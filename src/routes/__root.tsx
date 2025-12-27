@@ -1,18 +1,21 @@
+import { ColorSchemeScript, uiHtmlProps, UIProvider } from '@/components/ui';
+import { ModalsProvider } from '@/components/ui/modals';
+import { Notifications } from '@/components/ui/notifications';
+import { NavigationProgress } from '@/components/ui/nprogress';
+import { theme } from '@/styles/theme';
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import type { QueryClient } from '@tanstack/react-query';
 import {
-  HeadContent,
-  Scripts,
   createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+  Scripts,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { TanStackDevtools } from '@tanstack/react-devtools';
-
+import { PropsWithChildren } from 'react';
 import Header from '../components/Header';
-
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
-
 import appCss from '../styles.css?url';
-
-import type { QueryClient } from '@tanstack/react-query';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -39,19 +42,50 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-
-  shellComponent: RootDocument,
+  shellComponent: RootComponent,
 });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootComponent() {
   return (
-    <html lang="en">
+    <RootProviders>
+      <Outlet />
+    </RootProviders>
+  );
+}
+
+function RootProviders({
+  defaultColorScheme = 'light',
+  children,
+}: PropsWithChildren<{
+  defaultColorScheme?: 'light' | 'dark';
+}>) {
+  return (
+    <RootDocument colorScheme={defaultColorScheme}>
+      <UIProvider theme={theme} defaultColorScheme={defaultColorScheme}>
+        <ModalsProvider>
+          <NavigationProgress />
+          {children}
+          <Notifications position="top-right" />
+        </ModalsProvider>
+      </UIProvider>
+    </RootDocument>
+  );
+}
+
+function RootDocument({
+  children,
+  colorScheme,
+}: PropsWithChildren<{ colorScheme?: 'light' | 'dark' }>) {
+  return (
+    <html lang="en" {...uiHtmlProps}>
       <head>
         <HeadContent />
+        <ColorSchemeScript defaultColorScheme={colorScheme} />
       </head>
       <body>
         <Header />
         {children}
+
         <TanStackDevtools
           config={{
             position: 'bottom-right',
