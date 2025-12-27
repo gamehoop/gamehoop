@@ -6,11 +6,11 @@
  * @ai_context: Demonstrates Sentry features through interactive examples with educational context
  */
 
-import * as fs from 'node:fs/promises';
+import * as Sentry from '@sentry/tanstackstart-react';
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
-import * as Sentry from '@sentry/tanstackstart-react';
-import { useState, useEffect } from 'react';
+import * as fs from 'node:fs/promises';
+import { useEffect, useState } from 'react';
 
 export const Route = createFileRoute('/demo/sentry/testing')({
   component: RouteComponent,
@@ -182,8 +182,8 @@ function ResultBadge({
 }) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(spanOp);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(spanOp);
     setCopied(true);
     onCopy();
     setTimeout(() => setCopied(false), 2000);

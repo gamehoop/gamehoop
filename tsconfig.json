@@ -1,26 +1,43 @@
 {
   "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
+    // The target JavaScript version
     "target": "ES2022",
+    // Enable support for JSX syntax
     "jsx": "react-jsx",
+    // The JavaScript module system to use
     "module": "ESNext",
+    // The environment libraries to include
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    // The types to include
     "types": ["vite/client"],
-
-    /* Bundler mode */
+    // Resolve imports/exports without file extensions
     "moduleResolution": "bundler",
+    // Allow importing TypeScript files with .ts/.tsx extensions
     "allowImportingTsExtensions": true,
+    // Require the type keyword when importing types
     "verbatimModuleSyntax": false,
+    // Do not emit output files - leave it to the bundler
     "noEmit": true,
-
-    /* Linting */
+    // Skip type checking of declaration files
     "skipLibCheck": true,
+    // Enable a wide range of type-checking options
     "strict": true,
+    // Disallow unused variables
     "noUnusedLocals": true,
+    // Disallow unused parameters
     "noUnusedParameters": true,
+    // Disallow falling through cases in switch statements
     "noFallthroughCasesInSwitch": true,
+    // Disallow importing files that cause side effects
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
+    // Add undefined to a type when accessed using an index
+    "noUncheckedIndexedAccess": true,
+    // Ensure all code paths in a function return a value
+    "noImplicitReturns": true,
+    // Ensure overriding methods in derived classes are marked with the override keyword
+    "noImplicitOverride": true,
+    // Import path aliases
     "paths": {
       "@/*": ["./src/*"]
     }
