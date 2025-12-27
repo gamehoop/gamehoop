@@ -14,6 +14,14 @@ Install the dependencies:
 
 `pnpm install`
 
+Start the database:
+
+`docker compose up -d`
+
+Apply database schema changes:
+
+`pnpm db:migrate`
+
 Start the development server:
 
 `pnpm dev`
@@ -55,3 +63,11 @@ Create an image:
 Start a container:
 
 `pnpm docker:start`
+
+## Database
+
+Query the database:
+
+```shell
+pgcli -h localhost -p 5432 -u postgres -d gamehoop
+```
