@@ -13,7 +13,8 @@
     "lint:ci": "oxlint --type-aware --deny-warnings",
     "prepare": "husky",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "vitest --silent passed-only",
+    "test:ci": "vitest --run --silent passed-only",
     "typecheck": "tsc --noEmit",
     "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs"
   },

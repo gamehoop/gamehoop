@@ -1,0 +1,25 @@
+name: Test & Build
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+
+  build:
+    name: Build
+    needs: test
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+    with:
+      push: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+      sentry: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
