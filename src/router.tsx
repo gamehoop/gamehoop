@@ -1,15 +1,15 @@
-import { createRouter } from '@tanstack/react-router'
-import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-import * as TanstackQuery from './integrations/tanstack-query/root-provider'
+import { createRouter } from '@tanstack/react-router';
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
+import * as TanstackQuery from './integrations/tanstack-query/root-provider';
 
-import * as Sentry from '@sentry/tanstackstart-react'
+import * as Sentry from '@sentry/tanstackstart-react';
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
+import { routeTree } from './routeTree.gen';
 
 // Create a new router instance
 export const getRouter = () => {
-  const rqContext = TanstackQuery.getContext()
+  const rqContext = TanstackQuery.getContext();
 
   const router = createRouter({
     routeTree,
@@ -18,9 +18,12 @@ export const getRouter = () => {
     },
 
     defaultPreload: 'intent',
-  })
+  });
 
-  setupRouterSsrQueryIntegration({ router, queryClient: rqContext.queryClient })
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient: rqContext.queryClient,
+  });
 
   if (!router.isServer) {
     Sentry.init({
@@ -28,8 +31,8 @@ export const getRouter = () => {
       integrations: [],
       tracesSampleRate: 1.0,
       sendDefaultPii: true,
-    })
+    });
   }
 
-  return router
-}
+  return router;
+};

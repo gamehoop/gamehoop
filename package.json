@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--import ./instrument.server.mjs' vite dev --port 3000",
     "build": "vite build && cp instrument.server.mjs .output/server",
+    "fmt": "prettier --write .",
     "preview": "vite preview",
     "test": "vitest run",
     "start": "node --import ./.output/server/instrument.server.mjs .output/server/index.mjs"
@@ -38,6 +39,7 @@
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
     "jsdom": "^27.0.0",
+    "prettier": "^3.7.4",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
