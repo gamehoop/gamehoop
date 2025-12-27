@@ -3,4 +3,97 @@
  * Please do not edit it manually.
  */
 
-export interface DB {}
+import type { ColumnType } from 'kysely';
+
+export type Generated<T> =
+  T extends ColumnType<infer S, infer I, infer U>
+    ? ColumnType<S, I | undefined, U>
+    : ColumnType<T, T | undefined, T>;
+
+export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+
+export interface Account {
+  access_token: string | null;
+  access_token_expires_at: Timestamp | null;
+  account_id: string;
+  created_at: Generated<Timestamp>;
+  id: string;
+  id_token: string | null;
+  password: string | null;
+  provider_id: string;
+  refresh_token: string | null;
+  refresh_token_expires_at: Timestamp | null;
+  scope: string | null;
+  updated_at: Timestamp;
+  user_id: string;
+}
+
+export interface Invitation {
+  created_at: Generated<Timestamp>;
+  email: string;
+  expires_at: Timestamp;
+  id: string;
+  inviter_id: string;
+  organization_id: string;
+  role: string | null;
+  status: string;
+}
+
+export interface Member {
+  created_at: Generated<Timestamp>;
+  id: string;
+  organization_id: string;
+  role: string;
+  user_id: string;
+}
+
+export interface Organization {
+  created_at: Generated<Timestamp>;
+  id: string;
+  logo: string | null;
+  metadata: string | null;
+  name: string;
+  slug: string;
+}
+
+export interface Session {
+  active_organization_id: string | null;
+  created_at: Generated<Timestamp>;
+  expires_at: Timestamp;
+  id: string;
+  ip_address: string | null;
+  token: string;
+  updated_at: Timestamp;
+  user_agent: string | null;
+  user_id: string;
+}
+
+export interface User {
+  created_at: Generated<Timestamp>;
+  dark_mode: boolean | null;
+  email: string;
+  email_verified: boolean;
+  id: string;
+  image: string | null;
+  name: string;
+  updated_at: Generated<Timestamp>;
+}
+
+export interface Verification {
+  created_at: Generated<Timestamp>;
+  expires_at: Timestamp;
+  id: string;
+  identifier: string;
+  updated_at: Generated<Timestamp>;
+  value: string;
+}
+
+export interface DB {
+  account: Account;
+  invitation: Invitation;
+  member: Member;
+  organization: Organization;
+  session: Session;
+  user: User;
+  verification: Verification;
+}

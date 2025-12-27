@@ -21,14 +21,18 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # Stage 3 - Build the application
 FROM build-deps AS build
 
-
 # ARG and ENV vars are leaked into the final image
 # Make sure these are not secrets!
 ARG SOURCE_COMMIT
+ARG VITE_APP_NAME
+ARG VITE_BASE_URL
 ARG VITE_SENTRY_DSN
 
 ENV NODE_ENV=production \
     SENTRY_RELEASE=${SOURCE_COMMIT} \
+    VITE_APP_NAME=${VITE_APP_NAME} \
+    VITE_BASE_URL=${VITE_BASE_URL} \
+    VITE_ENVIRONMENT=production \
     VITE_SENTRY_DSN=${VITE_SENTRY_DSN} \
     VITE_SENTRY_RELEASE=${SOURCE_COMMIT} \
     VITE_SOURCE_COMMIT=${SOURCE_COMMIT}
@@ -45,8 +49,13 @@ FROM base AS runtime
 
 # Copy the files we need at runtime
 COPY --from=prod-deps /app/node_modules ./node_modules
+# Need for the web server
 COPY --from=build /app/.output ./.output
 COPY --from=build /app/scripts/entrypoint.sh .
+# Needed to run the database migrations on startup
+COPY --from=build /app/.config ./.config
+COPY --from=build /app/src/db ./src/db
+COPY --from=build /app/src/lib/logger.ts ./src/lib/logger.ts
 
 # Create a non-root user to run as
 RUN chmod +x entrypoint.sh && \
