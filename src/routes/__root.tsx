@@ -2,7 +2,8 @@ import { ColorSchemeScript, uiHtmlProps, UIProvider } from '@/components/ui';
 import { ModalsProvider } from '@/components/ui/modals';
 import { Notifications } from '@/components/ui/notifications';
 import { NavigationProgress } from '@/components/ui/nprogress';
-import { theme } from '@/styles/theme';
+import { theme, themeColor } from '@/styles/theme';
+import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
 import {
@@ -31,8 +32,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
+      ...seo({
+        title: 'gamehoop',
+        description: 'The easy to use tools to build and scale your games.',
+      }),
       {
-        title: 'TanStack Start Starter',
+        name: 'theme-color',
+        content: themeColor,
       },
     ],
     links: [
@@ -40,6 +46,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+      { rel: 'manifest', href: '/manifest.json', color: themeColor },
     ],
   }),
   shellComponent: RootComponent,
