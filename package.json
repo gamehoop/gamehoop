@@ -9,6 +9,7 @@
     "fmt": "prettier --write .",
     "lint": "oxlint --type-aware --deny-warnings --fix",
     "lint:ci": "oxlint --type-aware --deny-warnings",
+    "prepare": "husky",
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -35,6 +36,8 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
@@ -42,6 +45,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "oxlint": "^1.35.0",
     "oxlint-tsgolint": "^0.10.0",
