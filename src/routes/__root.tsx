@@ -6,6 +6,7 @@ import { theme, themeColor } from '@/styles/theme';
 import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -14,9 +15,7 @@ import {
 } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { PropsWithChildren } from 'react';
-import Header from '../components/Header';
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
-import appCss from '../styles.css?url';
+import appCss from '../styles/app.css?url';
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -95,7 +94,6 @@ function RootDocument({
         <ColorSchemeScript defaultColorScheme={colorScheme} />
       </head>
       <body>
-        <Header />
         {children}
 
         <TanStackDevtools
@@ -107,7 +105,10 @@ function RootDocument({
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
             },
-            TanStackQueryDevtools,
+            {
+              name: 'Tanstack Query',
+              render: <ReactQueryDevtoolsPanel />,
+            },
           ]}
         />
         <Scripts />
