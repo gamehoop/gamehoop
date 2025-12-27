@@ -1,0 +1,38 @@
+# dependencies
+node_modules
+
+# output
+.nitro
+.output
+.tanstack
+dist
+dist-ssr
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+*.log
+
+# dotenv environment variable files
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# Finder (MacOS) folder config
+.DS_Store
+
+# playwright
+test-results
+
+# Sentry
+.env.sentry-build-plugin
+
+# Editor Config
+.zed
+.vscode
