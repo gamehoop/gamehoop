@@ -24,14 +24,13 @@ import {
 
 export type ThemeOverride = MantineThemeOverride;
 
-export function createTheme({
-  //https://mantine.dev/theming/colors/#default-colors
-  primaryColor,
-}: {
-  primaryColor?: string;
-}): ThemeOverride {
+export function createTheme(): { theme: ThemeOverride; themeColor: string } {
+  // https://mantine.dev/theming/colors/#default-colors
+  const primaryColor = 'cyan';
+  const primaryColorHex = '#22b8cf';
+
   // https://mantine.dev/theming/theme-object
-  return mantineCreateTheme({
+  const theme = mantineCreateTheme({
     primaryColor,
     fontFamily: 'Nunito Sans Variable, system-ui, sans-serif',
     cursorType: 'pointer',
@@ -164,4 +163,6 @@ export function createTheme({
       }),
     },
   });
+
+  return { theme, themeColor: primaryColorHex };
 }

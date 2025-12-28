@@ -24,13 +24,11 @@ FROM build-deps AS build
 # ARG and ENV vars are leaked into the final image
 # Make sure these are not secrets!
 ARG SOURCE_COMMIT
-ARG VITE_APP_NAME
 ARG VITE_BASE_URL
 ARG VITE_SENTRY_DSN
 
 ENV NODE_ENV=production \
     SENTRY_RELEASE=${SOURCE_COMMIT} \
-    VITE_APP_NAME=${VITE_APP_NAME} \
     VITE_BASE_URL=${VITE_BASE_URL} \
     VITE_ENVIRONMENT=production \
     VITE_SENTRY_DSN=${VITE_SENTRY_DSN} \

@@ -1,8 +1,8 @@
+import { nprogress } from '@/components/ui/nprogress';
+import * as Sentry from '@sentry/tanstackstart-react';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import * as TanstackQuery from './queries';
-
-import * as Sentry from '@sentry/tanstackstart-react';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
@@ -16,8 +16,14 @@ export const getRouter = () => {
     context: {
       ...rqContext,
     },
-
+    // Restore the scroll position of a page when the user navigates back to it.
+    scrollRestoration: true,
+    // Preload routes on intent (e.g. hover, touch.)
     defaultPreload: 'intent',
+    // Preload after 50 milliseconds.
+    defaultPreloadDelay: 50,
+    // Use the not found component defined in the root component.
+    notFoundMode: 'root',
   });
 
   setupRouterSsrQueryIntegration({
@@ -33,6 +39,13 @@ export const getRouter = () => {
       sendDefaultPii: true,
     });
   }
+
+  // Update the navigation progress bar
+  router.subscribe(
+    'onBeforeLoad',
+    (e) => e.fromLocation && e.pathChanged && nprogress.start(),
+  );
+  router.subscribe('onLoad', nprogress.complete);
 
   return router;
 };

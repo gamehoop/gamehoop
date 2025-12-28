@@ -7,13 +7,11 @@ export const env = createEnv({
     SOURCE_COMMIT: z.string().optional(),
 
     // Authentication
-    BETTER_AUTH_URL: z.string(),
+    BETTER_AUTH_URL: z.string().default('http://localhost:3000'),
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_REQUIRE_EMAIL_VERIFICATION: z
       .enum(['true', 'false'])
       .transform((val) => val === 'true'),
-    BETTER_AUTH_GOOGLE_CLIENT_ID: z.string(),
-    BETTER_AUTH_GOOGLE_CLIENT_SECRET: z.string(),
 
     // Database
     DATABASE_URL: z.string(),

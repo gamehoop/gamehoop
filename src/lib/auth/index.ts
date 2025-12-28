@@ -47,14 +47,6 @@ export const auth = betterAuth({
     // To send the verification email
     sendVerificationEmail,
   },
-  // Allow users to sign in using their Google account
-  socialProviders: {
-    google: {
-      clientId: env.BETTER_AUTH_GOOGLE_CLIENT_ID,
-      clientSecret: env.BETTER_AUTH_GOOGLE_CLIENT_SECRET,
-      prompt: 'select_account',
-    },
-  },
   user: {
     // Additional columns to add to the user database table
     additionalFields: {

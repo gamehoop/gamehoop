@@ -1,6 +1,6 @@
 {
-  "short_name": "gamehoop",
-  "name": "gamehoop",
+  "short_name": "Gamehoop",
+  "name": "Gamehoop",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#339af0",
+  "theme_color": "#22b8cf",
   "background_color": "#ffffff"
 }

@@ -5,9 +5,11 @@ export const env = createEnv({
   client: {
     // App
     VITE_SOURCE_COMMIT: z.string().optional(),
-    VITE_APP_NAME: z.string(),
-    VITE_BASE_URL: z.string(),
-    VITE_ENVIRONMENT: z.enum(['development', 'production']),
+    VITE_APP_NAME: z.string().default('Gamehoop'),
+    VITE_BASE_URL: z.string().default('http://localhost:3000'),
+    VITE_ENVIRONMENT: z
+      .enum(['development', 'production'])
+      .default('production'),
 
     // Error tracking
     VITE_SENTRY_DSN: z.url().optional(),

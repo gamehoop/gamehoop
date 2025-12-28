@@ -1,7 +1,11 @@
+import { NotFound } from '@/components/app/not-found';
+import { SomethingWentWrong } from '@/components/app/sww';
 import { ColorSchemeScript, uiHtmlProps, UIProvider } from '@/components/ui';
 import { ModalsProvider } from '@/components/ui/modals';
 import { Notifications } from '@/components/ui/notifications';
 import { NavigationProgress } from '@/components/ui/nprogress';
+import { env } from '@/env/client';
+import { getUser } from '@/functions/auth/get-user';
 import { theme, themeColor } from '@/styles/theme';
 import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
@@ -9,7 +13,9 @@ import type { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import {
   createRootRouteWithContext,
+  ErrorComponentProps,
   HeadContent,
+  NotFoundRouteProps,
   Outlet,
   Scripts,
 } from '@tanstack/react-router';
@@ -32,7 +38,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       ...seo({
-        title: 'gamehoop',
+        title: env.VITE_APP_NAME,
         description: 'The easy to use tools to build and scale your games.',
       }),
       {
@@ -53,13 +59,42 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       { rel: 'manifest', href: '/manifest.json', color: themeColor },
     ],
   }),
+  beforeLoad: async () => {
+    try {
+      const user = await getUser();
+      return { user };
+    } catch {
+      // The current user is unauthenticated
+      return {};
+    }
+  },
   shellComponent: RootComponent,
+  notFoundComponent: RootNotFoundComponent,
+  errorComponent: RootErrorComponent,
 });
 
 function RootComponent() {
+  const { user } = Route.useRouteContext();
+  const defaultColorScheme = user?.darkMode ? 'dark' : 'light';
+
   return (
-    <RootProviders>
+    <RootProviders defaultColorScheme={defaultColorScheme}>
       <Outlet />
+    </RootProviders>
+  );
+}
+
+function RootNotFoundComponent(props: NotFoundRouteProps) {
+  return <NotFound {...props} />;
+}
+
+function RootErrorComponent(props: ErrorComponentProps) {
+  const { user } = Route.useRouteContext();
+  const defaultColorScheme = user?.darkMode ? 'dark' : 'light';
+
+  return (
+    <RootProviders defaultColorScheme={defaultColorScheme}>
+      <SomethingWentWrong {...props} />
     </RootProviders>
   );
 }
@@ -76,7 +111,7 @@ function RootProviders({
         <ModalsProvider>
           <NavigationProgress />
           {children}
-          <Notifications position="top-right" />
+          <Notifications position="bottom-right" />
         </ModalsProvider>
       </UIProvider>
     </RootDocument>
@@ -96,9 +131,10 @@ function RootDocument({
       <body>
         {children}
 
+        <Scripts />
         <TanStackDevtools
           config={{
-            position: 'bottom-right',
+            position: 'bottom-left',
           }}
           plugins={[
             {
@@ -111,7 +147,6 @@ function RootDocument({
             },
           ]}
         />
-        <Scripts />
       </body>
     </html>
   );
