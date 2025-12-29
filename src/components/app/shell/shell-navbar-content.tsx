@@ -1,11 +1,13 @@
 import logo from '@/assets/logo-full.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
+import { updateUser } from '@/lib/auth/client';
 import { ActionIcon, Avatar, Menu, NavLink } from '@mantine/core';
-import { Link } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, LogOut, PanelLeftClose, User } from 'lucide-react';
+import { Home, LogOut, Moon, PanelLeftClose, Sun, User } from 'lucide-react';
 
 export interface ShellNavbarContentProps {
   user: SessionUser;
@@ -16,6 +18,21 @@ export function ShellNavbarContent({
   user,
   onToggle,
 }: ShellNavbarContentProps) {
+  const router = useRouter();
+  const { isDarkTheme, toggleColorScheme } = useColorScheme();
+
+  const onThemeToggle = async () => {
+    toggleColorScheme();
+
+    await updateUser({
+      settings: {
+        ...user.settings,
+        darkMode: !user.settings?.darkMode,
+      },
+    });
+    await router.invalidate();
+  };
+
   return (
     <div className="flex flex-1 flex-col mt-4">
       <AnchorLink to="/" className="self-center">
@@ -28,7 +45,7 @@ export function ShellNavbarContent({
 
       <ActionIcon
         variant="transparent"
-        color="black"
+        color={isDarkTheme ? 'white' : 'black'}
         onClick={onToggle}
         className="mt-auto self-end"
       >
@@ -49,6 +66,15 @@ export function ShellNavbarContent({
             <Link to="/account">
               <Menu.Item leftSection={<User />}>Account</Menu.Item>
             </Link>
+            {user.settings?.darkMode ? (
+              <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
+                Light Mode
+              </Menu.Item>
+            ) : (
+              <Menu.Item leftSection={<Moon />} onClick={onThemeToggle}>
+                Dark Mode
+              </Menu.Item>
+            )}
             <Menu.Divider />
             <Link to="/sign-out">
               <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>

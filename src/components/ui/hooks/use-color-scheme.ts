@@ -9,5 +9,10 @@ export interface UseColorSchemeResult {
 export function useColorScheme() {
   const { colorScheme, setColorScheme, toggleColorScheme } =
     useMantineColorScheme();
-  return { colorScheme, setColorScheme, toggleColorScheme };
+  return {
+    colorScheme,
+    isDarkTheme: colorScheme === 'dark',
+    setColorScheme,
+    toggleColorScheme,
+  };
 }

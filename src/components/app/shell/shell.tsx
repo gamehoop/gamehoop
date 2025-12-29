@@ -2,6 +2,7 @@ import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useRouter } from '@tanstack/react-router';
 import { PropsWithChildren } from 'react';
 import { ShellNavbarCollapsedContent } from './shell-collapsed-navbar-content';
 import { ShellNavbarContent } from './shell-navbar-content';
@@ -11,6 +12,7 @@ export interface ShellProps extends PropsWithChildren {
 }
 
 export function Shell({ user, children }: ShellProps) {
+  const router = useRouter();
   const [opened, { toggle }] = useDisclosure(!user.settings?.navbarCollapsed);
 
   const onToggle = async () => {
@@ -22,6 +24,7 @@ export function Shell({ user, children }: ShellProps) {
         navbarCollapsed: !user.settings?.navbarCollapsed,
       },
     });
+    await router.invalidate();
   };
 
   return (

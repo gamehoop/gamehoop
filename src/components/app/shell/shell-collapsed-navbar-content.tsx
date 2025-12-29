@@ -1,12 +1,14 @@
 import logo from '@/assets/logo.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
+import { updateUser } from '@/lib/auth/client';
 import { themeColor } from '@/styles/theme';
 import { ActionIcon, Avatar, Menu, Tooltip } from '@mantine/core';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, LogOut, PanelLeftOpen, User } from 'lucide-react';
+import { Home, LogOut, Moon, PanelLeftOpen, Sun, User } from 'lucide-react';
 
 export interface ShellNavbarCollapsedContentProps {
   user: SessionUser;
@@ -14,9 +16,23 @@ export interface ShellNavbarCollapsedContentProps {
 }
 
 export function ShellNavbarCollapsedContent({
+  user,
   onToggle,
 }: ShellNavbarCollapsedContentProps) {
-  const location = useLocation();
+  const router = useRouter();
+  const { isDarkTheme, toggleColorScheme } = useColorScheme();
+
+  const onThemeToggle = async () => {
+    toggleColorScheme();
+
+    await updateUser({
+      settings: {
+        ...user.settings,
+        darkMode: !user.settings?.darkMode,
+      },
+    });
+    await router.invalidate();
+  };
 
   return (
     <div className="flex flex-1 flex-col items-center mt-4">
@@ -27,12 +43,12 @@ export function ShellNavbarCollapsedContent({
       <ul className="flex w-full items-center flex-col mt-4 pt-2 gap-2 border-t border-(--app-shell-border-color)">
         <Tooltip label="Home" position="right" withArrow>
           <ActionIcon
-            variant="subtle"
-            color={location.pathname === '/' ? themeColor : 'black'}
+            variant="default"
+            color={isDarkTheme ? 'white' : 'black'}
             size="lg"
             className="mt-auto"
           >
-            <Link to="/">
+            <Link to="/" activeProps={{ style: { color: themeColor } }}>
               <Home className="text-xl" />
             </Link>
           </ActionIcon>
@@ -41,7 +57,7 @@ export function ShellNavbarCollapsedContent({
 
       <ActionIcon
         variant="transparent"
-        color="black"
+        color={isDarkTheme ? 'white' : 'black'}
         onClick={onToggle}
         className="mt-auto"
       >
@@ -58,6 +74,15 @@ export function ShellNavbarCollapsedContent({
             <Link to="/account">
               <Menu.Item leftSection={<User />}>Account</Menu.Item>
             </Link>
+            {user.settings?.darkMode ? (
+              <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
+                Light Mode
+              </Menu.Item>
+            ) : (
+              <Menu.Item leftSection={<Moon />} onClick={onThemeToggle}>
+                Dark Mode
+              </Menu.Item>
+            )}
             <Menu.Divider />
             <Link to="/sign-out">
               <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
