@@ -20,7 +20,7 @@ export function ShellNavbarContent({
   onToggle,
 }: ShellNavbarContentProps) {
   const router = useRouter();
-  const { isDarkTheme, toggleColorScheme } = useColorScheme();
+  const { toggleColorScheme } = useColorScheme();
 
   const onThemeToggle = async () => {
     toggleColorScheme();
@@ -38,7 +38,7 @@ export function ShellNavbarContent({
     <div className="flex flex-1 flex-col mt-4">
       <AnchorLink to="/" className="self-center ">
         <Image
-          src={isDarkTheme ? logoDark : logo}
+          src={user.settings?.darkMode ? logoDark : logo}
           alt={env.VITE_APP_NAME}
           width={148}
           height={48}
