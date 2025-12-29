@@ -5,9 +5,5 @@ export const Route = createFileRoute('/_layout')({
 });
 
 function Layout() {
-  return (
-    <main>
-      <Outlet />
-    </main>
-  );
+  return <Outlet />;
 }

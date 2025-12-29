@@ -1,3 +1,4 @@
+import { Shell } from '@/components/app/shell/shell';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout/_authed')({
@@ -8,9 +9,18 @@ export const Route = createFileRoute('/_layout/_authed')({
 
     return { user };
   },
+  loader: ({ context: { user } }) => {
+    return { user };
+  },
   component: Authed,
 });
 
 function Authed() {
-  return <Outlet />;
+  const { user } = Route.useLoaderData();
+
+  return (
+    <Shell user={user}>
+      <Outlet />
+    </Shell>
+  );
 }
