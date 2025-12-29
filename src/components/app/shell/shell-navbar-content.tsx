@@ -2,10 +2,10 @@ import logo from '@/assets/logo-full.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
-import { ActionIcon, Avatar, NavLink } from '@mantine/core';
+import { ActionIcon, Avatar, Menu, NavLink } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, PanelLeftClose } from 'lucide-react';
+import { Home, LogOut, PanelLeftClose, User } from 'lucide-react';
 
 export interface ShellNavbarContentProps {
   user: SessionUser;
@@ -36,12 +36,25 @@ export function ShellNavbarContent({
       </ActionIcon>
 
       <div className="border-t border-(--app-shell-border-color)">
-        <NavLink
-          href="/account"
-          label={user.name}
-          description={user.name}
-          leftSection={<Avatar />}
-        />
+        <Menu shadow="md" width={200} position="top" withArrow>
+          <Menu.Target>
+            <NavLink
+              label={user.name}
+              description={user.name}
+              leftSection={<Avatar />}
+            />
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Link to="/account">
+              <Menu.Item leftSection={<User />}>Account</Menu.Item>
+            </Link>
+            <Menu.Divider />
+            <Link to="/sign-out">
+              <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
+            </Link>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </div>
   );

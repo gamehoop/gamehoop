@@ -3,10 +3,10 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
 import { themeColor } from '@/styles/theme';
-import { ActionIcon, Avatar, Tooltip } from '@mantine/core';
+import { ActionIcon, Avatar, Menu, Tooltip } from '@mantine/core';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, PanelLeftOpen } from 'lucide-react';
+import { Home, LogOut, PanelLeftOpen, User } from 'lucide-react';
 
 export interface ShellNavbarCollapsedContentProps {
   user: SessionUser;
@@ -30,7 +30,6 @@ export function ShellNavbarCollapsedContent({
             variant="subtle"
             color={location.pathname === '/' ? themeColor : 'black'}
             size="lg"
-            onClick={onToggle}
             className="mt-auto"
           >
             <Link to="/">
@@ -50,9 +49,21 @@ export function ShellNavbarCollapsedContent({
       </ActionIcon>
 
       <div className="flex items-center justify-center py-2 border-t border-(--app-shell-border-color) w-full">
-        <AnchorLink to="/account">
-          <Avatar />
-        </AnchorLink>
+        <Menu shadow="md" width={200} position="right" withArrow>
+          <Menu.Target>
+            <Avatar className="cursor-pointer" />
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Link to="/account">
+              <Menu.Item leftSection={<User />}>Account</Menu.Item>
+            </Link>
+            <Menu.Divider />
+            <Link to="/sign-out">
+              <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
+            </Link>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </div>
   );
