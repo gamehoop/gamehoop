@@ -1,4 +1,5 @@
-import logo from '@/assets/logo-full.png';
+import logoDark from '@/assets/logo-full-dark.svg';
+import logo from '@/assets/logo-full.svg';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { env } from '@/env/client';
@@ -35,8 +36,13 @@ export function ShellNavbarContent({
 
   return (
     <div className="flex flex-1 flex-col mt-4">
-      <AnchorLink to="/" className="self-center">
-        <Image src={logo} alt={env.VITE_APP_NAME} width={148} height={48} />
+      <AnchorLink to="/" className="self-center ">
+        <Image
+          src={isDarkTheme ? logoDark : logo}
+          alt={env.VITE_APP_NAME}
+          width={148}
+          height={48}
+        />
       </AnchorLink>
 
       <ul className="mt-4 border-t border-(--app-shell-border-color)">
@@ -45,17 +51,17 @@ export function ShellNavbarContent({
 
       <ActionIcon
         variant="transparent"
-        color={isDarkTheme ? 'white' : 'black'}
         onClick={onToggle}
         className="mt-auto self-end"
       >
-        <PanelLeftClose />
+        <PanelLeftClose className="text-(--mantine-color-text)" />
       </ActionIcon>
 
-      <div className="border-t border-(--app-shell-border-color)">
-        <Menu shadow="md" width={200} position="top" withArrow>
+      <div className="mt-1 border-t border-(--app-shell-border-color)">
+        <Menu shadow="md" width={200} position="right" withArrow>
           <Menu.Target>
             <NavLink
+              py="md"
               label={user.name}
               description={user.name}
               leftSection={<Avatar />}

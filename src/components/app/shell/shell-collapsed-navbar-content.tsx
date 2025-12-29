@@ -20,7 +20,7 @@ export function ShellNavbarCollapsedContent({
   onToggle,
 }: ShellNavbarCollapsedContentProps) {
   const router = useRouter();
-  const { isDarkTheme, toggleColorScheme } = useColorScheme();
+  const { toggleColorScheme } = useColorScheme();
 
   const onThemeToggle = async () => {
     toggleColorScheme();
@@ -40,14 +40,9 @@ export function ShellNavbarCollapsedContent({
         <Image src={logo} alt={env.VITE_APP_NAME} width={48} height={48} />
       </AnchorLink>
 
-      <ul className="flex w-full items-center flex-col mt-4 pt-2 gap-2 border-t border-(--app-shell-border-color)">
+      <ul className="flex w-full items-center flex-col mt-4 pt-4 gap-4 border-t border-(--app-shell-border-color)">
         <Tooltip label="Home" position="right" withArrow>
-          <ActionIcon
-            variant="default"
-            color={isDarkTheme ? 'white' : 'black'}
-            size="lg"
-            className="mt-auto"
-          >
+          <ActionIcon variant="default" size="lg">
             <Link to="/" activeProps={{ style: { color: themeColor } }}>
               <Home className="text-xl" />
             </Link>
@@ -55,41 +50,36 @@ export function ShellNavbarCollapsedContent({
         </Tooltip>
       </ul>
 
-      <ActionIcon
-        variant="transparent"
-        color={isDarkTheme ? 'white' : 'black'}
-        onClick={onToggle}
-        className="mt-auto"
-      >
-        <PanelLeftOpen />
+      <ActionIcon variant="transparent" onClick={onToggle} className="mt-auto ">
+        <PanelLeftOpen className="text-(--mantine-color-text)" />
       </ActionIcon>
 
-      <div className="flex items-center justify-center py-2 border-t border-(--app-shell-border-color) w-full">
-        <Menu shadow="md" width={200} position="right" withArrow>
-          <Menu.Target>
-            <Avatar className="cursor-pointer" />
-          </Menu.Target>
+      <Menu shadow="md" width={200} position="right" withArrow>
+        <Menu.Target>
+          <div className="mt-1 flex items-center justify-center border-t border-(--app-shell-border-color) w-full dark:hover:bg-(--mantine-color-dark-6) hover:bg-(--mantine-color-gray-0) cursor-pointer">
+            <Avatar m="md" />
+          </div>
+        </Menu.Target>
 
-          <Menu.Dropdown>
-            <Link to="/account">
-              <Menu.Item leftSection={<User />}>Account</Menu.Item>
-            </Link>
-            {user.settings?.darkMode ? (
-              <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
-                Light Mode
-              </Menu.Item>
-            ) : (
-              <Menu.Item leftSection={<Moon />} onClick={onThemeToggle}>
-                Dark Mode
-              </Menu.Item>
-            )}
-            <Menu.Divider />
-            <Link to="/sign-out">
-              <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
-            </Link>
-          </Menu.Dropdown>
-        </Menu>
-      </div>
+        <Menu.Dropdown>
+          <Link to="/account">
+            <Menu.Item leftSection={<User />}>Account</Menu.Item>
+          </Link>
+          {user.settings?.darkMode ? (
+            <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
+              Light Mode
+            </Menu.Item>
+          ) : (
+            <Menu.Item leftSection={<Moon />} onClick={onThemeToggle}>
+              Dark Mode
+            </Menu.Item>
+          )}
+          <Menu.Divider />
+          <Link to="/sign-out">
+            <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
+          </Link>
+        </Menu.Dropdown>
+      </Menu>
     </div>
   );
 }

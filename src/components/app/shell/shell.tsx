@@ -33,7 +33,7 @@ export function Shell({ user, children }: ShellProps) {
       navbar={{
         width: opened ? 250 : 80,
         breakpoint: 'sm',
-        collapsed: { mobile: !opened },
+        collapsed: { mobile: true },
       }}
     >
       <AppShell.Navbar>

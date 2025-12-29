@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '../components/ui/styles/ui.css';
 
+@custom-variant dark (&:where([data-mantine-color-scheme=dark], [data-mantine-color-scheme=dark] *));
+
 html,
 body {
   width: 100%;
