@@ -134,7 +134,8 @@ function RootDocument({
         <Scripts />
         <TanStackDevtools
           config={{
-            position: 'bottom-left',
+            position: 'bottom-right',
+            hideUntilHover: true,
           }}
           plugins={[
             {
