@@ -15,6 +15,7 @@ export const {
   getSession,
   requestPasswordReset,
   deleteUser,
+  updateUser,
 } = createAuthClient({
   fetchOptions: { onError },
   plugins: [inferAdditionalFields<typeof auth>(), organizationClient()],

@@ -1,4 +1,5 @@
 import { SessionUser } from '@/lib/auth';
+import { updateUser } from '@/lib/auth/client';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { PropsWithChildren } from 'react';
@@ -10,7 +11,18 @@ export interface ShellProps extends PropsWithChildren {
 }
 
 export function Shell({ user, children }: ShellProps) {
-  const [opened, { toggle }] = useDisclosure(true);
+  const [opened, { toggle }] = useDisclosure(!user.settings?.navbarCollapsed);
+
+  const onToggle = async () => {
+    toggle();
+
+    await updateUser({
+      settings: {
+        ...user.settings,
+        navbarCollapsed: !user.settings?.navbarCollapsed,
+      },
+    });
+  };
 
   return (
     <AppShell
@@ -23,9 +35,9 @@ export function Shell({ user, children }: ShellProps) {
     >
       <AppShell.Navbar>
         {opened ? (
-          <ShellNavbarContent user={user} onToggle={toggle} />
+          <ShellNavbarContent user={user} onToggle={onToggle} />
         ) : (
-          <ShellNavbarCollapsedContent user={user} onToggle={toggle} />
+          <ShellNavbarCollapsedContent user={user} onToggle={onToggle} />
         )}
       </AppShell.Navbar>
 

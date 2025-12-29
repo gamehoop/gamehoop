@@ -75,7 +75,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   const { user } = Route.useRouteContext();
-  const defaultColorScheme = user?.darkMode ? 'dark' : 'light';
+  const defaultColorScheme = user?.settings?.darkMode ? 'dark' : 'light';
 
   return (
     <RootProviders defaultColorScheme={defaultColorScheme}>
@@ -90,7 +90,7 @@ function RootNotFoundComponent(props: NotFoundRouteProps) {
 
 function RootErrorComponent(props: ErrorComponentProps) {
   const { user } = Route.useRouteContext();
-  const defaultColorScheme = user?.darkMode ? 'dark' : 'light';
+  const defaultColorScheme = user?.settings?.darkMode ? 'dark' : 'light';
 
   return (
     <RootProviders defaultColorScheme={defaultColorScheme}>

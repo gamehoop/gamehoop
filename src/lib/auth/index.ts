@@ -50,10 +50,10 @@ export const auth = betterAuth({
   user: {
     // Additional columns to add to the user database table
     additionalFields: {
-      darkMode: {
-        type: 'boolean',
+      settings: {
+        type: 'json',
         required: false,
-        defaultValue: false,
+        defaultValue: {},
       },
     },
     changeEmail: {
@@ -117,5 +117,15 @@ export const auth = betterAuth({
   },
 });
 
+export type UserSettings = {
+  [key: string]: boolean | undefined;
+
+  darkMode?: boolean;
+  navbarCollapsed?: boolean;
+};
+
 export type Session = typeof auth.$Infer.Session;
-export type SessionUser = typeof auth.$Infer.Session.user;
+
+export type SessionUser = Omit<typeof auth.$Infer.Session.user, 'settings'> & {
+  settings?: UserSettings | null;
+};

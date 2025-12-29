@@ -59,7 +59,9 @@ function SignIn() {
         const { data } = await getSession();
         if (data) {
           const user = data.user;
-          const preferredColorScheme = user.darkMode ? 'dark' : 'light';
+          const preferredColorScheme = user.settings?.darkMode
+            ? 'dark'
+            : 'light';
           if (colorScheme !== preferredColorScheme) {
             setColorScheme(preferredColorScheme);
           }

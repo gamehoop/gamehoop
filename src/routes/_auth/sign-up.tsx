@@ -14,7 +14,6 @@ import z from 'zod';
 
 export const Route = createFileRoute('/_auth/sign-up')({
   beforeLoad: async ({ context: { user } }) => {
-    console.log('beforeLoad /sign-up', user);
     if (user) {
       throw redirect({ to: '/' });
     }
