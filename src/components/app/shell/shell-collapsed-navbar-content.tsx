@@ -9,6 +9,7 @@ import { ActionIcon, Avatar, Menu, Tooltip } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
+  Book,
   Castle,
   Home,
   LogOut,
@@ -73,11 +74,17 @@ export function ShellNavbarCollapsedContent({
           <Link to="/account">
             <Menu.Item leftSection={<User />}>Account</Menu.Item>
           </Link>
+
           <Link to="/organization">
             <Menu.Item leftSection={<Castle />}>
               {user.organization.name}
             </Menu.Item>
           </Link>
+
+          <a href="https://docs.gamehoop.io">
+            <Menu.Item leftSection={<Book />}>Documentation</Menu.Item>
+          </a>
+          <Menu.Divider />
           {user.settings?.darkMode ? (
             <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
               Light Mode

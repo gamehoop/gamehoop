@@ -9,6 +9,7 @@ import { ActionIcon, Avatar, Menu, NavLink } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
+  Book,
   Castle,
   Home,
   LogOut,
@@ -85,6 +86,12 @@ export function ShellNavbarContent({
                 {user.organization.name}
               </Menu.Item>
             </Link>
+
+            <a href="https://docs.gamehoop.io">
+              <Menu.Item leftSection={<Book />}>Documentation</Menu.Item>
+            </a>
+            <Menu.Divider />
+
             {user.settings?.darkMode ? (
               <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
                 Light Mode
@@ -94,6 +101,7 @@ export function ShellNavbarContent({
                 Dark Mode
               </Menu.Item>
             )}
+
             <Menu.Divider />
             <Link to="/sign-out">
               <Menu.Item leftSection={<LogOut />}>Sign Out</Menu.Item>
