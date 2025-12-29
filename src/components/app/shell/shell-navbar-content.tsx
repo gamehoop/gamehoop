@@ -8,7 +8,15 @@ import { updateUser } from '@/lib/auth/client';
 import { ActionIcon, Avatar, Menu, NavLink } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, LogOut, Moon, PanelLeftClose, Sun, User } from 'lucide-react';
+import {
+  Castle,
+  Home,
+  LogOut,
+  Moon,
+  PanelLeftClose,
+  Sun,
+  User,
+} from 'lucide-react';
 
 export interface ShellNavbarContentProps {
   user: SessionUser;
@@ -71,6 +79,11 @@ export function ShellNavbarContent({
           <Menu.Dropdown>
             <Link to="/account">
               <Menu.Item leftSection={<User />}>Account</Menu.Item>
+            </Link>
+            <Link to="/organization">
+              <Menu.Item leftSection={<Castle />}>
+                {user.organization.name}
+              </Menu.Item>
             </Link>
             {user.settings?.darkMode ? (
               <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>

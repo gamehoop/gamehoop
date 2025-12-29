@@ -13,42 +13,42 @@ export type Generated<T> =
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface Account {
-  access_token: string | null;
-  access_token_expires_at: Timestamp | null;
-  account_id: string;
-  created_at: Generated<Timestamp>;
+  accessToken: string | null;
+  accessTokenExpiresAt: Timestamp | null;
+  accountId: string;
+  createdAt: Generated<Timestamp>;
   id: string;
-  id_token: string | null;
+  idToken: string | null;
   password: string | null;
-  provider_id: string;
-  refresh_token: string | null;
-  refresh_token_expires_at: Timestamp | null;
+  providerId: string;
+  refreshToken: string | null;
+  refreshTokenExpiresAt: Timestamp | null;
   scope: string | null;
-  updated_at: Timestamp;
-  user_id: string;
+  updatedAt: Timestamp;
+  userId: string;
 }
 
 export interface Invitation {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   email: string;
-  expires_at: Timestamp;
+  expiresAt: Timestamp;
   id: string;
-  inviter_id: string;
-  organization_id: string;
+  inviterId: string;
+  organizationId: string;
   role: string | null;
   status: string;
 }
 
 export interface Member {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   id: string;
-  organization_id: string;
+  organizationId: string;
   role: string;
-  user_id: string;
+  userId: string;
 }
 
 export interface Organization {
-  created_at: Generated<Timestamp>;
+  createdAt: Generated<Timestamp>;
   id: string;
   logo: string | null;
   metadata: string | null;
@@ -57,34 +57,34 @@ export interface Organization {
 }
 
 export interface Session {
-  active_organization_id: string | null;
-  created_at: Generated<Timestamp>;
-  expires_at: Timestamp;
+  activeOrganizationId: string | null;
+  createdAt: Generated<Timestamp>;
+  expiresAt: Timestamp;
   id: string;
-  ip_address: string | null;
+  ipAddress: string | null;
   token: string;
-  updated_at: Timestamp;
-  user_agent: string | null;
-  user_id: string;
+  updatedAt: Timestamp;
+  userAgent: string | null;
+  userId: string;
 }
 
 export interface User {
-  created_at: Generated<Timestamp>;
-  dark_mode: boolean | null;
+  createdAt: Generated<Timestamp>;
   email: string;
-  email_verified: boolean;
+  emailVerified: boolean;
   id: string;
   image: string | null;
   name: string;
-  updated_at: Generated<Timestamp>;
+  settings: string | null;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Verification {
-  created_at: Generated<Timestamp>;
-  expires_at: Timestamp;
+  createdAt: Generated<Timestamp>;
+  expiresAt: Timestamp;
   id: string;
   identifier: string;
-  updated_at: Generated<Timestamp>;
+  updatedAt: Generated<Timestamp>;
   value: string;
 }
 

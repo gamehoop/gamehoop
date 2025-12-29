@@ -19,6 +19,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-pass
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as LayoutAuthedIndexRouteImport } from './routes/_layout/_authed/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -68,6 +69,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LayoutAuthedOrganizationRoute =
+  LayoutAuthedOrganizationRouteImport.update({
+    id: '/organization',
+    path: '/organization',
+    getParentRoute: () => LayoutAuthedRoute,
+  } as any)
 const LayoutAuthedAccountRoute = LayoutAuthedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/sign-out': typeof AuthSignOutRoute
   '/sign-up': typeof AuthSignUpRoute
   '/account': typeof LayoutAuthedAccountRoute
+  '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/': typeof LayoutAuthedIndexRoute
 }
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/sign-out': typeof AuthSignOutRoute
   '/sign-up': typeof AuthSignUpRoute
   '/account': typeof LayoutAuthedAccountRoute
+  '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/': typeof LayoutAuthedIndexRoute
 }
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_layout/_authed': typeof LayoutAuthedRouteWithChildren
   '/_layout/_authed/account': typeof LayoutAuthedAccountRoute
+  '/_layout/_authed/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
 }
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/sign-out'
     | '/sign-up'
     | '/account'
+    | '/organization'
     | '/api/auth/$'
     | '/'
   fileRoutesByTo: FileRoutesByTo
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/sign-out'
     | '/sign-up'
     | '/account'
+    | '/organization'
     | '/api/auth/$'
     | '/'
   id:
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/_auth/sign-up'
     | '/_layout/_authed'
     | '/_layout/_authed/account'
+    | '/_layout/_authed/organization'
     | '/api/auth/$'
     | '/_layout/_authed/'
   fileRoutesById: FileRoutesById
@@ -222,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_layout/_authed/organization': {
+      id: '/_layout/_authed/organization'
+      path: '/organization'
+      fullPath: '/organization'
+      preLoaderRoute: typeof LayoutAuthedOrganizationRouteImport
+      parentRoute: typeof LayoutAuthedRoute
+    }
     '/_layout/_authed/account': {
       id: '/_layout/_authed/account'
       path: '/account'
@@ -252,11 +272,13 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface LayoutAuthedRouteChildren {
   LayoutAuthedAccountRoute: typeof LayoutAuthedAccountRoute
+  LayoutAuthedOrganizationRoute: typeof LayoutAuthedOrganizationRoute
   LayoutAuthedIndexRoute: typeof LayoutAuthedIndexRoute
 }
 
 const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
   LayoutAuthedAccountRoute: LayoutAuthedAccountRoute,
+  LayoutAuthedOrganizationRoute: LayoutAuthedOrganizationRoute,
   LayoutAuthedIndexRoute: LayoutAuthedIndexRoute,
 }
 

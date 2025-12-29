@@ -13,7 +13,7 @@ import {
   minutesToSeconds,
 } from '@/utils/datetime';
 import { betterAuth } from 'better-auth';
-import { organization } from 'better-auth/plugins';
+import { createAuthMiddleware, organization } from 'better-auth/plugins';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
 
 // https://better-auth.vercel.app/docs/reference/options
@@ -115,6 +115,43 @@ export const auth = betterAuth({
   telemetry: {
     enabled: false,
   },
+  hooks: {
+    after: createAuthMiddleware(async ({ path, context, headers }) => {
+      const session = context.session?.session;
+      const newSession = context.newSession;
+
+      if (path.startsWith('/sign-up') && newSession) {
+        const org = await auth.api.createOrganization({
+          body: {
+            name: 'My Organization',
+            slug: `org-${newSession.user.id}`,
+            userId: newSession.user.id,
+          },
+        });
+
+        if (!org) {
+          throw new Error(
+            `Failed to create organization for user ${newSession.user.id}`,
+          );
+        }
+      } else if (path.startsWith('/get-session') && session) {
+        if (!session.activeOrganizationId) {
+          const { id: organizationId } = await db
+            .selectFrom('organization')
+            .innerJoin('member', 'member.organizationId', 'organization.id')
+            .where('member.role', '=', 'owner')
+            .where('member.userId', '=', session.userId)
+            .select('organization.id')
+            .executeTakeFirstOrThrow();
+
+          await auth.api.setActiveOrganization({
+            headers: headers as HeadersInit,
+            body: { organizationId },
+          });
+        }
+      }
+    }),
+  },
 });
 
 export type UserSettings = {
@@ -126,6 +163,9 @@ export type UserSettings = {
 
 export type Session = typeof auth.$Infer.Session;
 
+export type Organization = typeof auth.$Infer.Organization;
+
 export type SessionUser = Omit<typeof auth.$Infer.Session.user, 'settings'> & {
+  organization: Organization;
   settings?: UserSettings | null;
 };
