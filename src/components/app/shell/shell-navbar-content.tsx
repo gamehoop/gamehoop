@@ -71,7 +71,7 @@ export function ShellNavbarContent({
             <NavLink
               py="md"
               label={user.name}
-              description={user.name}
+              description={user.email}
               leftSection={<Avatar />}
             />
           </Menu.Target>

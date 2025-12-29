@@ -8,7 +8,7 @@ import { seo } from '@/utils/seo';
 import { Button, Card, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { AtSign, Lock } from 'lucide-react';
+import { AtSign, CircleUserRound, Lock } from 'lucide-react';
 import { useState } from 'react';
 import z from 'zod';
 
@@ -29,6 +29,7 @@ function SignUp() {
   const form = useForm({
     defaultValues: {
       email: '',
+      name: '',
       password: '',
       passwordConfirmation: '',
     },
@@ -36,6 +37,7 @@ function SignUp() {
       onSubmit: z
         .object({
           email: z.email().min(1),
+          name: z.string().min(1),
           password: z
             .string()
             .min(8, { message: 'Password must be at least 8 characters' }),
@@ -52,7 +54,7 @@ function SignUp() {
       const { error } = await signUp.email({
         email: value.email,
         password: value.password,
-        name: value.email,
+        name: value.name,
         callbackURL: '/?verified=true',
       });
 
@@ -90,6 +92,22 @@ function SignUp() {
                   error={field.state.meta.errors[0]?.message}
                   placeholder="you@example.com"
                   leftSection={<AtSign />}
+                  required
+                />
+              )}
+            </form.Field>
+
+            <form.Field name="name">
+              {(field) => (
+                <TextInput
+                  label="Name"
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  error={field.state.meta.errors[0]?.message}
+                  placeholder="What should we call you?"
+                  leftSection={<CircleUserRound />}
                   required
                 />
               )}
