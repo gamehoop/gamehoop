@@ -5,14 +5,7 @@ import { defineConfig } from 'vitest/config';
 
 // https://vitest.dev/config
 export default defineConfig({
-  plugins: [
-    // Adds support for TypeScript path aliases
-    tsConfigPaths(),
-    // To use React
-    react(),
-    // To use Tailwind CSS
-    tailwindcss(),
-  ],
+  plugins: [tsConfigPaths(), react(), tailwindcss()],
   test: {
     // Run tests in an emulated browser environment
     environment: 'jsdom',
