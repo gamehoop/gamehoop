@@ -7,3 +7,5 @@ export const UIProvider = MantineProvider;
 export const uiHtmlProps = mantineHtmlProps;
 
 export type UISize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+export type UIPosition = 'left' | 'right' | 'top' | 'bottom';
