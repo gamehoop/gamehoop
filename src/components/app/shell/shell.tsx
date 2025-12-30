@@ -1,4 +1,5 @@
 import { AppShell } from '@/components/ui/app-shell';
+import { useAccountNotifier } from '@/hooks/use-account-notifier';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { useDisclosure } from '@mantine/hooks';
@@ -14,6 +15,8 @@ export interface ShellProps extends PropsWithChildren {
 export function Shell({ user, children }: ShellProps) {
   const router = useRouter();
   const [opened, { toggle }] = useDisclosure(!user.settings?.navbarCollapsed);
+
+  useAccountNotifier({ user });
 
   const onCollapseNavbar = async () => {
     toggle();
