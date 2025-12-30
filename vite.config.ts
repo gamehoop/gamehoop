@@ -8,6 +8,22 @@ import { defineConfig } from 'vite';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 const config = defineConfig({
+  build: {
+    sourcemap: true,
+    chunkSizeWarningLimit: 2000, // >= 2MB
+    rollupOptions: {
+      output: {
+        // Workaround for https://github.com/TanStack/router/discussions/4298
+        assetFileNames: (assetInfo) => {
+          const fileName = assetInfo.names?.[assetInfo.names.length - 1];
+          if (fileName === 'app.css') {
+            return `assets/styles/app.css`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+      },
+    },
+  },
   plugins: [
     devtools(),
     nitro(),
