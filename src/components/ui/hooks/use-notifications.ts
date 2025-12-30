@@ -1,8 +1,10 @@
-import { DefaultMantineColor } from '@mantine/core';
+import { DefaultMantineColor, useMantineTheme } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { ReactNode } from 'react';
 
 export function useNotifications() {
+  const theme = useMantineTheme();
+
   const factory =
     (color: DefaultMantineColor) =>
     ({
@@ -29,7 +31,7 @@ export function useNotifications() {
     };
 
   return {
-    info: factory('blue'),
+    info: factory(theme.primaryColor),
     success: factory('green'),
     warning: factory('yellow'),
     error: factory('red'),

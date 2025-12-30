@@ -8,11 +8,11 @@ export interface UseColorSchemeResult {
   isLightTheme: boolean;
 }
 
-export function useColorScheme() {
+export function useColorScheme(): UseColorSchemeResult {
   const { colorScheme, setColorScheme, toggleColorScheme } =
     useMantineColorScheme();
   return {
-    colorScheme,
+    colorScheme: colorScheme as 'light' | 'dark',
     setColorScheme,
     toggleColorScheme,
     isDarkTheme: colorScheme === 'dark',
