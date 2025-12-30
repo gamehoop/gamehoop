@@ -8,6 +8,7 @@ export interface NavLinkProps {
   label?: string;
   leftSection?: ReactNode;
   onClick?: () => void;
+  to?: string;
 }
 
 export function NavLink(props: NavLinkProps) {
