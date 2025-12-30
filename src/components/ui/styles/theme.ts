@@ -137,6 +137,11 @@ export function createTheme(): { theme: ThemeOverride; themeColor: string } {
           size: 'md',
         },
       }),
+      Table: Textarea.extend({
+        defaultProps: {
+          fz: 'md',
+        },
+      }),
       Textarea: Textarea.extend({
         defaultProps: {
           size: 'md',

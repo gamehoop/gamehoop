@@ -1,21 +1,27 @@
 import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { TextInput } from '@/components/ui/text-input';
-import { SessionUser } from '@/lib/auth';
-import { organization } from '@/lib/auth/client';
+import { Organization } from '@/lib/auth';
+import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { Castle, Save } from 'lucide-react';
 import z from 'zod';
 
-export function OrganizationSettingsForm({ user }: { user: SessionUser }) {
+export interface OrganizationSettingsFormProps {
+  organization: Organization;
+}
+
+export function OrganizationSettingsForm({
+  organization,
+}: OrganizationSettingsFormProps) {
   const router = useRouter();
   const notify = useNotifications();
 
   const form = useForm({
     defaultValues: {
-      name: user.organization.name,
+      name: organization.name,
     },
     validators: {
       onSubmit: z.object({
@@ -24,8 +30,8 @@ export function OrganizationSettingsForm({ user }: { user: SessionUser }) {
     },
     onSubmit: async ({ value }) => {
       try {
-        await organization.update({
-          organizationId: user.organization.id,
+        await authClient.organization.update({
+          organizationId: organization.id,
           data: value,
         });
         form.reset(value);

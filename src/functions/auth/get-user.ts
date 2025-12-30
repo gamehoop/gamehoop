@@ -12,15 +12,6 @@ export const getUser = createServerFn().handler(
       throw new Error('Unauthorized');
     }
 
-    const organizations = await auth.api.listOrganizations({ headers });
-    const organization = organizations[0];
-    if (!organization) {
-      throw new Error(`No organization found for user ${user.id}`);
-    }
-
-    return {
-      ...user,
-      organization,
-    };
+    return user;
   },
 );

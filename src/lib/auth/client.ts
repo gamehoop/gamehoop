@@ -7,17 +7,7 @@ import {
 } from 'better-auth/client/plugins';
 import { createAuthClient, ErrorContext } from 'better-auth/react';
 
-export const {
-  signIn,
-  signUp,
-  resetPassword,
-  useSession,
-  getSession,
-  requestPasswordReset,
-  deleteUser,
-  updateUser,
-  organization,
-} = createAuthClient({
+export const authClient = createAuthClient({
   fetchOptions: { onError },
   plugins: [inferAdditionalFields<typeof auth>(), organizationClient()],
 });
@@ -30,3 +20,15 @@ async function onError({ request, response }: ErrorContext) {
     );
   }
 }
+
+export const {
+  signIn,
+  signUp,
+  resetPassword,
+  useSession,
+  getSession,
+  requestPasswordReset,
+  deleteUser,
+  updateUser,
+  organization,
+} = authClient;

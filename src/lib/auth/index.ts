@@ -131,7 +131,8 @@ export type Session = typeof auth.$Infer.Session;
 
 export type Organization = typeof auth.$Infer.Organization;
 
+export type Member = typeof auth.$Infer.Member;
+
 export type SessionUser = Omit<typeof auth.$Infer.Session.user, 'settings'> & {
-  organization: Organization;
   settings?: UserSettings | null;
 };
