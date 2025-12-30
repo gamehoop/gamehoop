@@ -7,10 +7,6 @@ export interface AnchorLinkProps extends AnchorProps {
 }
 
 // https://tanstack.com/router/latest/docs/framework/react/api/router/linkComponent#link-returns
-export function AnchorLink({ children, ...props }: AnchorLinkProps) {
-  return (
-    <Anchor component={Link} {...props}>
-      {children}
-    </Anchor>
-  );
+export function AnchorLink(props: AnchorLinkProps) {
+  return <Anchor component={Link} {...props} />;
 }

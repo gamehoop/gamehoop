@@ -1,6 +1,7 @@
 import logoDark from '@/assets/logo-full-dark.svg';
 import logo from '@/assets/logo-full.svg';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { NavLink } from '@/components/app/ui/nav-link';
 import { ActionIcon } from '@/components/ui/action-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
@@ -8,7 +9,6 @@ import { Menu } from '@/components/ui/menu';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
-import { NavLink } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
@@ -73,7 +73,7 @@ export function ShellNavbarContent({
         <Menu position="right" withArrow>
           <Menu.Target>
             <NavLink
-              py="md"
+              className="m-4"
               label={user.name}
               description={user.email}
               leftSection={<Avatar />}
