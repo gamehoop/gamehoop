@@ -40,6 +40,7 @@ export function ShellAvatarMenu({
             description={user.email}
             leftSection={<Avatar />}
             size="md"
+            className="h-18.75"
           />
         ) : (
           <div className="mt-1 h-18.75 flex items-center justify-center border-t border-(--app-shell-border-color) w-full dark:hover:bg-(--mantine-color-dark-6) hover:bg-(--mantine-color-gray-0) cursor-pointer">

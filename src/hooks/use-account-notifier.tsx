@@ -9,7 +9,7 @@ export function useAccountNotifier({ user }: { user?: SessionUser }) {
   useEffect(() => {
     if (user && !user.emailVerified) {
       notify.warning({
-        title: 'Verify your email',
+        title: 'Verify your email address',
         message: 'Please check your inbox and verify your email address.',
         id: 'verify-email-notification',
         autoClose: false,
