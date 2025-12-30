@@ -1,5 +1,6 @@
 import logo from '@/assets/logo.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { ActionIcon } from '@/components/ui/action-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -7,7 +8,7 @@ import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { themeColor } from '@/styles/theme';
-import { ActionIcon, Menu } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
@@ -61,7 +62,7 @@ export function ShellNavbarCollapsedContent({
         </Tooltip>
       </ul>
 
-      <ActionIcon variant="transparent" onClick={onToggle} className="mt-auto ">
+      <ActionIcon variant="transparent" onClick={onToggle} className="mt-auto">
         <PanelLeftOpen className="text-(--mantine-color-text)" />
       </ActionIcon>
 
