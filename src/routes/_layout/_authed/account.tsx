@@ -25,7 +25,7 @@ function Account() {
   return (
     <>
       <Title order={2}>My Account</Title>
-      <p className="text-sm">
+      <p className="text-sm pb-4">
         User since{' '}
         {user.createdAt.toLocaleDateString(undefined, {
           year: 'numeric',
