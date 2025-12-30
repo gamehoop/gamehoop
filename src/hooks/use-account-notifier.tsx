@@ -1,9 +1,9 @@
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { SessionUser } from '@/lib/auth';
+import { User } from '@/lib/auth';
 import { Mail } from 'lucide-react';
 import { useEffect } from 'react';
 
-export function useAccountNotifier({ user }: { user?: SessionUser }) {
+export function useAccountNotifier({ user }: { user?: User }) {
   const notify = useNotifications();
 
   useEffect(() => {

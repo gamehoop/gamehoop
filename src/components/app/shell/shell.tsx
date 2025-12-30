@@ -1,6 +1,6 @@
 import { AppShell } from '@/components/ui/app-shell';
 import { useAccountNotifier } from '@/hooks/use-account-notifier';
-import { SessionUser } from '@/lib/auth';
+import { User } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from '@tanstack/react-router';
@@ -9,7 +9,7 @@ import { ShellNavbarCollapsedContent } from './shell-collapsed-navbar-content';
 import { ShellNavbarContent } from './shell-navbar-content';
 
 export interface ShellProps extends PropsWithChildren {
-  user: SessionUser;
+  user: User;
 }
 
 export function Shell({ user, children }: ShellProps) {

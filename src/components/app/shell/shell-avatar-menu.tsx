@@ -2,13 +2,13 @@ import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Menu } from '@/components/ui/menu';
 import { NavLink } from '@/components/ui/nav-link';
-import { SessionUser } from '@/lib/auth';
+import { User } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { Link, useRouter } from '@tanstack/react-router';
-import { Book, Castle, LogOut, Moon, Sun, User } from 'lucide-react';
+import { Book, Castle, LogOut, Moon, Sun, UserIcon } from 'lucide-react';
 
 export interface ShellAvatarMenuProps {
-  user: SessionUser;
+  user: User;
   withDescription?: boolean;
 }
 
@@ -57,7 +57,7 @@ export function ShellAvatarMenu({
 
       <Menu.Dropdown>
         <Link to="/account">
-          <Menu.Item leftSection={<User />}>Account</Menu.Item>
+          <Menu.Item leftSection={<UserIcon />}>Account</Menu.Item>
         </Link>
         <Link to="/organization">
           <Menu.Item leftSection={<Castle />}>Organization</Menu.Item>

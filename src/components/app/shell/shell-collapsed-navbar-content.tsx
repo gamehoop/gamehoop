@@ -3,7 +3,7 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { ActionIcon } from '@/components/ui/action-icon';
 import { Tooltip } from '@/components/ui/tooltip';
 import { env } from '@/env/client';
-import { SessionUser } from '@/lib/auth';
+import { User } from '@/lib/auth';
 import { themeColor } from '@/styles/theme';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
@@ -11,7 +11,7 @@ import { Home, PanelLeftOpen } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
 
 export interface ShellNavbarCollapsedContentProps {
-  user: SessionUser;
+  user: User;
   onCollapseNavbar: () => void;
 }
 

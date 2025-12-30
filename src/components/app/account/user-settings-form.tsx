@@ -6,7 +6,7 @@ import { TextInput } from '@/components/ui/text-input';
 import { deleteUserAvatar } from '@/functions/user/delete-user-avatar';
 import { updateUser } from '@/functions/user/update-user';
 import { updateUserAvatar } from '@/functions/user/update-user-avatar';
-import { SessionUser } from '@/lib/auth';
+import { User } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
@@ -14,7 +14,7 @@ import { AtSign, CircleUserRound, Save } from 'lucide-react';
 import { ChangeEvent, useEffect, useRef } from 'react';
 import z from 'zod';
 
-export function UserSettingsForm({ user }: { user: SessionUser }) {
+export function UserSettingsForm({ user }: { user: User }) {
   const router = useRouter();
   const avatarInput = useRef<HTMLInputElement>(null);
   const notify = useNotifications();
