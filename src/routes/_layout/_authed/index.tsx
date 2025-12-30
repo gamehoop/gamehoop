@@ -6,12 +6,13 @@ import z from 'zod';
 export const Route = createFileRoute('/_layout/_authed/')({
   validateSearch: z.object({
     verified: z.boolean().optional(),
+    accountDeleted: z.boolean().optional(),
   }),
   component: Home,
 });
 
 function Home() {
-  const { verified } = Route.useSearch();
+  const { verified, accountDeleted } = Route.useSearch();
   const notify = useNotifications();
 
   useEffect(() => {
@@ -22,6 +23,15 @@ function Home() {
       });
     }
   }, [verified, notify]);
+
+  useEffect(() => {
+    if (accountDeleted) {
+      notify.success({
+        title: 'Sorry to see you go',
+        message: 'Your account has been permanently deleted.',
+      });
+    }
+  }, [accountDeleted, notify]);
 
   return <div></div>;
 }

@@ -1,4 +1,7 @@
+import { AccountDangerZone } from '@/components/app/account/account-danger-zone';
+import { AuthenticationSettings } from '@/components/app/account/authentication-settings';
 import { UserSettingsForm } from '@/components/app/account/user-settings-form';
+import { Divider } from '@/components/ui/divider';
 import { Title } from '@/components/ui/title';
 import { env } from '@/env/client';
 import { seo } from '@/utils/seo';
@@ -24,6 +27,12 @@ function Account() {
       <Title order={2}>My Account</Title>
 
       <UserSettingsForm user={user} />
+
+      <Divider />
+      <AuthenticationSettings />
+
+      <Divider />
+      <AccountDangerZone user={user} />
     </>
   );
 }
