@@ -1,11 +1,12 @@
 import logo from '@/assets/logo.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
+import { Tooltip } from '@/components/ui/tooltip';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { themeColor } from '@/styles/theme';
-import { ActionIcon, Avatar, Menu, Tooltip } from '@mantine/core';
+import { ActionIcon, Avatar, Menu } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
