@@ -15,7 +15,7 @@ export function Shell({ user, children }: ShellProps) {
   const router = useRouter();
   const [opened, { toggle }] = useDisclosure(!user.settings?.navbarCollapsed);
 
-  const onToggle = async () => {
+  const onCollapseNavbar = async () => {
     toggle();
 
     await updateUser({
@@ -38,9 +38,12 @@ export function Shell({ user, children }: ShellProps) {
     >
       <AppShell.Navbar>
         {opened ? (
-          <ShellNavbarContent user={user} onToggle={onToggle} />
+          <ShellNavbarContent user={user} onCollapseNavbar={onCollapseNavbar} />
         ) : (
-          <ShellNavbarCollapsedContent user={user} onToggle={onToggle} />
+          <ShellNavbarCollapsedContent
+            user={user}
+            onCollapseNavbar={onCollapseNavbar}
+          />
         )}
       </AppShell.Navbar>
 
