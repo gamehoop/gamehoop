@@ -1,8 +1,8 @@
 import logoDark from '@/assets/logo-full-dark.svg';
 import logo from '@/assets/logo-full.svg';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { Title } from '@/components/ui/title';
 import { env } from '@/env/client';
-import { Title } from '@mantine/core';
 import { Image } from '@unpic/react';
 import { PropsWithChildren } from 'react';
 
