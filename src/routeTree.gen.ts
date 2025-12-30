@@ -18,6 +18,7 @@ import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as LayoutAuthedIndexRouteImport } from './routes/_layout/_authed/index'
+import { Route as ApiUserAvatarRouteImport } from './routes/api/user/avatar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
@@ -64,6 +65,11 @@ const LayoutAuthedIndexRoute = LayoutAuthedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LayoutAuthedRoute,
 } as any)
+const ApiUserAvatarRoute = ApiUserAvatarRouteImport.update({
+  id: '/api/user/avatar',
+  path: '/api/user/avatar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof LayoutAuthedAccountRoute
   '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/account': typeof LayoutAuthedAccountRoute
   '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
 }
 export interface FileRoutesById {
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/_layout/_authed/account': typeof LayoutAuthedAccountRoute
   '/_layout/_authed/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/user/avatar': typeof ApiUserAvatarRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
 }
 export interface FileRouteTypes {
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/organization'
     | '/api/auth/$'
+    | '/api/user/avatar'
     | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/organization'
     | '/api/auth/$'
+    | '/api/user/avatar'
     | '/'
   id:
     | '__root__'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/_layout/_authed/account'
     | '/_layout/_authed/organization'
     | '/api/auth/$'
+    | '/api/user/avatar'
     | '/_layout/_authed/'
   fileRoutesById: FileRoutesById
 }
@@ -161,6 +173,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LayoutRoute: typeof LayoutRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiUserAvatarRoute: typeof ApiUserAvatarRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof LayoutAuthedIndexRouteImport
       parentRoute: typeof LayoutAuthedRoute
+    }
+    '/api/user/avatar': {
+      id: '/api/user/avatar'
+      path: '/api/user/avatar'
+      fullPath: '/api/user/avatar'
+      preLoaderRoute: typeof ApiUserAvatarRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -301,6 +321,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LayoutRoute: LayoutRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiUserAvatarRoute: ApiUserAvatarRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

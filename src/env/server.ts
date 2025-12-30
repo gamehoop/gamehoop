@@ -26,6 +26,13 @@ export const env = createEnv({
     SMTP_USERNAME: z.string(),
     SMTP_PASSWORD: z.string(),
     SMTP_SENDER: z.email(),
+
+    // Object storage
+    S3_ENDPOINT_URL: z.url().optional(),
+    S3_REGION: z.string().optional(),
+    S3_BUCKET_NAME: z.string().optional(),
+    S3_ACCESS_KEY_ID: z.string().optional(),
+    S3_SECRET_ACCESS_KEY: z.string().optional(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

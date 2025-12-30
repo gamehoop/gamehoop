@@ -1,3 +1,5 @@
+import { UserSettingsForm } from '@/components/app/account/user-settings-form';
+import { Title } from '@/components/ui/title';
 import { env } from '@/env/client';
 import { seo } from '@/utils/seo';
 import { createFileRoute } from '@tanstack/react-router';
@@ -17,5 +19,11 @@ export const Route = createFileRoute('/_layout/_authed/account')({
 function Account() {
   const { user } = Route.useLoaderData();
 
-  return <div>Hello {user.name}!</div>;
+  return (
+    <>
+      <Title order={2}>My Account</Title>
+
+      <UserSettingsForm user={user} />
+    </>
+  );
 }

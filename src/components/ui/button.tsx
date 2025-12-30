@@ -10,6 +10,7 @@ export interface ButtonProps extends PropsWithChildren {
   loading?: boolean;
   onClick: () => void;
   size?: UISize;
+  variant?: 'default' | 'filled' | 'light' | 'outline' | 'subtle';
 }
 
 export function Button(props: ButtonProps) {

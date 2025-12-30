@@ -38,13 +38,19 @@ export function ShellAvatarMenu({
           <NavLink
             label={user.name}
             description={user.email}
-            leftSection={<Avatar />}
+            leftSection={
+              <Avatar
+                src={user.image ? `/api/user/avatar?url=${user.image}` : ''}
+              />
+            }
             size="md"
             className="h-18.75"
           />
         ) : (
           <div className="mt-1 h-18.75 flex items-center justify-center border-t border-(--app-shell-border-color) w-full dark:hover:bg-(--mantine-color-dark-6) hover:bg-(--mantine-color-gray-0) cursor-pointer">
-            <Avatar />
+            <Avatar
+              src={user.image ? `/api/user/avatar?url=${user.image}` : ''}
+            />
           </div>
         )}
       </Menu.Target>

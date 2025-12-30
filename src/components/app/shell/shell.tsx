@@ -32,7 +32,6 @@ export function Shell({ user, children }: ShellProps) {
 
   return (
     <AppShell
-      className="m-4"
       navbar={{
         width: opened ? 250 : 80,
         breakpoint: 'sm',
@@ -50,7 +49,9 @@ export function Shell({ user, children }: ShellProps) {
         )}
       </AppShell.Navbar>
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>
+        <div className="p-4">{children}</div>
+      </AppShell.Main>
     </AppShell>
   );
 }
