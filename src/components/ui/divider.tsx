@@ -1,0 +1,14 @@
+import { UISize } from '@/components/ui';
+import { Divider as BaseDivider } from '@mantine/core';
+
+export interface DividerProps {
+  className?: string;
+  label?: string;
+  labelPosition?: 'center' | 'left' | 'right';
+  size?: UISize;
+}
+
+// https://mantine.dev/core/divider
+export function Divider(props: DividerProps) {
+  return <BaseDivider {...props} />;
+}
