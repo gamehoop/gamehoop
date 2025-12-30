@@ -73,7 +73,6 @@ export function ShellNavbarContent({
         <Menu position="right" withArrow>
           <Menu.Target>
             <NavLink
-              className="m-4"
               label={user.name}
               description={user.email}
               leftSection={<Avatar />}

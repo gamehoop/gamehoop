@@ -1,6 +1,6 @@
+import { AppShell } from '@/components/ui/app-shell';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
-import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from '@tanstack/react-router';
 import { PropsWithChildren } from 'react';
@@ -29,7 +29,7 @@ export function Shell({ user, children }: ShellProps) {
 
   return (
     <AppShell
-      padding="md"
+      className="m-4"
       navbar={{
         width: opened ? 250 : 80,
         breakpoint: 'sm',
