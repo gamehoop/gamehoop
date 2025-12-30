@@ -26,7 +26,14 @@ export const updateUser = createServerFn({ method: HttpMethod.Post })
       ) {
         await auth.api.updateUser({
           headers,
-          body: { name, image, settings: { ...user.settings, darkMode } },
+          body: {
+            name: name ?? user.name,
+            image: image ?? user.image,
+            settings: {
+              ...user.settings,
+              darkMode: darkMode ?? user.settings?.darkMode,
+            },
+          },
         });
       }
 

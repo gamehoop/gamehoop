@@ -25,6 +25,15 @@ function Account() {
   return (
     <>
       <Title order={2}>My Account</Title>
+      <p className="text-sm">
+        User since{' '}
+        {user.createdAt.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+        })}
+      </p>
 
       <UserSettingsForm user={user} />
 
