@@ -50,7 +50,7 @@ export function Shell({ user, children }: ShellProps) {
       </AppShell.Navbar>
 
       <AppShell.Main>
-        <div className="p-4">{children}</div>
+        <div className="p-4 max-w-400 mx-auto">{children}</div>
       </AppShell.Main>
     </AppShell>
   );

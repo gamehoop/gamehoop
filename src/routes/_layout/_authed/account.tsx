@@ -32,6 +32,7 @@ function Account() {
           month: 'long',
           day: 'numeric',
           hour: 'numeric',
+          hour12: true,
         })}
       </p>
 
