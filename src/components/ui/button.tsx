@@ -3,6 +3,7 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { UISize } from '.';
 
 export interface ButtonProps extends PropsWithChildren {
+  className?: string;
   disabled?: boolean;
   fullWidth?: boolean;
   leftSection?: ReactNode;
