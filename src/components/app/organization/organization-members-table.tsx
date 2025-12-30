@@ -21,6 +21,7 @@ export function OrganizationMembersTable({
           <Table.Th>Name</Table.Th>
           <Table.Th>Email</Table.Th>
           <Table.Th>Role</Table.Th>
+          <Table.Th>Date Added</Table.Th>
         </Table.Head>
         <Table.Body>
           {organization.members.map((member) => (
@@ -35,6 +36,13 @@ export function OrganizationMembersTable({
               <Table.Td>{member.user.name}</Table.Td>
               <Table.Td>{member.user.email}</Table.Td>
               <Table.Td>{member.role}</Table.Td>
+              <Table.Td>
+                {member.createdAt.toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </Table.Td>
             </Table.Tr>
           ))}
         </Table.Body>
