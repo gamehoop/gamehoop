@@ -13,8 +13,9 @@ import {
   minutesToSeconds,
 } from '@/utils/datetime';
 import { betterAuth } from 'better-auth';
-import { createAuthMiddleware, organization } from 'better-auth/plugins';
+import { organization } from 'better-auth/plugins';
 import { tanstackStartCookies } from 'better-auth/tanstack-start';
+import { hooks } from './hooks';
 
 // https://better-auth.vercel.app/docs/reference/options
 export const auth = betterAuth({
@@ -84,6 +85,8 @@ export const auth = betterAuth({
       maxAge: minutesToSeconds(5),
     },
   },
+  // Hooks to run custom logic at various points in the auth flow
+  hooks,
   // Rate limit requests from the same IP address to prevent brute force attacks
   rateLimit: {
     // Limit to 100 requests per minute
@@ -114,43 +117,6 @@ export const auth = betterAuth({
   },
   telemetry: {
     enabled: false,
-  },
-  hooks: {
-    after: createAuthMiddleware(async ({ path, context, headers }) => {
-      const session = context.session?.session;
-      const newSession = context.newSession;
-
-      if (path.startsWith('/sign-up') && newSession) {
-        const org = await auth.api.createOrganization({
-          body: {
-            name: 'My Organization',
-            slug: `org-${newSession.user.id}`,
-            userId: newSession.user.id,
-          },
-        });
-
-        if (!org) {
-          throw new Error(
-            `Failed to create organization for user ${newSession.user.id}`,
-          );
-        }
-      } else if (path.startsWith('/get-session') && session) {
-        if (!session.activeOrganizationId) {
-          const { id: organizationId } = await db
-            .selectFrom('organization')
-            .innerJoin('member', 'member.organizationId', 'organization.id')
-            .where('member.role', '=', 'owner')
-            .where('member.userId', '=', session.userId)
-            .select('organization.id')
-            .executeTakeFirstOrThrow();
-
-          await auth.api.setActiveOrganization({
-            headers: headers as HeadersInit,
-            body: { organizationId },
-          });
-        }
-      }
-    }),
   },
 });
 

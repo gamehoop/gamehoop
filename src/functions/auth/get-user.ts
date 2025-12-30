@@ -1,29 +1,22 @@
-import { db } from '@/db';
 import { auth, SessionUser } from '@/lib/auth';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
 export const getUser = createServerFn().handler(
   async (): Promise<SessionUser> => {
-    const session = await auth.api.getSession({
-      headers: getRequestHeaders(),
-    });
+    const headers = getRequestHeaders();
+    const session = await auth.api.getSession({ headers });
 
     const user = session?.user;
     if (!user) {
       throw new Error('Unauthorized');
     }
 
-    const activeOrganizationId = session.session?.activeOrganizationId;
-    if (!activeOrganizationId) {
-      throw new Error('No active organization');
+    const organizations = await auth.api.listOrganizations({ headers });
+    const organization = organizations[0];
+    if (!organization) {
+      throw new Error(`No organization found for user ${user.id}`);
     }
-
-    const organization = await db
-      .selectFrom('organization')
-      .where('id', '=', activeOrganizationId)
-      .selectAll()
-      .executeTakeFirstOrThrow();
 
     return {
       ...user,
