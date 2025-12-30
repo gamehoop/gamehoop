@@ -1,12 +1,13 @@
 import logo from '@/assets/logo.png';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
+import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Tooltip } from '@/components/ui/tooltip';
 import { env } from '@/env/client';
 import { SessionUser } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { themeColor } from '@/styles/theme';
-import { ActionIcon, Avatar, Menu } from '@mantine/core';
+import { ActionIcon, Menu } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import {
@@ -67,7 +68,7 @@ export function ShellNavbarCollapsedContent({
       <Menu shadow="md" width={200} position="right" withArrow>
         <Menu.Target>
           <div className="mt-1 flex items-center justify-center border-t border-(--app-shell-border-color) w-full dark:hover:bg-(--mantine-color-dark-6) hover:bg-(--mantine-color-gray-0) cursor-pointer">
-            <Avatar m="md" />
+            <Avatar className="m-4" />
           </div>
         </Menu.Target>
 
