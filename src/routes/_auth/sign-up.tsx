@@ -1,11 +1,12 @@
 import { AuthCardHeader } from '@/components/app/auth/auth-card-header';
 import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { Alert, AlertProps } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import { env } from '@/env/client';
 import { signUp } from '@/lib/auth/client';
 import { getAlertPropsForError } from '@/lib/auth/errors';
 import { seo } from '@/utils/seo';
-import { Button, Card, PasswordInput, TextInput } from '@mantine/core';
+import { Card, PasswordInput, TextInput } from '@mantine/core';
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { AtSign, CircleUserRound, Lock } from 'lucide-react';

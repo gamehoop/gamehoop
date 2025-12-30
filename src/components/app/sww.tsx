@@ -1,5 +1,6 @@
+import { Button } from '@/components/ui/button';
 import { logger } from '@/lib/logger';
-import { Button, Title } from '@mantine/core';
+import { Title } from '@mantine/core';
 import { useRouter } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 
