@@ -3,11 +3,10 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { Alert, AlertProps } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { PasswordInput } from '@/components/ui/password-input';
 import { TextInput } from '@/components/ui/text-input';
 import { env } from '@/env/client';
-import { getSession, signIn } from '@/lib/auth/client';
+import { signIn } from '@/lib/auth/client';
 import { getAlertPropsForError } from '@/lib/auth/errors';
 import { seo } from '@/utils/seo';
 import { useForm } from '@tanstack/react-form';
@@ -33,7 +32,6 @@ function SignIn() {
   const router = useRouter();
   const search = Route.useSearch();
   const [alertProps, setAlertProps] = useState<AlertProps>();
-  const { colorScheme, setColorScheme } = useColorScheme();
 
   const form = useForm({
     defaultValues: {
@@ -58,17 +56,6 @@ function SignIn() {
       } else {
         await router.invalidate();
         await router.navigate({ to: search.redirect || '/' });
-
-        const { data } = await getSession();
-        if (data) {
-          const user = data.user;
-          const preferredColorScheme = user.settings?.darkMode
-            ? 'dark'
-            : 'light';
-          if (colorScheme !== preferredColorScheme) {
-            setColorScheme(preferredColorScheme);
-          }
-        }
       }
     },
   });

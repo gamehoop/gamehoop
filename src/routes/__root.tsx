@@ -2,7 +2,6 @@ import { NotFound } from '@/components/app/not-found';
 import { SomethingWentWrong } from '@/components/app/sww';
 import { ColorSchemeScript, uiHtmlProps, UIProvider } from '@/components/ui';
 import { ModalsProvider } from '@/components/ui/modals';
-import { Notifications } from '@/components/ui/notifications';
 import { NavigationProgress } from '@/components/ui/nprogress';
 import { env } from '@/env/client';
 import { getUser } from '@/functions/auth/get-user';
@@ -111,7 +110,6 @@ function RootProviders({
         <ModalsProvider>
           <NavigationProgress />
           {children}
-          <Notifications position="bottom-right" />
         </ModalsProvider>
       </UIProvider>
     </RootDocument>

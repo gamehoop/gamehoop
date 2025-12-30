@@ -4,6 +4,8 @@ export interface UseColorSchemeResult {
   colorScheme: 'light' | 'dark';
   setColorScheme: (value: 'light' | 'dark') => void;
   toggleColorScheme: () => void;
+  isDarkTheme: boolean;
+  isLightTheme: boolean;
 }
 
 export function useColorScheme() {
@@ -11,8 +13,9 @@ export function useColorScheme() {
     useMantineColorScheme();
   return {
     colorScheme,
-    isDarkTheme: colorScheme === 'dark',
     setColorScheme,
     toggleColorScheme,
+    isDarkTheme: colorScheme === 'dark',
+    isLightTheme: colorScheme === 'light',
   };
 }
