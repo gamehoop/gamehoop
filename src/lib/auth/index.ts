@@ -3,6 +3,7 @@ import { env } from '@/env/server';
 import {
   sendChangeEmailConfirmation,
   sendDeleteAccountVerification,
+  sendInvitationEmail,
   sendResetPassword,
   sendVerificationEmail,
 } from '@/lib/auth/emails';
@@ -101,7 +102,7 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [organization(), tanstackStartCookies()],
+  plugins: [organization({ sendInvitationEmail }), tanstackStartCookies()],
   logger: {
     log: (level, message, ...args) => {
       if (level === 'error') {
@@ -120,18 +121,20 @@ export const auth = betterAuth({
   },
 });
 
+export type Session = typeof auth.$Infer.Session;
+
+export type Organization = typeof auth.$Infer.Organization;
+
+export type Member = typeof auth.$Infer.Member;
+
+export type Invitation = typeof auth.$Infer.Invitation;
+
 export type UserSettings = {
   [key: string]: boolean | undefined;
 
   darkMode?: boolean;
   navbarCollapsed?: boolean;
 };
-
-export type Session = typeof auth.$Infer.Session;
-
-export type Organization = typeof auth.$Infer.Organization;
-
-export type Member = typeof auth.$Infer.Member;
 
 export type User = Omit<typeof auth.$Infer.Session.user, 'settings'> & {
   settings?: UserSettings | null;

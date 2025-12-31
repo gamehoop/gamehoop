@@ -16,6 +16,9 @@ import { useState } from 'react';
 import z from 'zod';
 
 export const Route = createFileRoute('/_auth/sign-up')({
+  validateSearch: z.object({
+    redirect: z.string().optional().catch(''),
+  }),
   beforeLoad: async ({ context: { user } }) => {
     if (user) {
       throw redirect({ to: '/' });
@@ -27,6 +30,7 @@ export const Route = createFileRoute('/_auth/sign-up')({
 
 function SignUp() {
   const router = useRouter();
+  const search = Route.useSearch();
   const [alertProps, setAlertProps] = useState<AlertProps>();
 
   const form = useForm({
@@ -64,7 +68,7 @@ function SignUp() {
       if (error) {
         setAlertProps(getAlertPropsForError(error));
       } else {
-        await router.navigate({ to: '/' });
+        await router.navigate({ to: search.redirect ?? '/' });
       }
     },
   });

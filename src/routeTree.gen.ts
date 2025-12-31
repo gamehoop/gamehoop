@@ -22,6 +22,7 @@ import { Route as ApiUserAvatarRouteImport } from './routes/api/user/avatar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
+import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -86,6 +87,12 @@ const LayoutAuthedAccountRoute = LayoutAuthedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => LayoutAuthedRoute,
 } as any)
+const AuthInvitationInvitationIdAcceptRoute =
+  AuthInvitationInvitationIdAcceptRouteImport.update({
+    id: '/invitation/$invitationId/accept',
+    path: '/invitation/$invitationId/accept',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
+  '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -110,6 +118,7 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
+  '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
+  '/_auth/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/'
+    | '/invitation/$invitationId/accept'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/'
+    | '/invitation/$invitationId/accept'
   id:
     | '__root__'
     | '/_auth'
@@ -167,6 +179,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/_layout/_authed/'
+    | '/_auth/invitation/$invitationId/accept'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -269,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedAccountRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
+    '/_auth/invitation/$invitationId/accept': {
+      id: '/_auth/invitation/$invitationId/accept'
+      path: '/invitation/$invitationId/accept'
+      fullPath: '/invitation/$invitationId/accept'
+      preLoaderRoute: typeof AuthInvitationInvitationIdAcceptRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
@@ -278,6 +298,7 @@ interface AuthRouteChildren {
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignOutRoute: typeof AuthSignOutRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthInvitationInvitationIdAcceptRoute: typeof AuthInvitationInvitationIdAcceptRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -286,6 +307,7 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthSignInRoute: AuthSignInRoute,
   AuthSignOutRoute: AuthSignOutRoute,
   AuthSignUpRoute: AuthSignUpRoute,
+  AuthInvitationInvitationIdAcceptRoute: AuthInvitationInvitationIdAcceptRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

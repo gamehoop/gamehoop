@@ -1,15 +1,11 @@
+import { getUser } from '@/functions/auth/get-user';
 import { auth } from '@/lib/auth';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
 export const getOrganization = createServerFn().handler(async () => {
+  const user = await getUser();
   const headers = getRequestHeaders();
-  const session = await auth.api.getSession({ headers });
-
-  const user = session?.user;
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
 
   const organizations = await auth.api.listOrganizations({ headers });
   if (!organizations.length) {

@@ -7,12 +7,13 @@ export const Route = createFileRoute('/_layout/_authed/')({
   validateSearch: z.object({
     verified: z.boolean().optional(),
     accountDeleted: z.boolean().optional(),
+    invitationAccepted: z.boolean().optional(),
   }),
   component: Home,
 });
 
 function Home() {
-  const { verified, accountDeleted } = Route.useSearch();
+  const { verified, accountDeleted, invitationAccepted } = Route.useSearch();
   const notify = useNotifications();
 
   useEffect(() => {
@@ -32,6 +33,15 @@ function Home() {
       });
     }
   }, [accountDeleted, notify]);
+
+  useEffect(() => {
+    if (invitationAccepted) {
+      notify.success({
+        title: 'Invitation accepted',
+        message: 'You have successfully joined the organization.',
+      });
+    }
+  }, [invitationAccepted, notify]);
 
   return <div></div>;
 }

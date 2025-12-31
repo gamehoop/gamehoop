@@ -1,3 +1,4 @@
+import { env } from '@/env/client';
 import { sendEmail } from '@/lib/email';
 
 export async function sendResetPassword({
@@ -53,5 +54,22 @@ export async function sendDeleteAccountVerification({
     to: user.email,
     subject: 'Confirm your account deletion',
     html: `Click the link to confirm you want to delete your account: <a href="${url}">Delete Account</a>`,
+  });
+}
+
+export async function sendInvitationEmail({
+  id,
+  email,
+  inviter,
+}: {
+  id: string;
+  email: string;
+  inviter: { user: { name: string } };
+}): Promise<void> {
+  const url = `${env.VITE_BASE_URL}/invitation/${id}/accept`;
+  await sendEmail({
+    to: email,
+    subject: `${inviter.user.name} has invited you to join Gamehoop`,
+    html: `Click the link to join Gamehoop: <a href="${url}">Accept Invitation</a>`,
   });
 }
