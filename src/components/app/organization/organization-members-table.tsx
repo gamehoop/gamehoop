@@ -1,22 +1,28 @@
+import { ActionIcon } from '@/components/ui/action-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
-import { Member, Organization } from '@/lib/auth';
+import { Member, Organization, User } from '@/lib/auth';
 import { capitalize } from '@/utils/string';
-import { ArrowDownAZ, UserPlus } from 'lucide-react';
+import { ArrowDownAZ, Ellipsis, UserPlus, UserRoundMinus } from 'lucide-react';
 import { useInviteMemberModal } from './use-invite-member-modal';
+import { useRemoveMemberModal } from './use-remove-member-modal';
 
 export interface OrganizationMembersTableProps {
+  user: User;
   organization: Organization & {
     members: Member[];
   };
 }
 
 export function OrganizationMembersTable({
+  user,
   organization,
 }: OrganizationMembersTableProps) {
   const openInviteMemberModel = useInviteMemberModal({ organization });
+  const openRemoveMemberModal = useRemoveMemberModal({ organization });
 
   return (
     <>
@@ -37,6 +43,7 @@ export function OrganizationMembersTable({
             <Table.Th>Email</Table.Th>
             <Table.Th>Role</Table.Th>
             <Table.Th>Date Added</Table.Th>
+            <Table.Th></Table.Th>
           </Table.Tr>
         </Table.Head>
         <Table.Body>
@@ -60,6 +67,24 @@ export function OrganizationMembersTable({
                     month: 'long',
                     day: 'numeric',
                   })}
+                </Table.Td>
+                <Table.Td>
+                  <Menu>
+                    <Menu.Target>
+                      <ActionIcon variant="subtle">
+                        <Ellipsis />
+                      </ActionIcon>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item
+                        leftSection={<UserRoundMinus />}
+                        onClick={() => openRemoveMemberModal(member)}
+                        disabled={member.userId === user.id}
+                      >
+                        Remove
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
                 </Table.Td>
               </Table.Tr>
             ))}

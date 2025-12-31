@@ -26,7 +26,7 @@ export const Route = createFileRoute('/_layout/_authed/organization')({
 });
 
 function Organization() {
-  const { organization, invitations } = Route.useLoaderData();
+  const { user, organization, invitations } = Route.useLoaderData();
 
   return (
     <>
@@ -43,7 +43,7 @@ function Organization() {
       <OrganizationSettingsForm organization={organization} />
 
       <Divider />
-      <OrganizationMembersTable organization={organization} />
+      <OrganizationMembersTable user={user} organization={organization} />
 
       <Divider />
       <PendingInvitationsTable invitations={invitations} />

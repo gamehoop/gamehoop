@@ -28,6 +28,7 @@ Menu.Target = function MenuTarget(props: MenuTargetProps) {
 
 export interface MenuItemProps extends PropsWithChildren {
   className?: string;
+  disabled?: boolean;
   leftSection?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -83,6 +84,7 @@ MenuSub.Target = function MenuSubTarget(props: MenuSubTargetProps) {
 export interface MenuSubItemProps {
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
   leftSection?: ReactNode;
 }
 
