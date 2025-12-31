@@ -60,11 +60,41 @@ Menu.Divider = function MenuDivider(props: MenuDividerProps) {
   return <BaseMenu.Divider {...props} />;
 };
 
+export interface MenuSubTargetProps {
+  children: ReactNode;
+  className?: string;
+}
+
 export interface MenuSubProps {
   children: ReactNode;
   className?: string;
 }
 
-Menu.Sub = function MenuSub(props: MenuSubProps) {
+function MenuSub(props: MenuSubProps) {
   return <BaseMenu.Sub {...props} />;
+}
+
+Menu.Sub = MenuSub;
+
+MenuSub.Target = function MenuSubTarget(props: MenuSubTargetProps) {
+  return <BaseMenu.Sub.Target {...props} />;
+};
+
+export interface MenuSubItemProps {
+  children: ReactNode;
+  className?: string;
+  leftSection?: ReactNode;
+}
+
+MenuSub.Item = function MenuSubItem(props: MenuSubItemProps) {
+  return <BaseMenu.Sub.Item {...props} />;
+};
+
+export interface MenuSubDropdownProps {
+  children: ReactNode;
+  className?: string;
+}
+
+MenuSub.Dropdown = function MenuSubDropdown(props: MenuSubDropdownProps) {
+  return <BaseMenu.Sub.Dropdown {...props} />;
 };
