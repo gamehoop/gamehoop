@@ -9,7 +9,7 @@ const zUpdateUser = z.object({
   email: z.email().optional(),
   name: z.string().optional(),
   image: z.string().optional(),
-  activeOrganizationId: z.string().optional(),
+  activeOrganizationId: z.string().nullable().optional(),
   darkMode: z.boolean().optional(),
 });
 
@@ -37,7 +37,9 @@ export const updateUser = createServerFn({ method: HttpMethod.Post })
             settings: {
               ...user.settings,
               activeOrganizationId:
-                activeOrganizationId ?? user.settings?.activeOrganizationId,
+                activeOrganizationId !== undefined
+                  ? activeOrganizationId
+                  : user.settings?.activeOrganizationId,
               darkMode: darkMode ?? user.settings?.darkMode,
             },
           },

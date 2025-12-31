@@ -169,7 +169,7 @@ function SignUp() {
 
           <div className="text-center text-sm">
             <span>Already have an account? </span>
-            <AnchorLink to="/sign-in" size="sm">
+            <AnchorLink to="/sign-in" search={{ ...search }} size="sm">
               Sign in
             </AnchorLink>
           </div>
