@@ -63,7 +63,7 @@ export function ShellAvatarMenu({
           <Menu.Item leftSection={<Castle />}>Organization</Menu.Item>
         </Link>
 
-        <a href="https://docs.gamehoop.io">
+        <a href="https://docs.gamehoop.io" target="_blank" rel="noreferrer">
           <Menu.Item leftSection={<Book />}>Documentation</Menu.Item>
         </a>
         <Menu.Divider />
