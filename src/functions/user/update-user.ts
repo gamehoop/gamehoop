@@ -9,20 +9,25 @@ const zUpdateUser = z.object({
   email: z.email().optional(),
   name: z.string().optional(),
   image: z.string().optional(),
+  activeOrganizationId: z.string().optional(),
   darkMode: z.boolean().optional(),
 });
 
 export const updateUser = createServerFn({ method: HttpMethod.Post })
   .inputValidator(zUpdateUser)
   .handler(
-    async ({ data: { email, name, image, darkMode } }): Promise<void> => {
+    async ({
+      data: { email, name, image, darkMode, activeOrganizationId },
+    }): Promise<void> => {
       const user = await getUser();
       const headers = getRequestHeaders();
 
       if (
         (name !== undefined && name !== user.name) ||
         (image !== undefined && image !== user.image) ||
-        (darkMode !== undefined && darkMode !== user.settings?.darkMode)
+        (darkMode !== undefined && darkMode !== user.settings?.darkMode) ||
+        (activeOrganizationId !== undefined &&
+          activeOrganizationId !== user.settings?.activeOrganizationId)
       ) {
         await auth.api.updateUser({
           headers,
@@ -31,6 +36,8 @@ export const updateUser = createServerFn({ method: HttpMethod.Post })
             image: image ?? user.image,
             settings: {
               ...user.settings,
+              activeOrganizationId:
+                activeOrganizationId ?? user.settings?.activeOrganizationId,
               darkMode: darkMode ?? user.settings?.darkMode,
             },
           },

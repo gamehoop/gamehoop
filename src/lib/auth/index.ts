@@ -130,8 +130,7 @@ export type Member = typeof auth.$Infer.Member;
 export type Invitation = typeof auth.$Infer.Invitation;
 
 export type UserSettings = {
-  [key: string]: boolean | undefined;
-
+  activeOrganizationId?: string;
   darkMode?: boolean;
   navbarCollapsed?: boolean;
 };

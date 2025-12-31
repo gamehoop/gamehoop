@@ -5,6 +5,7 @@ import { ModalsProvider } from '@/components/ui/modals';
 import { NavigationProgress } from '@/components/ui/nprogress';
 import { env } from '@/env/client';
 import { getUser } from '@/functions/auth/get-user';
+import { getOrganizations } from '@/functions/user/get-organizations';
 import { theme, themeColor } from '@/styles/theme';
 import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
@@ -60,8 +61,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
   beforeLoad: async () => {
     try {
-      const user = await getUser();
-      return { user };
+      const [user, organizations] = await Promise.all([
+        getUser(),
+        getOrganizations(),
+      ]);
+      return { user, organizations };
     } catch {
       // The current user is unauthenticated
       return {};

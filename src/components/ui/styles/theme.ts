@@ -122,6 +122,11 @@ export function createTheme(): { theme: ThemeOverride; themeColor: string } {
           fz: 'md',
         },
       }),
+      MenuSubItem: Menu.Sub.Item.extend({
+        defaultProps: {
+          fz: 'md',
+        },
+      }),
       Select: Select.extend({
         defaultProps: {
           size: 'md',

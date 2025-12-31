@@ -2,22 +2,39 @@ import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Menu } from '@/components/ui/menu';
 import { NavLink } from '@/components/ui/nav-link';
-import { User } from '@/lib/auth';
+import { Organization, User } from '@/lib/auth';
 import { updateUser } from '@/lib/auth/client';
 import { Link, useRouter } from '@tanstack/react-router';
-import { Book, Castle, LogOut, Moon, Sun, UserIcon } from 'lucide-react';
+import {
+  Book,
+  Castle,
+  CircleChevronDown,
+  Cog,
+  LogOut,
+  Moon,
+  Sun,
+  UserIcon,
+} from 'lucide-react';
+import { useSwitchOrganizationModal } from './use-switch-organization-modal';
 
 export interface ShellAvatarMenuProps {
   user: User;
+  organizations: Organization[];
   withDescription?: boolean;
 }
 
 export function ShellAvatarMenu({
   user,
+  organizations,
   withDescription,
 }: ShellAvatarMenuProps) {
   const router = useRouter();
   const { toggleColorScheme } = useColorScheme();
+
+  const openSwitchOrganizationModal = useSwitchOrganizationModal({
+    user,
+    organizations,
+  });
 
   const onThemeToggle = async () => {
     toggleColorScheme();
@@ -31,13 +48,20 @@ export function ShellAvatarMenu({
     await router.invalidate();
   };
 
+  const activeOrganization =
+    organizations.find((o) => o.id === user.settings?.activeOrganizationId) ??
+    organizations[0];
+  if (!activeOrganization) {
+    throw new Error('No active organization');
+  }
+
   return (
     <Menu position="right" withArrow>
       <Menu.Target>
         {withDescription ? (
           <NavLink
             label={user.name}
-            description={user.email}
+            description={activeOrganization.name}
             leftSection={
               <Avatar
                 src={user.image ? `/api/user/avatar?url=${user.image}` : ''}
@@ -59,9 +83,36 @@ export function ShellAvatarMenu({
         <Link to="/account">
           <Menu.Item leftSection={<UserIcon />}>Account</Menu.Item>
         </Link>
-        <Link to="/organization">
-          <Menu.Item leftSection={<Castle />}>Organization</Menu.Item>
-        </Link>
+
+        {organizations.length === 1 ? (
+          <Link to="/organization">
+            <Menu.Item leftSection={<Castle />}>
+              {activeOrganization.name}
+            </Menu.Item>
+          </Link>
+        ) : (
+          <Menu.Sub>
+            <Menu.Sub.Target>
+              <Menu.Sub.Item leftSection={<Castle />}>
+                Organizations
+              </Menu.Sub.Item>
+            </Menu.Sub.Target>
+
+            <Menu.Sub.Dropdown>
+              <Link to="/organization">
+                <Menu.Item leftSection={<Cog />}>
+                  Manage {activeOrganization.name}
+                </Menu.Item>
+              </Link>
+              <Menu.Item
+                leftSection={<CircleChevronDown />}
+                onClick={openSwitchOrganizationModal}
+              >
+                Switch Organization
+              </Menu.Item>
+            </Menu.Sub.Dropdown>
+          </Menu.Sub>
+        )}
 
         <a href="https://docs.gamehoop.io" target="_blank" rel="noreferrer">
           <Menu.Item leftSection={<Book />}>Documentation</Menu.Item>

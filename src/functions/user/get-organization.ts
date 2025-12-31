@@ -13,7 +13,10 @@ export const getOrganization = createServerFn().handler(async () => {
   }
 
   const organization = await auth.api.getFullOrganization({
-    query: { organizationId: organizations[0]?.id },
+    query: {
+      organizationId:
+        user.settings?.activeOrganizationId ?? organizations[0]?.id,
+    },
     headers,
   });
 

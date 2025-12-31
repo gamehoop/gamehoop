@@ -3,7 +3,7 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { ActionIcon } from '@/components/ui/action-icon';
 import { Tooltip } from '@/components/ui/tooltip';
 import { env } from '@/env/client';
-import { User } from '@/lib/auth';
+import { Organization, User } from '@/lib/auth';
 import { themeColor } from '@/styles/theme';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
@@ -12,11 +12,13 @@ import { ShellAvatarMenu } from './shell-avatar-menu';
 
 export interface ShellNavbarCollapsedContentProps {
   user: User;
+  organizations: Organization[];
   onCollapseNavbar: () => void;
 }
 
 export function ShellNavbarCollapsedContent({
   user,
+  organizations,
   onCollapseNavbar,
 }: ShellNavbarCollapsedContentProps) {
   return (
@@ -43,7 +45,7 @@ export function ShellNavbarCollapsedContent({
         <PanelLeftOpen className="text-(--mantine-color-text)" />
       </ActionIcon>
 
-      <ShellAvatarMenu user={user} />
+      <ShellAvatarMenu user={user} organizations={organizations} />
     </div>
   );
 }

@@ -30,9 +30,14 @@ function Organization() {
 
   return (
     <>
-      <Title order={2}>My Organization</Title>
+      <Title order={2}>{organization.name}</Title>
       <p className="text-sm pb-4">
-        Your account is linked to your organization.
+        Established{' '}
+        {organization.createdAt.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
       </p>
 
       <OrganizationSettingsForm organization={organization} />

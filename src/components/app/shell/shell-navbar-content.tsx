@@ -4,7 +4,7 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { ActionIcon } from '@/components/ui/action-icon';
 import { NavLink } from '@/components/ui/nav-link';
 import { env } from '@/env/client';
-import { User } from '@/lib/auth';
+import { Organization, User } from '@/lib/auth';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import { Home, PanelLeftClose } from 'lucide-react';
@@ -12,11 +12,13 @@ import { ShellAvatarMenu } from './shell-avatar-menu';
 
 export interface ShellNavbarContentProps {
   user: User;
+  organizations: Organization[];
   onCollapseNavbar: () => void;
 }
 
 export function ShellNavbarContent({
   user,
+  organizations,
   onCollapseNavbar,
 }: ShellNavbarContentProps) {
   return (
@@ -43,7 +45,11 @@ export function ShellNavbarContent({
       </ActionIcon>
 
       <div className="mt-1 border-t border-(--app-shell-border-color)">
-        <ShellAvatarMenu user={user} withDescription />
+        <ShellAvatarMenu
+          user={user}
+          organizations={organizations}
+          withDescription
+        />
       </div>
     </div>
   );
