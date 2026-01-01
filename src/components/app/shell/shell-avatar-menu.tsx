@@ -106,11 +106,11 @@ export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
 
         {user.settings?.darkMode ? (
           <Menu.Item leftSection={<Sun />} onClick={onThemeToggle}>
-            Light Mode
+            Light Theme
           </Menu.Item>
         ) : (
           <Menu.Item leftSection={<Moon />} onClick={onThemeToggle}>
-            Dark Mode
+            Dark Theme
           </Menu.Item>
         )}
 

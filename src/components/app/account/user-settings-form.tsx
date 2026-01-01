@@ -190,7 +190,7 @@ export function UserSettingsForm() {
         {(field) => (
           <Switch
             name={field.name}
-            label="Dark Mode"
+            label="Dark Theme"
             checked={field.state.value}
             onChange={(e) => field.handleChange(e.target.checked)}
             onBlur={field.handleBlur}
