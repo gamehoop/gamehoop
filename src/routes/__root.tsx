@@ -5,7 +5,7 @@ import { ModalsProvider } from '@/components/ui/modals';
 import { NavigationProgress } from '@/components/ui/nprogress';
 import { env } from '@/env/client';
 import { getSessionContext } from '@/functions/auth/get-session-context';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { theme, themeColor } from '@/styles/theme';
 import { HttpStatus } from '@/utils/http';
 import { seo } from '@/utils/seo';
@@ -65,14 +65,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       const { user, organizations, activeOrganization } =
         await getSessionContext();
       return { user, organizations, activeOrganization };
-    } catch (err) {
+    } catch (error) {
       if (
-        err &&
-        typeof err === 'object' &&
-        'statusCode' in err &&
-        err.statusCode !== HttpStatus.Unauthorized
+        error &&
+        typeof error === 'object' &&
+        'statusCode' in error &&
+        error.statusCode !== HttpStatus.Unauthorized
       ) {
-        logger.error(err);
+        logError(error);
       }
 
       return {};

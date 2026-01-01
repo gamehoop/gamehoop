@@ -7,7 +7,7 @@ import { deleteUserAvatar } from '@/functions/user/delete-user-avatar';
 import { updateUser } from '@/functions/user/update-user';
 import { updateUserAvatar } from '@/functions/user/update-user-avatar';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { AtSign, CircleUserRound, Save } from 'lucide-react';
@@ -44,8 +44,8 @@ export function UserSettingsForm() {
           title: 'Account updated',
           message: 'Your changes have been saved.',
         });
-      } catch (err) {
-        logger.error(err);
+      } catch (error) {
+        logError(error);
         notify.error({
           title: 'Failed to update account',
           message: 'Something went wrong. Please try again.',
@@ -96,8 +96,8 @@ export function UserSettingsForm() {
         title: 'Avatar updated',
         message: 'Your new avatar has been uploaded.',
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to update avatar',
         message: 'Something went wrong. Please try again.',
@@ -113,8 +113,8 @@ export function UserSettingsForm() {
         title: 'Avatar deleted',
         message: 'Your avatar has been removed.',
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to delete avatar',
         message: 'Something went wrong. Please try again.',

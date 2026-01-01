@@ -6,7 +6,7 @@ import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
 import { Invitation } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { capitalize } from '@/utils/string';
 import { useRouter } from '@tanstack/react-router';
 import { Ellipsis, MailX, Send } from 'lucide-react';
@@ -35,8 +35,8 @@ export function PendingInvitationsTable({
         title: 'Member invitation sent',
         message: 'An invitation has been sent via email.',
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to send member invitation',
         message: 'Something went wrong. Please try again.',
@@ -54,8 +54,8 @@ export function PendingInvitationsTable({
         title: 'Invitation cancelled',
         message: 'The invitation has been successfully cancelled.',
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to cancel invitation',
         message: 'Something went wrong. Please try again.',

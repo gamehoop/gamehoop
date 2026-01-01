@@ -38,3 +38,11 @@ export function createLogger() {
     redact: [],
   });
 }
+
+export function logError(error: unknown) {
+  if (error instanceof Error) {
+    logger.error({ error }, error.message);
+  } else {
+    logger.error({ error }, 'Unknown error');
+  }
+}

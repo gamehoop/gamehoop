@@ -7,7 +7,7 @@ import { updateActiveOrganizationLogo } from '@/functions/organization/update-ac
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { cn } from '@/utils/styles';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
@@ -48,8 +48,8 @@ export function OrganizationSettingsForm({
           title: 'Organization updated',
           message: 'Your changes have been saved.',
         });
-      } catch (err) {
-        logger.error(err);
+      } catch (error) {
+        logError(error);
         notify.error({
           title: 'Failed to update organization',
           message: 'Something went wrong. Please try again.',
@@ -90,10 +90,8 @@ export function OrganizationSettingsForm({
         title: 'Logo updated',
         message: 'Your new logo has been uploaded.',
       });
-    } catch (err) {
-      if (err instanceof Error) {
-        logger.error(err, err.message);
-      }
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to update logo',
         message: 'Something went wrong. Please try again.',
@@ -109,8 +107,8 @@ export function OrganizationSettingsForm({
         title: 'Logo deleted',
         message: 'The logo has been removed.',
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (error) {
+      logError(error);
       notify.error({
         title: 'Failed to delete logo',
         message: 'Something went wrong. Please try again.',

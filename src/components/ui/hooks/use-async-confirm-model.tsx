@@ -1,5 +1,5 @@
 import { modals } from '@/components/ui/modals';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { useRouter } from '@tanstack/react-router';
 import { PropsWithChildren, ReactNode, useId } from 'react';
 import { UISize } from '..';
@@ -49,8 +49,8 @@ export function useOpenAsyncConfirmModal() {
           modals.close(modalId);
           await router.invalidate();
           onSuccess?.();
-        } catch (err) {
-          logger.error(err);
+        } catch (error) {
+          logError(error);
           onError?.();
         } finally {
           modals.updateModal({
