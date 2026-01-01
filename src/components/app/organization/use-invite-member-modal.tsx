@@ -2,6 +2,7 @@ import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confir
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Select } from '@/components/ui/select';
 import { TextInput } from '@/components/ui/text-input';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
 import { useForm } from '@tanstack/react-form';
@@ -15,6 +16,7 @@ export interface UseInviteMemberModalProps {
 export function useInviteMemberModal({
   organization,
 }: UseInviteMemberModalProps) {
+  const { user } = useSessionContext();
   const notify = useNotifications();
   const openAsyncConfirmModal = useOpenAsyncConfirmModal();
 
@@ -64,23 +66,25 @@ export function useInviteMemberModal({
             )}
           </form.Field>
 
-          <form.Field name="role">
-            {(field) => (
-              <Select
-                label="Role"
-                data={[
-                  { value: 'admin', label: 'Admin' },
-                  { value: 'member', label: 'Member' },
-                ]}
-                name={field.name}
-                value={field.state.value}
-                onChange={(value) => value && field.handleChange(value)}
-                onBlur={field.handleBlur}
-                error={field.state.meta.errors[0]?.message}
-                required
-              />
-            )}
-          </form.Field>
+          {user.role !== 'member' && (
+            <form.Field name="role">
+              {(field) => (
+                <Select
+                  label="Role"
+                  data={[
+                    { value: 'admin', label: 'Admin' },
+                    { value: 'member', label: 'Member' },
+                  ]}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(value) => value && field.handleChange(value)}
+                  onBlur={field.handleBlur}
+                  error={field.state.meta.errors[0]?.message}
+                  required
+                />
+              )}
+            </form.Field>
+          )}
         </form>
       ),
       confirmLabel: 'Invite',

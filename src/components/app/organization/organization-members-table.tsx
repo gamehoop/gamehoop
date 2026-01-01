@@ -83,7 +83,9 @@ export function OrganizationMembersTable({
                       <Menu.Item
                         leftSection={<UserRoundMinus />}
                         onClick={() => openRemoveMemberModal(member)}
-                        disabled={member.userId === user.id}
+                        disabled={
+                          member.userId === user.id || user.role === 'member'
+                        }
                       >
                         Remove
                       </Menu.Item>

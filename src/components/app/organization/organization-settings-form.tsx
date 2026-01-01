@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { TextInput } from '@/components/ui/text-input';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/logger';
@@ -16,6 +17,7 @@ export interface OrganizationSettingsFormProps {
 export function OrganizationSettingsForm({
   organization,
 }: OrganizationSettingsFormProps) {
+  const { user } = useSessionContext();
   const router = useRouter();
   const notify = useNotifications();
 
@@ -65,6 +67,7 @@ export function OrganizationSettingsForm({
             onBlur={field.handleBlur}
             leftSection={<Castle />}
             error={field.state.meta.errors[0]?.message}
+            disabled={user.role === 'member'}
             required
           />
         )}
