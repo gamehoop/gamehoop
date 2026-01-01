@@ -1,8 +1,8 @@
 import { UISize } from '@/components/ui';
 import { Avatar as BaseAvatar } from '@mantine/core';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
-export interface AvatarProps {
+export interface AvatarProps extends PropsWithChildren {
   alt?: string;
   className?: string;
   name?: string;
