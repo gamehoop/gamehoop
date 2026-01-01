@@ -72,9 +72,24 @@ export function useInviteMemberModal({
                 <Select
                   label="Role"
                   data={[
-                    { value: 'admin', label: 'Admin' },
-                    { value: 'member', label: 'Member' },
+                    {
+                      value: 'admin',
+                      label: 'Admin',
+                      description: 'Full control over the organization',
+                    },
+                    {
+                      value: 'member',
+                      label: 'Member',
+                      description:
+                        'Can only read organization data and have no permissions to create, update, or delete resources',
+                    },
                   ]}
+                  renderOption={({ option }) => (
+                    <div>
+                      <strong>{option.label}</strong>
+                      <div className="text-sm">{option.description}</div>
+                    </div>
+                  )}
                   name={field.name}
                   value={field.state.value}
                   onChange={(value) => value && field.handleChange(value)}
