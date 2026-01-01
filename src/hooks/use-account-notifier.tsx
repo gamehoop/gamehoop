@@ -9,6 +9,13 @@ export function useAccountNotifier({ user }: { user?: User }) {
   const location = useLocation();
 
   useEffect(() => {
+    if (location.search.error) {
+      notify.error({
+        title: 'Something went wrong',
+        message: location.search.error,
+      });
+    }
+
     if (user && !user.emailVerified) {
       notify.warning({
         title: 'Verify your email address',

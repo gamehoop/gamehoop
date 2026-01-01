@@ -13,11 +13,23 @@ export const Route = createFileRoute('/_auth/invitation/$invitationId/accept')({
     location,
   }) => {
     if (user) {
-      await acceptInvitation({ data: { invitationId } });
-      throw redirect({
-        to: '/',
-        search: { invitationAccepted: true },
-      });
+      try {
+        await acceptInvitation({ data: { invitationId } });
+        throw redirect({
+          to: '/',
+          search: { invitationAccepted: true },
+        });
+      } catch (error) {
+        throw redirect({
+          to: '/',
+          search: {
+            error:
+              error instanceof Error
+                ? error.message
+                : 'Failed to accept invitation',
+          },
+        });
+      }
     } else {
       throw redirect({
         to: '/sign-up',
