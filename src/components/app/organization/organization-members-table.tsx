@@ -4,23 +4,23 @@ import { Button } from '@/components/ui/button';
 import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
-import { Member, Organization, User } from '@/lib/auth';
+import { useSessionContext } from '@/hooks/use-session-context';
+import { Member, Organization } from '@/lib/auth';
 import { capitalize } from '@/utils/string';
 import { ArrowDownAZ, Ellipsis, UserPlus, UserRoundMinus } from 'lucide-react';
 import { useInviteMemberModal } from './use-invite-member-modal';
 import { useRemoveMemberModal } from './use-remove-member-modal';
 
 export interface OrganizationMembersTableProps {
-  user: User;
   organization: Organization & {
     members: Member[];
   };
 }
 
 export function OrganizationMembersTable({
-  user,
   organization,
 }: OrganizationMembersTableProps) {
+  const { user } = useSessionContext();
   const openInviteMemberModel = useInviteMemberModal({ organization });
   const openRemoveMemberModal = useRemoveMemberModal({ organization });
 

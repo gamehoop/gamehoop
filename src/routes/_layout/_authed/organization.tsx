@@ -71,7 +71,7 @@ function Organization() {
       <OrganizationSettingsForm organization={organization} />
 
       <Divider />
-      <OrganizationMembersTable user={user} organization={organization} />
+      <OrganizationMembersTable organization={organization} />
 
       <Divider />
       <PendingInvitationsTable invitations={invitations} />

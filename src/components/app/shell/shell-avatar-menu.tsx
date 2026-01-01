@@ -2,7 +2,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Menu } from '@/components/ui/menu';
 import { NavLink } from '@/components/ui/nav-link';
-import { Organization, User } from '@/lib/auth';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { updateUser } from '@/lib/auth/client';
 import { Link, useRouter } from '@tanstack/react-router';
 import {
@@ -18,23 +18,15 @@ import {
 import { useSwitchOrganizationModal } from './use-switch-organization-modal';
 
 export interface ShellAvatarMenuProps {
-  user: User;
-  organizations: Organization[];
   withDescription?: boolean;
 }
 
-export function ShellAvatarMenu({
-  user,
-  organizations,
-  withDescription,
-}: ShellAvatarMenuProps) {
+export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
+  const { user, organizations } = useSessionContext();
   const router = useRouter();
   const { toggleColorScheme } = useColorScheme();
 
-  const openSwitchOrganizationModal = useSwitchOrganizationModal({
-    user,
-    organizations,
-  });
+  const openSwitchOrganizationModal = useSwitchOrganizationModal();
 
   const onThemeToggle = async () => {
     toggleColorScheme();

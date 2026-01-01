@@ -1,6 +1,7 @@
 import { Shell } from '@/components/app/shell/shell';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Notifications } from '@/components/ui/notifications';
+import { SessionContext } from '@/contexts/session-context';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
@@ -13,13 +14,22 @@ export const Route = createFileRoute('/_layout/_authed')({
     return { user, organizations };
   },
   loader: ({ context: { user, organizations } }) => {
-    return { user, organizations };
+    const activeOrganization =
+      organizations.find(
+        (org) => org.id === user.settings?.activeOrganizationId,
+      ) ?? organizations[0];
+
+    if (!activeOrganization) {
+      throw new Error('No organization found for user');
+    }
+
+    return { user, organizations, activeOrganization };
   },
   component: Authed,
 });
 
 function Authed() {
-  const { user, organizations } = Route.useLoaderData();
+  const { user, organizations, activeOrganization } = Route.useLoaderData();
   const { colorScheme, setColorScheme } = useColorScheme();
 
   useEffect(() => {
@@ -30,11 +40,13 @@ function Authed() {
   }, [user, colorScheme, setColorScheme]);
 
   return (
-    <>
-      <Shell user={user} organizations={organizations}>
+    <SessionContext.Provider
+      value={{ user, organizations, activeOrganization }}
+    >
+      <Shell>
         <Outlet />
       </Shell>
       <Notifications position="bottom-right" />
-    </>
+    </SessionContext.Provider>
   );
 }

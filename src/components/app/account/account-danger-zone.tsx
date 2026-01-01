@@ -1,13 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { modals } from '@/components/ui/modals';
 import { Title } from '@/components/ui/title';
-import { User } from '@/lib/auth';
 import { deleteUser } from '@/lib/auth/client';
 import { Trash2 } from 'lucide-react';
 
-export function AccountDangerZone(_props: { user: User }) {
-  const modalId = 'delete-account-modal';
+const modalId = 'delete-account-modal';
 
+export function AccountDangerZone() {
   const openModal = () =>
     modals.openConfirmModal({
       modalId,

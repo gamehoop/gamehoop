@@ -4,23 +4,20 @@ import { AnchorLink } from '@/components/app/ui/anchor-link';
 import { ActionIcon } from '@/components/ui/action-icon';
 import { NavLink } from '@/components/ui/nav-link';
 import { env } from '@/env/client';
-import { Organization, User } from '@/lib/auth';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
 import { Home, PanelLeftClose } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
 
 export interface ShellNavbarContentProps {
-  user: User;
-  organizations: Organization[];
   onCollapseNavbar: () => void;
 }
 
 export function ShellNavbarContent({
-  user,
-  organizations,
   onCollapseNavbar,
 }: ShellNavbarContentProps) {
+  const { user } = useSessionContext();
   return (
     <div className="flex flex-1 flex-col mt-4">
       <AnchorLink to="/" className="self-center ">
@@ -45,11 +42,7 @@ export function ShellNavbarContent({
       </ActionIcon>
 
       <div className="mt-1 border-t border-(--app-shell-border-color)">
-        <ShellAvatarMenu
-          user={user}
-          organizations={organizations}
-          withDescription
-        />
+        <ShellAvatarMenu withDescription />
       </div>
     </div>
   );

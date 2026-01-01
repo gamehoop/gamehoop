@@ -2,7 +2,7 @@ import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { modals } from '@/components/ui/modals';
 import { Select } from '@/components/ui/select';
 import { updateUser } from '@/functions/user/update-user';
-import { Organization, User } from '@/lib/auth';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { logger } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
@@ -10,13 +10,8 @@ import z from 'zod';
 
 const modalId = 'switch-organization-modal';
 
-export function useSwitchOrganizationModal({
-  user,
-  organizations,
-}: {
-  user: User;
-  organizations: Organization[];
-}) {
+export function useSwitchOrganizationModal() {
+  const { user, organizations } = useSessionContext();
   const router = useRouter();
   const notify = useNotifications();
 

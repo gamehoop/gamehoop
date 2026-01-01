@@ -1,6 +1,6 @@
 import { AppShell } from '@/components/ui/app-shell';
 import { useAccountNotifier } from '@/hooks/use-account-notifier';
-import { Organization, User } from '@/lib/auth';
+import { useSessionContext } from '@/hooks/use-session-context';
 import { updateUser } from '@/lib/auth/client';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from '@tanstack/react-router';
@@ -8,12 +8,8 @@ import { PropsWithChildren } from 'react';
 import { ShellNavbarCollapsedContent } from './shell-collapsed-navbar-content';
 import { ShellNavbarContent } from './shell-navbar-content';
 
-export interface ShellProps extends PropsWithChildren {
-  user: User;
-  organizations: Organization[];
-}
-
-export function Shell({ user, organizations, children }: ShellProps) {
+export function Shell({ children }: PropsWithChildren) {
+  const { user } = useSessionContext();
   const router = useRouter();
   const [opened, { toggle }] = useDisclosure(!user.settings?.navbarCollapsed);
 
@@ -41,17 +37,9 @@ export function Shell({ user, organizations, children }: ShellProps) {
     >
       <AppShell.Navbar>
         {opened ? (
-          <ShellNavbarContent
-            user={user}
-            organizations={organizations}
-            onCollapseNavbar={onCollapseNavbar}
-          />
+          <ShellNavbarContent onCollapseNavbar={onCollapseNavbar} />
         ) : (
-          <ShellNavbarCollapsedContent
-            user={user}
-            organizations={organizations}
-            onCollapseNavbar={onCollapseNavbar}
-          />
+          <ShellNavbarCollapsedContent onCollapseNavbar={onCollapseNavbar} />
         )}
       </AppShell.Navbar>
 

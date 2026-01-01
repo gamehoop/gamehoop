@@ -36,13 +36,13 @@ function Account() {
         })}
       </p>
 
-      <UserSettingsForm user={user} />
+      <UserSettingsForm />
 
       <Divider />
       <AuthenticationSettings />
 
       <Divider />
-      <AccountDangerZone user={user} />
+      <AccountDangerZone />
     </>
   );
 }
