@@ -2,6 +2,7 @@ import { Shell } from '@/components/app/shell/shell';
 import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Notifications } from '@/components/ui/notifications';
 import { SessionContext } from '@/contexts/session-context';
+import { useAccountNotifier } from '@/hooks/use-account-notifier';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
@@ -25,6 +26,8 @@ export const Route = createFileRoute('/_layout/_authed')({
 function Authed() {
   const { user, organizations, activeOrganization } = Route.useLoaderData();
   const { colorScheme, setColorScheme } = useColorScheme();
+
+  useAccountNotifier({ user });
 
   useEffect(() => {
     const preferredScheme = user.settings?.darkMode ? 'dark' : 'light';

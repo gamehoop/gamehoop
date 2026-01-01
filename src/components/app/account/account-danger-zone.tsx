@@ -1,16 +1,15 @@
 import { Button } from '@/components/ui/button';
-import { modals } from '@/components/ui/modals';
+import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { Title } from '@/components/ui/title';
 import { deleteUser } from '@/lib/auth/client';
 import { Trash2 } from 'lucide-react';
 
-const modalId = 'delete-account-modal';
-
 export function AccountDangerZone() {
-  const openModal = () =>
-    modals.openConfirmModal({
-      modalId,
-      title: <span className="font-bold">Confirm Account Deletion</span>,
+  const openAsyncConfirmModel = useOpenAsyncConfirmModal();
+
+  const openDeleteAccountConfirmModal = () =>
+    openAsyncConfirmModel({
+      title: 'Confirm Account Deletion',
       children: (
         <>
           <p>
@@ -23,18 +22,10 @@ export function AccountDangerZone() {
           </p>
         </>
       ),
-      labels: { confirm: 'Delete Account', cancel: 'Cancel' },
-      confirmProps: { color: 'red' },
-      closeOnConfirm: false,
+      destructive: true,
+      confirmLabel: 'Delete Account',
       onConfirm: async () => {
-        modals.updateModal({
-          modalId,
-          confirmProps: { color: 'red', loading: true },
-        });
-
         await deleteUser({ callbackURL: '/?accountDeleted=true' });
-
-        modals.close(modalId);
       },
     });
 
@@ -44,7 +35,7 @@ export function AccountDangerZone() {
 
       <Button
         destructive
-        onClick={openModal}
+        onClick={openDeleteAccountConfirmModal}
         className="mt-2"
         leftSection={<Trash2 />}
       >

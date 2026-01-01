@@ -1,4 +1,4 @@
-import { getActiveOrganization } from '@/functions/user/get-active-organization';
+import { getActiveOrganization } from '@/functions/organization/get-active-organization';
 import { getUserObject } from '@/lib/s3';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';

@@ -1,10 +1,12 @@
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { User } from '@/lib/auth';
+import { useLocation } from '@tanstack/react-router';
 import { Mail } from 'lucide-react';
 import { useEffect } from 'react';
 
 export function useAccountNotifier({ user }: { user?: User }) {
   const notify = useNotifications();
+  const location = useLocation();
 
   useEffect(() => {
     if (user && !user.emailVerified) {
@@ -16,5 +18,27 @@ export function useAccountNotifier({ user }: { user?: User }) {
         icon: <Mail />,
       });
     }
-  }, [user, notify]);
+
+    const { verified, invitationAccepted, accountDeleted } = location.search;
+    if (verified) {
+      notify.success({
+        title: 'Email address verified',
+        message: 'Thank you for verifying your email address.',
+      });
+    }
+
+    if (location.pathname === '/' && invitationAccepted) {
+      notify.success({
+        title: 'Invitation accepted',
+        message: 'You have successfully joined the organization.',
+      });
+    }
+
+    if (accountDeleted) {
+      notify.success({
+        title: 'Sorry to see you go',
+        message: 'Your account has been permanently deleted.',
+      });
+    }
+  }, [user, notify, location]);
 }
