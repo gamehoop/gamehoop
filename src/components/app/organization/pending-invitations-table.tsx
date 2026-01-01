@@ -1,6 +1,7 @@
+import { ActionIcon } from '@/components/ui/action-icon';
 import { Avatar } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
+import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
 import { Invitation } from '@/lib/auth';
@@ -8,8 +9,8 @@ import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/logger';
 import { capitalize } from '@/utils/string';
 import { useRouter } from '@tanstack/react-router';
-import { Send } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Ellipsis, MailX, Send } from 'lucide-react';
+import { useMemo } from 'react';
 
 export interface PendingInvitationsTableProps {
   invitations: Invitation[];
@@ -20,15 +21,9 @@ export function PendingInvitationsTable({
 }: PendingInvitationsTableProps) {
   const router = useRouter();
   const notify = useNotifications();
-  const [resending, setResending] = useState(false);
 
   const onResend = async (invitation: Invitation) => {
-    if (resending) {
-      return;
-    }
-
     try {
-      setResending(true);
       await authClient.organization.inviteMember({
         email: invitation.email,
         organizationId: invitation.organizationId,
@@ -46,8 +41,25 @@ export function PendingInvitationsTable({
         title: 'Failed to send member invitation',
         message: 'Something went wrong. Please try again.',
       });
-    } finally {
-      setResending(false);
+    }
+  };
+
+  const onCancel = async (invitation: Invitation) => {
+    try {
+      await authClient.organization.cancelInvitation({
+        invitationId: invitation.id,
+      });
+      await router.invalidate();
+      notify.success({
+        title: 'Invitation cancelled',
+        message: 'The invitation has been successfully cancelled.',
+      });
+    } catch (err) {
+      logger.error(err);
+      notify.error({
+        title: 'Failed to cancel invitation',
+        message: 'Something went wrong. Please try again.',
+      });
     }
   };
 
@@ -87,14 +99,27 @@ export function PendingInvitationsTable({
                 })}
               </Table.Td>
               <Table.Td>
-                <Button
-                  onClick={() => onResend(invitation)}
-                  loading={resending}
-                  leftSection={<Send />}
-                  size="xs"
-                >
-                  Resend
-                </Button>
+                <Menu>
+                  <Menu.Target>
+                    <ActionIcon variant="subtle">
+                      <Ellipsis />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={<Send />}
+                      onClick={() => onResend(invitation)}
+                    >
+                      Resend
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={<MailX />}
+                      onClick={() => onCancel(invitation)}
+                    >
+                      Cancel
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
               </Table.Td>
             </Table.Tr>
           ))}
