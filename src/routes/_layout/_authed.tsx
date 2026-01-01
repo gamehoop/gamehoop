@@ -6,23 +6,17 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 export const Route = createFileRoute('/_layout/_authed')({
-  beforeLoad: ({ context: { user, organizations }, location }) => {
+  beforeLoad: ({
+    context: { user, organizations, activeOrganization },
+    location,
+  }) => {
     if (!user) {
       throw redirect({ to: '/sign-in', search: { redirect: location.href } });
     }
 
-    return { user, organizations };
+    return { user, organizations, activeOrganization };
   },
-  loader: ({ context: { user, organizations } }) => {
-    const activeOrganization =
-      organizations.find(
-        (org) => org.id === user.settings?.activeOrganizationId,
-      ) ?? organizations[0];
-
-    if (!activeOrganization) {
-      throw new Error('No organization found for user');
-    }
-
+  loader: ({ context: { user, organizations, activeOrganization } }) => {
     return { user, organizations, activeOrganization };
   },
   component: Authed,

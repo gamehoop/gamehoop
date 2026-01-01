@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
 import { Title } from '@/components/ui/title';
 import { env } from '@/env/client';
-import { getOrganization } from '@/functions/user/get-organization';
-import { getOrganizationInvitations } from '@/functions/user/get-organization-invitations';
+import { getActiveOrganization } from '@/functions/user/get-active-organization';
+import { getActiveOrganizationInvitations } from '@/functions/user/get-active-organization-invitations';
 import { seo } from '@/utils/seo';
 import { createFileRoute } from '@tanstack/react-router';
 import { DoorOpen } from 'lucide-react';
@@ -15,8 +15,8 @@ import { DoorOpen } from 'lucide-react';
 export const Route = createFileRoute('/_layout/_authed/organization')({
   loader: async ({ context: { user } }) => {
     const [organization, invitations] = await Promise.all([
-      getOrganization(),
-      getOrganizationInvitations(),
+      getActiveOrganization(),
+      getActiveOrganizationInvitations(),
     ]);
     return { user, organization, invitations };
   },

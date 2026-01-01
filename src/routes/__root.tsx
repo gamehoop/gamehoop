@@ -4,8 +4,7 @@ import { ColorSchemeScript, uiHtmlProps, UIProvider } from '@/components/ui';
 import { ModalsProvider } from '@/components/ui/modals';
 import { NavigationProgress } from '@/components/ui/nprogress';
 import { env } from '@/env/client';
-import { getUser } from '@/functions/auth/get-user';
-import { getOrganizations } from '@/functions/user/get-organizations';
+import { getSessionContext } from '@/functions/auth/get-session-context';
 import { theme, themeColor } from '@/styles/theme';
 import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
@@ -61,11 +60,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
   beforeLoad: async () => {
     try {
-      const [user, organizations] = await Promise.all([
-        getUser(),
-        getOrganizations(),
-      ]);
-      return { user, organizations };
+      const { user, organizations, activeOrganization } =
+        await getSessionContext();
+      return { user, organizations, activeOrganization };
     } catch {
       // The current user is unauthenticated
       return {};
