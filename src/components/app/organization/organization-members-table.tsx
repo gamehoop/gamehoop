@@ -7,9 +7,16 @@ import { Title } from '@/components/ui/title';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Member, Organization } from '@/lib/auth';
 import { capitalize } from '@/utils/string';
-import { ArrowDownAZ, Ellipsis, UserPlus, UserRoundMinus } from 'lucide-react';
+import {
+  ArrowDownAZ,
+  Ellipsis,
+  UserPlus,
+  UserRoundMinus,
+  UserRoundPen,
+} from 'lucide-react';
 import { useInviteMemberModal } from './use-invite-member-modal';
 import { useRemoveMemberModal } from './use-remove-member-modal';
+import { useUpdateMemberModal } from './use-update-member-modal';
 
 export interface OrganizationMembersTableProps {
   organization: Organization & {
@@ -23,6 +30,7 @@ export function OrganizationMembersTable({
   const { user } = useSessionContext();
   const openInviteMemberModel = useInviteMemberModal({ organization });
   const openRemoveMemberModal = useRemoveMemberModal({ organization });
+  const openUpdateMemberModal = useUpdateMemberModal({ organization });
 
   return (
     <>
@@ -80,6 +88,17 @@ export function OrganizationMembersTable({
                       </ActionIcon>
                     </Menu.Target>
                     <Menu.Dropdown>
+                      <Menu.Item
+                        leftSection={<UserRoundPen />}
+                        onClick={() => openUpdateMemberModal(member)}
+                        disabled={
+                          member.userId === user.id ||
+                          member.role === 'owner' ||
+                          user.role === 'member'
+                        }
+                      >
+                        Modify
+                      </Menu.Item>
                       <Menu.Item
                         leftSection={<UserRoundMinus />}
                         onClick={() => openRemoveMemberModal(member)}
