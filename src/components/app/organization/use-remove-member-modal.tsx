@@ -1,24 +1,19 @@
+import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { modals } from '@/components/ui/modals';
 import { Member, Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
-import { logger } from '@/lib/logger';
-import { useRouter } from '@tanstack/react-router';
-
-const modalId = 'remove-member-modal';
 
 export function useRemoveMemberModal({
   organization,
 }: {
   organization: Organization;
 }) {
-  const router = useRouter();
   const notify = useNotifications();
+  const openAsyncConfirmModel = useOpenAsyncConfirmModal();
 
-  const open = (member: Member) => {
-    modals.openConfirmModal({
-      modalId,
-      title: <span className="font-bold">Remove Member</span>,
+  return (member: Member) => {
+    return openAsyncConfirmModel({
+      title: 'Remove Member',
       children: (
         <p>
           Are you sure you wish to remove the member{' '}
@@ -28,41 +23,26 @@ export function useRemoveMemberModal({
           from the organization <strong>{organization.name}</strong>?
         </p>
       ),
-      labels: { confirm: 'Remove', cancel: 'Cancel' },
-      closeOnConfirm: false,
-      confirmProps: { color: 'red' },
+      confirmLabel: 'Remove',
+      destructive: true,
       onConfirm: async () => {
-        modals.updateModal({
-          modalId,
-          confirmProps: { color: 'red', loading: true },
+        await authClient.organization.removeMember({
+          memberIdOrEmail: member.id,
+          organizationId: organization.id,
         });
-
-        try {
-          await authClient.organization.removeMember({
-            memberIdOrEmail: member.id,
-            organizationId: organization.id,
-          });
-          modals.close(modalId);
-          await router.invalidate();
-          notify.success({
-            title: 'Member removed',
-            message: `${member.user.name} has been removed from the organization`,
-          });
-        } catch (err) {
-          logger.error(err);
-          notify.error({
-            title: 'Failed to remove member',
-            message: 'Something went wrong. Please try again.',
-          });
-        } finally {
-          modals.updateModal({
-            modalId,
-            confirmProps: { color: 'red', loading: false },
-          });
-        }
+      },
+      onSuccess: () => {
+        notify.success({
+          title: 'Member removed',
+          message: `${member.user.name} has been removed from the organization`,
+        });
+      },
+      onError: () => {
+        notify.error({
+          title: 'Failed to remove member',
+          message: 'Something went wrong. Please try again.',
+        });
       },
     });
   };
-
-  return open;
 }

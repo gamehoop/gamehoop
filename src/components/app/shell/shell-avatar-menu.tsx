@@ -22,7 +22,7 @@ export interface ShellAvatarMenuProps {
 }
 
 export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
-  const { user, organizations } = useSessionContext();
+  const { user, organizations, activeOrganization } = useSessionContext();
   const router = useRouter();
   const { toggleColorScheme } = useColorScheme();
 
@@ -39,13 +39,6 @@ export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
     });
     await router.invalidate();
   };
-
-  const activeOrganization =
-    organizations.find((o) => o.id === user.settings?.activeOrganizationId) ??
-    organizations[0];
-  if (!activeOrganization) {
-    throw new Error('No active organization');
-  }
 
   return (
     <Menu position="right" withArrow>

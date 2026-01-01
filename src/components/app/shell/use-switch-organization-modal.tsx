@@ -1,24 +1,19 @@
+import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { modals } from '@/components/ui/modals';
 import { Select } from '@/components/ui/select';
 import { updateUser } from '@/functions/user/update-user';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { logger } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
-import { useRouter } from '@tanstack/react-router';
 import z from 'zod';
 
-const modalId = 'switch-organization-modal';
-
 export function useSwitchOrganizationModal() {
-  const { user, organizations } = useSessionContext();
-  const router = useRouter();
+  const { organizations, activeOrganization } = useSessionContext();
   const notify = useNotifications();
+  const openAsyncConfirmModal = useOpenAsyncConfirmModal();
 
   const form = useForm({
     defaultValues: {
-      organizationId:
-        user.settings?.activeOrganizationId ?? organizations[0]?.id,
+      organizationId: activeOrganization.id,
     },
     validators: {
       onSubmit: z.object({
@@ -26,48 +21,18 @@ export function useSwitchOrganizationModal() {
       }),
     },
     onSubmit: async ({ value }) => {
-      modals.updateModal({
-        modalId,
-        confirmProps: { loading: true },
+      await updateUser({
+        data: {
+          activeOrganizationId: value.organizationId,
+        },
       });
-
-      try {
-        await updateUser({
-          data: {
-            activeOrganizationId: value.organizationId,
-          },
-        });
-        modals.close(modalId);
-        form.reset(value);
-        await router.invalidate();
-
-        const organization = organizations.find(
-          (o) => o.id === value.organizationId,
-        );
-        notify.success({
-          title: 'Organization switched',
-          message: `Now viewing ${organization?.name}`,
-        });
-      } catch (err) {
-        logger.error(err);
-        notify.error({
-          title: 'Failed to switch organization',
-          message: 'Something went wrong. Please try again.',
-        });
-      } finally {
-        modals.updateModal({
-          modalId,
-          confirmProps: { loading: false },
-        });
-      }
+      form.reset(value);
     },
   });
 
-  const open = () => {
-    modals.openConfirmModal({
-      modalId,
-      size: 'md',
-      title: <span className="font-bold">Switch Organization</span>,
+  return () => {
+    openAsyncConfirmModal({
+      title: 'Switch Organization',
       children: (
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -92,11 +57,24 @@ export function useSwitchOrganizationModal() {
           </form.Field>
         </form>
       ),
-      labels: { confirm: 'Switch', cancel: 'Cancel' },
-      closeOnConfirm: false,
+      confirmLabel: 'Switch',
+      size: 'md',
       onConfirm: () => form.handleSubmit(),
+      onSuccess: () => {
+        const organization = organizations.find(
+          (o) => o.id === form.getFieldValue('organizationId'),
+        );
+        notify.success({
+          title: 'Organization switched',
+          message: `Now viewing ${organization?.name}`,
+        });
+      },
+      onError: () => {
+        notify.error({
+          title: 'Failed to switch organization',
+          message: 'Something went wrong. Please try again.',
+        });
+      },
     });
   };
-
-  return open;
 }

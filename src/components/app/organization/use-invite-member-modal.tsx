@@ -1,24 +1,22 @@
+import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { modals } from '@/components/ui/modals';
 import { Select } from '@/components/ui/select';
 import { TextInput } from '@/components/ui/text-input';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
-import { logger } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
-import { useRouter } from '@tanstack/react-router';
 import { AtSign } from 'lucide-react';
 import z from 'zod';
 
-const modalId = 'invite-member-modal';
+export interface UseInviteMemberModalProps {
+  organization: Organization;
+}
 
 export function useInviteMemberModal({
   organization,
-}: {
-  organization: Organization;
-}) {
-  const router = useRouter();
+}: UseInviteMemberModalProps) {
   const notify = useNotifications();
+  const openAsyncConfirmModal = useOpenAsyncConfirmModal();
 
   const form = useForm({
     defaultValues: {
@@ -32,45 +30,19 @@ export function useInviteMemberModal({
       }),
     },
     onSubmit: async ({ value }) => {
-      modals.updateModal({
-        modalId,
-        confirmProps: { loading: true },
+      await authClient.organization.inviteMember({
+        email: value.email,
+        organizationId: organization.id,
+        role: value.role as 'admin' | 'member',
+        resend: true,
       });
-
-      try {
-        await authClient.organization.inviteMember({
-          email: value.email,
-          organizationId: organization.id,
-          role: value.role as 'admin' | 'member',
-          resend: true,
-        });
-        modals.close(modalId);
-        form.reset(value);
-        await router.invalidate();
-        notify.success({
-          title: 'Member invitation sent',
-          message: 'An invitation has been sent via email.',
-        });
-      } catch (err) {
-        logger.error(err);
-        notify.error({
-          title: 'Failed to send member invitation',
-          message: 'Something went wrong. Please try again.',
-        });
-      } finally {
-        modals.updateModal({
-          modalId,
-          confirmProps: { loading: false },
-        });
-      }
+      form.reset(value);
     },
   });
 
-  const open = () => {
-    modals.openConfirmModal({
-      modalId,
-      size: 'md',
-      title: <span className="font-bold">Invite Member</span>,
+  return () =>
+    openAsyncConfirmModal({
+      title: 'Invite Member',
       children: (
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -111,11 +83,20 @@ export function useInviteMemberModal({
           </form.Field>
         </form>
       ),
-      labels: { confirm: 'Invite', cancel: 'Cancel' },
-      closeOnConfirm: false,
-      onConfirm: () => form.handleSubmit(),
+      confirmLabel: 'Invite',
+      size: 'md',
+      onConfirm: async () => form.handleSubmit(),
+      onSuccess: () => {
+        notify.success({
+          title: 'Member invitation sent',
+          message: 'An invitation has been sent via email.',
+        });
+      },
+      onError: () => {
+        notify.error({
+          title: 'Failed to send member invitation',
+          message: 'Something went wrong. Please try again.',
+        });
+      },
     });
-  };
-
-  return open;
 }
