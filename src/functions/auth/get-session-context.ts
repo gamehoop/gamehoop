@@ -1,6 +1,6 @@
 import { SessionContextProps } from '@/contexts/session-context';
 import { getUser } from '@/functions/auth/get-user';
-import { auth, Organization, User } from '@/lib/auth';
+import { auth, Member, Organization, User } from '@/lib/auth';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
@@ -12,9 +12,13 @@ export const getSessionContext = createServerFn().handler(
     ]);
 
     const activeOrganization = getActiveOrganization(user, organizations);
+    const membership = await getUserMembership(user, activeOrganization);
 
     return {
-      user,
+      user: {
+        ...user,
+        role: membership.role,
+      },
       organizations,
       activeOrganization,
     };
@@ -35,4 +39,29 @@ function getActiveOrganization(
   }
 
   return activeOrganization;
+}
+
+async function getUserMembership(
+  user: User,
+  activeOrganization: Organization,
+): Promise<Member> {
+  const page = await auth.api.listMembers({
+    query: {
+      organizationId: activeOrganization.id,
+      limit: 1,
+      filterField: 'userId',
+      filterOperator: 'eq',
+      filterValue: user.id,
+    },
+    headers: getRequestHeaders(),
+  });
+
+  const member = page.members[0];
+  if (!member) {
+    throw new Error(
+      `User ${user.id} is not a member of organization ${activeOrganization.id}`,
+    );
+  }
+
+  return member;
 }

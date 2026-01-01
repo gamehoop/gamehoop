@@ -34,13 +34,6 @@ function Organization() {
     organization,
   });
 
-  const userMember = organization.members.find((m) => m.userId === user.id);
-  if (!userMember) {
-    throw new Error('Failed to find user in organization');
-  }
-
-  const isOwner = userMember.role === 'owner';
-
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -57,7 +50,7 @@ function Organization() {
           </p>
         </div>
 
-        {!isOwner && (
+        {user.role !== 'owner' && (
           <Button
             leftSection={<DoorOpen />}
             variant="default"

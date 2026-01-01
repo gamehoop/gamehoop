@@ -1,8 +1,8 @@
-import { Organization, User } from '@/lib/auth';
+import { Organization, Role, User } from '@/lib/auth';
 import { createContext } from 'react';
 
 export interface SessionContextProps {
-  user: User;
+  user: User & { role: Role };
   organizations: Organization[];
   activeOrganization: Organization;
 }
