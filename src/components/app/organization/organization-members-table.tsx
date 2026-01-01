@@ -53,7 +53,11 @@ export function OrganizationMembersTable({
               <Table.Tr key={member.id}>
                 <Table.Td className="flex justify-center">
                   <Avatar
-                    src={member.user.image}
+                    src={
+                      member.user.image
+                        ? `/api/user/${member.userId}/avatar`
+                        : ''
+                    }
                     name={member.user.name}
                     size="md"
                   />

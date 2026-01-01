@@ -125,7 +125,7 @@ export function UserSettingsForm() {
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
-      className="flex flex-col gap-4 max-w-[500px]"
+      className="flex flex-col gap-4 max-w-125"
     >
       <div className="flex gap-2 items-center mt-2">
         <input

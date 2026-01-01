@@ -22,6 +22,7 @@ import { Route as ApiUserAvatarRouteImport } from './routes/api/user/avatar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
+import { Route as ApiUserUserIdAvatarRouteImport } from './routes/api/user/$userId/avatar'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -87,6 +88,11 @@ const LayoutAuthedAccountRoute = LayoutAuthedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => LayoutAuthedRoute,
 } as any)
+const ApiUserUserIdAvatarRoute = ApiUserUserIdAvatarRouteImport.update({
+  id: '/api/user/$userId/avatar',
+  path: '/api/user/$userId/avatar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthInvitationInvitationIdAcceptRoute =
   AuthInvitationInvitationIdAcceptRouteImport.update({
     id: '/invitation/$invitationId/accept',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
   '/_auth/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/'
     | '/invitation/$invitationId/accept'
+    | '/api/user/$userId/avatar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/'
     | '/invitation/$invitationId/accept'
+    | '/api/user/$userId/avatar'
   id:
     | '__root__'
     | '/_auth'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/_layout/_authed/'
     | '/_auth/invitation/$invitationId/accept'
+    | '/api/user/$userId/avatar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiUserAvatarRoute: typeof ApiUserAvatarRoute
+  ApiUserUserIdAvatarRoute: typeof ApiUserUserIdAvatarRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedAccountRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
+    '/api/user/$userId/avatar': {
+      id: '/api/user/$userId/avatar'
+      path: '/api/user/$userId/avatar'
+      fullPath: '/api/user/$userId/avatar'
+      preLoaderRoute: typeof ApiUserUserIdAvatarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/invitation/$invitationId/accept': {
       id: '/_auth/invitation/$invitationId/accept'
       path: '/invitation/$invitationId/accept'
@@ -344,6 +364,7 @@ const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiUserAvatarRoute: ApiUserAvatarRoute,
+  ApiUserUserIdAvatarRoute: ApiUserUserIdAvatarRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

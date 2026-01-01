@@ -1,20 +1,19 @@
 import { nprogress } from '@/components/ui/nprogress';
+import { env } from '@/env/client';
 import * as Sentry from '@sentry/tanstackstart-react';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import * as TanstackQuery from './queries';
-
-// Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
 // Create a new router instance
 export const getRouter = () => {
-  const rqContext = TanstackQuery.getContext();
+  const queryClientContext = TanstackQuery.getContext();
 
   const router = createRouter({
     routeTree,
     context: {
-      ...rqContext,
+      ...queryClientContext,
     },
     // Restore the scroll position of a page when the user navigates back to it.
     scrollRestoration: true,
@@ -28,12 +27,12 @@ export const getRouter = () => {
 
   setupRouterSsrQueryIntegration({
     router,
-    queryClient: rqContext.queryClient,
+    queryClient: queryClientContext.queryClient,
   });
 
   if (!router.isServer) {
     Sentry.init({
-      dsn: import.meta.env.VITE_SENTRY_DSN,
+      dsn: env.VITE_SENTRY_DSN,
       integrations: [],
       tracesSampleRate: 1.0,
       sendDefaultPii: true,

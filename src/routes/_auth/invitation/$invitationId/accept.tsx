@@ -20,9 +20,4 @@ export const Route = createFileRoute('/_auth/invitation/$invitationId/accept')({
       });
     }
   },
-  component: AcceptInvitation,
 });
-
-function AcceptInvitation() {
-  return <div />;
-}

@@ -53,7 +53,7 @@ export function OrganizationSettingsForm({
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
-      className="flex flex-col gap-4 max-w-[500px]"
+      className="flex flex-col gap-4 max-w-125"
     >
       <form.Field name="name">
         {(field) => (
