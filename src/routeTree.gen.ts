@@ -23,6 +23,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
 import { Route as ApiUserUserIdAvatarRouteImport } from './routes/api/user/$userId/avatar'
+import { Route as ApiOrganizationOrganizationIdLogoRouteImport } from './routes/api/organization/$organizationId/logo'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -93,6 +94,12 @@ const ApiUserUserIdAvatarRoute = ApiUserUserIdAvatarRouteImport.update({
   path: '/api/user/$userId/avatar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOrganizationOrganizationIdLogoRoute =
+  ApiOrganizationOrganizationIdLogoRouteImport.update({
+    id: '/api/organization/$organizationId/logo',
+    path: '/api/organization/$organizationId/logo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthInvitationInvitationIdAcceptRoute =
   AuthInvitationInvitationIdAcceptRouteImport.update({
     id: '/invitation/$invitationId/accept',
@@ -112,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRoutesByTo {
@@ -126,6 +134,7 @@ export interface FileRoutesByTo {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRoutesById {
@@ -144,6 +153,7 @@ export interface FileRoutesById {
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
   '/_auth/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
+  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/'
     | '/invitation/$invitationId/accept'
+    | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/'
     | '/invitation/$invitationId/accept'
+    | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
   id:
     | '__root__'
@@ -191,6 +203,7 @@ export interface FileRouteTypes {
     | '/api/user/avatar'
     | '/_layout/_authed/'
     | '/_auth/invitation/$invitationId/accept'
+    | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +212,7 @@ export interface RootRouteChildren {
   LayoutRoute: typeof LayoutRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiUserAvatarRoute: typeof ApiUserAvatarRoute
+  ApiOrganizationOrganizationIdLogoRoute: typeof ApiOrganizationOrganizationIdLogoRoute
   ApiUserUserIdAvatarRoute: typeof ApiUserUserIdAvatarRoute
 }
 
@@ -302,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiUserUserIdAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/organization/$organizationId/logo': {
+      id: '/api/organization/$organizationId/logo'
+      path: '/api/organization/$organizationId/logo'
+      fullPath: '/api/organization/$organizationId/logo'
+      preLoaderRoute: typeof ApiOrganizationOrganizationIdLogoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/invitation/$invitationId/accept': {
       id: '/_auth/invitation/$invitationId/accept'
       path: '/invitation/$invitationId/accept'
@@ -364,6 +385,8 @@ const rootRouteChildren: RootRouteChildren = {
   LayoutRoute: LayoutRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiUserAvatarRoute: ApiUserAvatarRoute,
+  ApiOrganizationOrganizationIdLogoRoute:
+    ApiOrganizationOrganizationIdLogoRoute,
   ApiUserUserIdAvatarRoute: ApiUserUserIdAvatarRoute,
 }
 export const routeTree = rootRouteImport

@@ -39,6 +39,7 @@ export const updateActiveOrganizationLogo = createServerFn({
     const image = `${getObjectUrl(key)}?uploadedAt=${Date.now()}`;
     await auth.api.updateOrganization({
       body: {
+        organizationId: activeOrganization.id,
         data: {
           logo: image,
         },

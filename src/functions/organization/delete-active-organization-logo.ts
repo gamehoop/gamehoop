@@ -15,6 +15,7 @@ export const deleteActiveOrganizationLogo = createServerFn().handler(
     await deleteObject(key);
     await auth.api.updateOrganization({
       body: {
+        organizationId: activeOrganization.id,
         data: {
           logo: '',
         },

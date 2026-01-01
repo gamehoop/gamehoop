@@ -83,7 +83,7 @@ export function OrganizationSettingsForm({
 
     try {
       const formData = new FormData();
-      formData.append('avatar', file);
+      formData.append('logo', file);
       await updateActiveOrganizationLogo({ data: formData });
       await router.invalidate();
       notify.success({
@@ -91,7 +91,9 @@ export function OrganizationSettingsForm({
         message: 'Your new logo has been uploaded.',
       });
     } catch (err) {
-      logger.error(err);
+      if (err instanceof Error) {
+        logger.error(err, err.message);
+      }
       notify.error({
         title: 'Failed to update logo',
         message: 'Something went wrong. Please try again.',
@@ -121,7 +123,7 @@ export function OrganizationSettingsForm({
       onSubmit={(e) => e.preventDefault()}
       className="flex flex-col gap-4 max-w-125"
     >
-      <div>
+      <div className="flex gap-2 items-center mt-2">
         <input
           ref={logoInput}
           type="file"
@@ -134,7 +136,9 @@ export function OrganizationSettingsForm({
               logoInput.current?.click();
             }
           }}
-          src={organization.logo ?? ''}
+          src={
+            organization.logo ? `/api/organization/${organization.id}/logo` : ''
+          }
           className={cn(user.role !== 'member', 'cursor-pointer')}
           size="xl"
         >

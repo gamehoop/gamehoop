@@ -66,7 +66,7 @@ export async function sendInvitationEmail({
   email: string;
   inviter: { user: { name: string } };
 }): Promise<void> {
-  const url = `${env.VITE_BASE_URL}/invitation/${id}/accept`;
+  const url = `${env.VITE_BASE_URL}/invitation/${id}/accept?email=${encodeURIComponent(email)}`;
   await sendEmail({
     to: email,
     subject: `${inviter.user.name} has invited you to join Gamehoop`,

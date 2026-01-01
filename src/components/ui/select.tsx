@@ -5,7 +5,10 @@ import {
 } from '@mantine/core';
 import { FocusEvent, PropsWithChildren, ReactNode } from 'react';
 
-export type SelectItem = ComboboxItem & { description?: string };
+export type SelectItem = ComboboxItem & {
+  avatarSrc?: string;
+  description?: string;
+};
 
 export interface SelectProps extends PropsWithChildren {
   className?: string;
@@ -20,6 +23,7 @@ export interface SelectProps extends PropsWithChildren {
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   onChange?: (value: string | null) => void;
   renderOption?: (item: ComboboxLikeRenderOptionInput<SelectItem>) => ReactNode;
+  leftSection?: ReactNode;
 }
 
 export function Select({ required, ...props }: SelectProps) {

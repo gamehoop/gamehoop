@@ -17,6 +17,7 @@ import z from 'zod';
 
 export const Route = createFileRoute('/_auth/sign-in')({
   validateSearch: z.object({
+    email: z.string().optional().catch(''),
     redirect: z.string().optional().catch(''),
   }),
   beforeLoad: async ({ context: { user } }) => {
@@ -35,7 +36,7 @@ function SignIn() {
 
   const form = useForm({
     defaultValues: {
-      email: '',
+      email: search.email ?? '',
       password: '',
     },
     validators: {

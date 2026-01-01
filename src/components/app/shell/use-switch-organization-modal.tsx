@@ -1,9 +1,11 @@
+import { Avatar } from '@/components/ui/avatar';
 import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Select } from '@/components/ui/select';
 import { updateUser } from '@/functions/user/update-user';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { useForm } from '@tanstack/react-form';
+import { Castle } from 'lucide-react';
 import z from 'zod';
 
 export function useSwitchOrganizationModal() {
@@ -45,7 +47,19 @@ export function useSwitchOrganizationModal() {
                 data={organizations.map((org) => ({
                   value: org.id,
                   label: org.name,
+                  avatarSrc: org.logo ? `/api/organization/${org.id}/logo` : '',
                 }))}
+                renderOption={({ option }) => {
+                  return (
+                    <div className="flex flex-row gap-2 items-center">
+                      <Avatar size="sm" src={option.avatarSrc}>
+                        <Castle />
+                      </Avatar>
+                      <span>{option.label}</span>
+                    </div>
+                  );
+                }}
+                leftSection={<Castle />}
                 name={field.name}
                 value={field.state.value}
                 onChange={(value) => value && field.handleChange(value)}
