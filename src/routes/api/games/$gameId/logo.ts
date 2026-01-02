@@ -3,18 +3,15 @@ import { buildKey, getObject } from '@/lib/s3';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/api/organization/$organizationId/logo')({
+export const Route = createFileRoute('/api/games/$gameId/logo')({
   server: {
     handlers: {
-      GET: async ({ params: { organizationId } }) => {
-        const { organizations } = await getSessionContext();
+      GET: async ({ params: { gameId } }) => {
+        const { activeOrganization } = await getSessionContext();
 
-        const isMember = organizations.some((org) => org.id === organizationId);
-        if (!isMember) {
-          return new Response('', { status: HttpStatus.NotFound });
-        }
-
-        const key = buildKey(`organizations/${organizationId}/logo`);
+        const key = buildKey(
+          `organizations/${activeOrganization.id}/games/${gameId}/logo`,
+        );
         const logo = await getObject(key);
         if (!logo) {
           return new Response('', { status: HttpStatus.NotFound });

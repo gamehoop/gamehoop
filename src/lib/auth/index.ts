@@ -133,6 +133,7 @@ export type Invitation = typeof auth.$Infer.Invitation;
 
 export type UserSettings = {
   activeOrganizationId?: string;
+  activeGameId?: number;
   darkMode?: boolean;
   navbarCollapsed?: boolean;
 };

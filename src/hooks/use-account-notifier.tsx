@@ -29,6 +29,7 @@ export function useAccountNotifier({ user }: { user?: User }) {
     const { verified, invitationAccepted, accountDeleted } = location.search;
     if (verified) {
       notify.success({
+        id: 'email-address-verified',
         title: 'Email address verified',
         message: 'Thank you for verifying your email address.',
       });
@@ -36,6 +37,7 @@ export function useAccountNotifier({ user }: { user?: User }) {
 
     if (location.pathname === '/' && invitationAccepted) {
       notify.success({
+        id: 'invitation-accepted',
         title: 'Invitation accepted',
         message: 'You have successfully joined the organization.',
       });
@@ -43,6 +45,7 @@ export function useAccountNotifier({ user }: { user?: User }) {
 
     if (accountDeleted) {
       notify.success({
+        id: 'account-deleted',
         title: 'Sorry to see you go',
         message: 'Your account has been permanently deleted.',
       });

@@ -6,10 +6,12 @@ export interface NavLinkProps {
   className?: string;
   component?: any;
   description?: string;
+  disabled?: boolean;
   label?: string;
   leftSection?: ReactNode;
   onClick?: () => void;
   to?: string;
+  activeOptions?: { exact?: boolean };
   size?: UISize;
 }
 

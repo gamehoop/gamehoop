@@ -8,7 +8,9 @@ export interface OpenAsyncConfirmModalProps extends PropsWithChildren {
   cancelLabel?: string;
   confirmLabel?: string;
   destructive?: boolean;
+  validate?: () => Promise<boolean>;
   onConfirm: () => Promise<void>;
+  onClose?: () => void;
   onError?: () => void;
   onSuccess?: () => void;
   size?: UISize;
@@ -24,7 +26,9 @@ export function useOpenAsyncConfirmModal() {
     children,
     confirmLabel = 'Confirm',
     destructive,
+    validate,
     onConfirm,
+    onClose,
     onError,
     onSuccess,
     size,
@@ -39,12 +43,17 @@ export function useOpenAsyncConfirmModal() {
       labels: { confirm: confirmLabel, cancel: cancelLabel },
       confirmProps: { color },
       closeOnConfirm: false,
+      onClose,
       onConfirm: async () => {
         try {
           modals.updateModal({
             modalId,
             confirmProps: { color, loading: true },
           });
+          const isValid = !validate || (await validate());
+          if (!isValid) {
+            return;
+          }
           await onConfirm();
           modals.close(modalId);
           await router.invalidate();

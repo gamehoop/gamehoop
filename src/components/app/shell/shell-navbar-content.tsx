@@ -7,8 +7,9 @@ import { env } from '@/env/client';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Home, PanelLeftClose } from 'lucide-react';
+import { Cog, Home, PanelLeftClose } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
+import { ShellGameMenu } from './shell-game-menu';
 
 export interface ShellNavbarContentProps {
   onCollapseNavbar: () => void;
@@ -17,7 +18,11 @@ export interface ShellNavbarContentProps {
 export function ShellNavbarContent({
   onCollapseNavbar,
 }: ShellNavbarContentProps) {
-  const { user } = useSessionContext();
+  const {
+    user,
+    activeOrganization: { activeGame },
+  } = useSessionContext();
+
   return (
     <div className="flex flex-1 flex-col mt-4">
       <AnchorLink to="/" className="self-center ">
@@ -29,8 +34,17 @@ export function ShellNavbarContent({
         />
       </AnchorLink>
 
-      <ul className="mt-4 border-t border-(--app-shell-border-color)">
+      <ShellGameMenu />
+
+      <ul>
         <NavLink component={Link} to="/" label="Home" leftSection={<Home />} />
+        <NavLink
+          component={Link}
+          to="/game"
+          label="Configuration"
+          leftSection={<Cog />}
+          disabled={!activeGame}
+        />
       </ul>
 
       <ActionIcon

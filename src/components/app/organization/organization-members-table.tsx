@@ -36,7 +36,11 @@ export function OrganizationMembersTable({
     <>
       <div className="flex items-center justify-between">
         <Title order={4}>Members ({organization.members.length})</Title>
-        <Button leftSection={<UserPlus />} onClick={openInviteMemberModel}>
+        <Button
+          leftSection={<UserPlus />}
+          onClick={openInviteMemberModel}
+          disabled={user.role === 'member'}
+        >
           Invite Member
         </Button>
       </div>

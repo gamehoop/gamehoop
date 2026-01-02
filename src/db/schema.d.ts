@@ -28,6 +28,20 @@ export interface Account {
   userId: string;
 }
 
+export interface Game {
+  createdAt: Generated<Timestamp>;
+  createdBy: string;
+  genre: string | null;
+  id: Generated<number>;
+  logo: string | null;
+  name: string;
+  organizationId: string;
+  platforms: string[] | null;
+  sdk: string | null;
+  updatedAt: Generated<Timestamp>;
+  updatedBy: string;
+}
+
 export interface Invitation {
   createdAt: Generated<Timestamp>;
   email: string;
@@ -90,6 +104,7 @@ export interface Verification {
 
 export interface DB {
   account: Account;
+  game: Game;
   invitation: Invitation;
   member: Member;
   organization: Organization;

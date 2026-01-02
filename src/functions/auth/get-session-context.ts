@@ -1,4 +1,6 @@
 import { SessionContextProps } from '@/contexts/session-context';
+import { db } from '@/db';
+import { Game } from '@/db/types';
 import { getUser } from '@/functions/auth/get-user';
 import { auth, Member, Organization, User } from '@/lib/auth';
 import { createServerFn } from '@tanstack/react-start';
@@ -12,7 +14,13 @@ export const getSessionContext = createServerFn().handler(
     ]);
 
     const activeOrganization = getActiveOrganization(user, organizations);
-    const membership = await getUserMembership(user, activeOrganization);
+
+    const [membership, activeOrganizationGames] = await Promise.all([
+      getUserMembership(user, activeOrganization),
+      getActiveOrganizationGames(activeOrganization),
+    ]);
+
+    const activeGame = getActiveGame(user, activeOrganizationGames);
 
     return {
       user: {
@@ -20,7 +28,11 @@ export const getSessionContext = createServerFn().handler(
         role: membership.role,
       },
       organizations,
-      activeOrganization,
+      activeOrganization: {
+        ...activeOrganization,
+        games: activeOrganizationGames,
+        activeGame,
+      },
     };
   },
 );
@@ -64,4 +76,25 @@ async function getUserMembership(
   }
 
   return member;
+}
+
+async function getActiveOrganizationGames(
+  activeOrganization: Organization,
+): Promise<Game[]> {
+  return db
+    .selectFrom('game')
+    .where('organizationId', '=', activeOrganization.id)
+    .selectAll()
+    .execute();
+}
+
+function getActiveGame(
+  user: User,
+  activeOrganizationGames: Game[],
+): Game | null {
+  return (
+    activeOrganizationGames.find(
+      (game) => game.id === user.settings?.activeGameId,
+    ) ?? null
+  );
 }

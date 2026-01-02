@@ -32,13 +32,16 @@ export function useInviteMemberModal({
       }),
     },
     onSubmit: async ({ value }) => {
-      await authClient.organization.inviteMember({
+      const { error } = await authClient.organization.inviteMember({
         email: value.email,
         organizationId: organization.id,
         role: value.role as 'admin' | 'member',
         resend: true,
       });
-      form.reset(value);
+
+      if (error) {
+        throw error;
+      }
     },
   });
 
@@ -104,7 +107,12 @@ export function useInviteMemberModal({
       ),
       confirmLabel: 'Invite',
       size: 'md',
+      validate: async () => {
+        await form.validate('submit');
+        return form.state.isValid;
+      },
       onConfirm: async () => form.handleSubmit(),
+      onClose: () => form.reset(),
       onSuccess: () => {
         notify.success({
           title: 'Member invitation sent',

@@ -31,7 +31,6 @@ export function useUpdateMemberModal({
         organizationId: organization.id,
         role: value.role,
       });
-      form.reset();
     },
   });
 
@@ -78,7 +77,12 @@ export function useUpdateMemberModal({
         </form.Field>
       ),
       size: 'md',
+      validate: async () => {
+        await form.validate('submit');
+        return form.state.isValid;
+      },
       onConfirm: () => form.handleSubmit(),
+      onClose: () => form.reset(),
       onSuccess: () => {
         notify.success({
           title: 'Member updated',

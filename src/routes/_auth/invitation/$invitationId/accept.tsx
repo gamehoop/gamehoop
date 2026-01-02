@@ -1,4 +1,5 @@
 import { acceptInvitation } from '@/functions/auth/accept-invitation';
+import { logError } from '@/lib/logger';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 
@@ -15,11 +16,8 @@ export const Route = createFileRoute('/_auth/invitation/$invitationId/accept')({
     if (user) {
       try {
         await acceptInvitation({ data: { invitationId } });
-        throw redirect({
-          to: '/',
-          search: { invitationAccepted: true },
-        });
       } catch (error) {
+        logError(error);
         throw redirect({
           to: '/',
           search: {
@@ -30,6 +28,11 @@ export const Route = createFileRoute('/_auth/invitation/$invitationId/accept')({
           },
         });
       }
+
+      throw redirect({
+        to: '/',
+        search: { invitationAccepted: true },
+      });
     } else {
       throw redirect({
         to: '/sign-up',

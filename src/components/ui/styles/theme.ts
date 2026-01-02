@@ -132,6 +132,11 @@ export function createTheme(): { theme: ThemeOverride; themeColor: string } {
           size: 'md',
         },
       }),
+      MultiSelect: Select.extend({
+        defaultProps: {
+          size: 'md',
+        },
+      }),
       TextInput: TextInput.extend({
         defaultProps: {
           size: 'md',

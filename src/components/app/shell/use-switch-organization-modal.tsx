@@ -28,7 +28,6 @@ export function useSwitchOrganizationModal() {
           activeOrganizationId: value.organizationId,
         },
       });
-      form.reset(value);
     },
   });
 
@@ -73,7 +72,12 @@ export function useSwitchOrganizationModal() {
       ),
       confirmLabel: 'Switch',
       size: 'md',
+      validate: async () => {
+        await form.validate('submit');
+        return form.state.isValid;
+      },
       onConfirm: () => form.handleSubmit(),
+      onClose: () => form.reset(),
       onSuccess: () => {
         const organization = organizations.find(
           (o) => o.id === form.getFieldValue('organizationId'),
