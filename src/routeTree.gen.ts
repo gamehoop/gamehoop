@@ -23,6 +23,7 @@ import { Route as ApiUserAvatarRouteImport } from './routes/api/user/avatar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as LayoutAuthedOrganizationRouteImport } from './routes/_layout/_authed/organization'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
+import { Route as LayoutAuthedPlayersIndexRouteImport } from './routes/_layout/_authed/players/index'
 import { Route as LayoutAuthedGameIndexRouteImport } from './routes/_layout/_authed/game/index'
 import { Route as ApiUserUserIdAvatarRouteImport } from './routes/api/user/$userId/avatar'
 import { Route as ApiOrganizationOrganizationIdLogoRouteImport } from './routes/api/organization/$organizationId/logo'
@@ -97,6 +98,12 @@ const LayoutAuthedAccountRoute = LayoutAuthedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => LayoutAuthedRoute,
 } as any)
+const LayoutAuthedPlayersIndexRoute =
+  LayoutAuthedPlayersIndexRouteImport.update({
+    id: '/players/',
+    path: '/players/',
+    getParentRoute: () => LayoutAuthedRoute,
+  } as any)
 const LayoutAuthedGameIndexRoute = LayoutAuthedGameIndexRouteImport.update({
   id: '/game/',
   path: '/game/',
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/game': typeof LayoutAuthedGameIndexRoute
+  '/players': typeof LayoutAuthedPlayersIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -160,6 +168,7 @@ export interface FileRoutesByTo {
   '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/game': typeof LayoutAuthedGameIndexRoute
+  '/players': typeof LayoutAuthedPlayersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -182,6 +191,7 @@ export interface FileRoutesById {
   '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/_layout/_authed/game/': typeof LayoutAuthedGameIndexRoute
+  '/_layout/_authed/players/': typeof LayoutAuthedPlayersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
     | '/game'
+    | '/players'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
     | '/game'
+    | '/players'
   id:
     | '__root__'
     | '/_auth'
@@ -241,6 +253,7 @@ export interface FileRouteTypes {
     | '/api/organization/$organizationId/logo'
     | '/api/user/$userId/avatar'
     | '/_layout/_authed/game/'
+    | '/_layout/_authed/players/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -354,6 +367,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedAccountRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
+    '/_layout/_authed/players/': {
+      id: '/_layout/_authed/players/'
+      path: '/players'
+      fullPath: '/players'
+      preLoaderRoute: typeof LayoutAuthedPlayersIndexRouteImport
+      parentRoute: typeof LayoutAuthedRoute
+    }
     '/_layout/_authed/game/': {
       id: '/_layout/_authed/game/'
       path: '/game'
@@ -417,6 +437,7 @@ interface LayoutAuthedRouteChildren {
   LayoutAuthedOrganizationRoute: typeof LayoutAuthedOrganizationRoute
   LayoutAuthedIndexRoute: typeof LayoutAuthedIndexRoute
   LayoutAuthedGameIndexRoute: typeof LayoutAuthedGameIndexRoute
+  LayoutAuthedPlayersIndexRoute: typeof LayoutAuthedPlayersIndexRoute
 }
 
 const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
@@ -424,6 +445,7 @@ const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
   LayoutAuthedOrganizationRoute: LayoutAuthedOrganizationRoute,
   LayoutAuthedIndexRoute: LayoutAuthedIndexRoute,
   LayoutAuthedGameIndexRoute: LayoutAuthedGameIndexRoute,
+  LayoutAuthedPlayersIndexRoute: LayoutAuthedPlayersIndexRoute,
 }
 
 const LayoutAuthedRouteWithChildren = LayoutAuthedRoute._addFileChildren(

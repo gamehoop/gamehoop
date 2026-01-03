@@ -7,7 +7,7 @@ import { env } from '@/env/client';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Cog, Home, PanelLeftClose } from 'lucide-react';
+import { Cog, Home, PanelLeftClose, Users } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
 import { ShellGameMenu } from './shell-game-menu';
 
@@ -38,6 +38,13 @@ export function ShellNavbarContent({
 
       <ul>
         <NavLink component={Link} to="/" label="Home" leftSection={<Home />} />
+        <NavLink
+          component={Link}
+          to="/players"
+          label="Players"
+          leftSection={<Users />}
+          disabled={!activeGame}
+        />
         <NavLink
           component={Link}
           to="/game"

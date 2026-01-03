@@ -2,6 +2,14 @@ import { db } from '@/db';
 import { Game, InsertableGame, UpdateableGame } from '@/db/types';
 
 export class GameStore {
+  async getByOrganizationId(organizationId: string): Promise<Game[]> {
+    return db
+      .selectFrom('game')
+      .where('organizationId', '=', organizationId)
+      .selectAll()
+      .execute();
+  }
+
   async create(values: InsertableGame): Promise<Game> {
     return db
       .insertInto('game')
