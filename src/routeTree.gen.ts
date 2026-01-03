@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as LayoutAuthedRouteImport } from './routes/_layout/_authed'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignOutRouteImport } from './routes/_auth/sign-out'
@@ -34,6 +35,11 @@ const LayoutRoute = LayoutRouteImport.update({
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutAuthedRoute = LayoutAuthedRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof AuthSignInRoute
   '/sign-out': typeof AuthSignOutRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/api/health': typeof ApiHealthRoute
   '/account': typeof LayoutAuthedAccountRoute
   '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof AuthSignInRoute
   '/sign-out': typeof AuthSignOutRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/api/health': typeof ApiHealthRoute
   '/account': typeof LayoutAuthedAccountRoute
   '/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_auth/sign-out': typeof AuthSignOutRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_layout/_authed': typeof LayoutAuthedRouteWithChildren
+  '/api/health': typeof ApiHealthRoute
   '/_layout/_authed/account': typeof LayoutAuthedAccountRoute
   '/_layout/_authed/organization': typeof LayoutAuthedOrganizationRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-out'
     | '/sign-up'
+    | '/api/health'
     | '/account'
     | '/organization'
     | '/api/auth/$'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-out'
     | '/sign-up'
+    | '/api/health'
     | '/account'
     | '/organization'
     | '/api/auth/$'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/_auth/sign-out'
     | '/_auth/sign-up'
     | '/_layout/_authed'
+    | '/api/health'
     | '/_layout/_authed/account'
     | '/_layout/_authed/organization'
     | '/api/auth/$'
@@ -234,6 +246,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LayoutRoute: typeof LayoutRouteWithChildren
+  ApiHealthRoute: typeof ApiHealthRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiUserAvatarRoute: typeof ApiUserAvatarRoute
   ApiGamesGameIdLogoRoute: typeof ApiGamesGameIdLogoRoute
@@ -255,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/_authed': {
@@ -424,6 +444,7 @@ const LayoutRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LayoutRoute: LayoutRouteWithChildren,
+  ApiHealthRoute: ApiHealthRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiUserAvatarRoute: ApiUserAvatarRoute,
   ApiGamesGameIdLogoRoute: ApiGamesGameIdLogoRoute,
