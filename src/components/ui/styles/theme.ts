@@ -21,6 +21,7 @@ import {
   TextInput,
   type MantineThemeOverride,
 } from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
 
 export type ThemeOverride = MantineThemeOverride;
 
@@ -150,6 +151,11 @@ export function createTheme(): { theme: ThemeOverride; themeColor: string } {
       Table: Textarea.extend({
         defaultProps: {
           fz: 'md',
+        },
+      }),
+      DatePickerInput: DatePickerInput.extend({
+        defaultProps: {
+          size: 'md',
         },
       }),
       Textarea: Textarea.extend({

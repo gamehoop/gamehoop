@@ -37,9 +37,23 @@ export interface Game {
   name: string;
   organizationId: string;
   platforms: string[] | null;
+  publicId: Generated<string>;
   sdk: string | null;
   updatedAt: Generated<Timestamp>;
   updatedBy: string;
+}
+
+export interface GameApiKey {
+  active: Generated<boolean>;
+  createdAt: Generated<Timestamp>;
+  createdBy: string;
+  description: string | null;
+  expiresAt: Timestamp | null;
+  gameId: Generated<number>;
+  id: Generated<number>;
+  keyHash: string;
+  lastUsedAt: Timestamp | null;
+  scopes: Generated<string[]>;
 }
 
 export interface Invitation {
@@ -105,6 +119,7 @@ export interface Verification {
 export interface DB {
   account: Account;
   game: Game;
+  gameApiKey: GameApiKey;
   invitation: Invitation;
   member: Member;
   organization: Organization;

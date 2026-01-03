@@ -15,7 +15,9 @@ export interface TextInputProps {
   placeholder?: string;
   name: string;
   radius?: UISize;
+  readOnly?: boolean;
   required?: boolean;
+  rightSection?: ReactNode;
   size?: UISize;
   type?: 'text' | 'email';
   value: string;

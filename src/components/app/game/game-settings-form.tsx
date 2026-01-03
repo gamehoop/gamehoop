@@ -1,3 +1,4 @@
+import { ActionIcon } from '@/components/ui/action-icon';
 import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
@@ -17,7 +18,7 @@ import { useSessionContext } from '@/hooks/use-session-context';
 import { logError } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
-import { Gamepad2, Save } from 'lucide-react';
+import { Copy, Gamepad2, Save } from 'lucide-react';
 import { ChangeEvent, useRef } from 'react';
 import z from 'zod';
 
@@ -129,6 +130,10 @@ export function GameSettingsForm({ game }: { game: Game }) {
     }
   };
 
+  const onCopyId = async () => {
+    await window.navigator.clipboard.writeText(game.publicId);
+  };
+
   return (
     <form
       onSubmit={(e) => e.preventDefault()}
@@ -163,6 +168,18 @@ export function GameSettingsForm({ game }: { game: Game }) {
           </Button>
         )}
       </div>
+
+      <TextInput
+        label="ID"
+        name="id"
+        value={game.publicId}
+        rightSection={
+          <ActionIcon variant="transparent" onClick={onCopyId}>
+            <Copy />
+          </ActionIcon>
+        }
+        readOnly
+      />
 
       <form.Field name="name">
         {(field) => (

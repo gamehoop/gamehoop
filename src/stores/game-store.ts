@@ -20,7 +20,7 @@ export class GameStore {
   }
 
   async deleteById(gameId: number): Promise<void> {
-    await db.deleteFrom('game').where('game.id', '=', gameId).execute();
+    await db.deleteFrom('game').where('id', '=', gameId).execute();
   }
 }
 
