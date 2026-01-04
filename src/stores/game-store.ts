@@ -25,6 +25,14 @@ export class GameStore {
       .execute();
   }
 
+  async getByPublicId(publicId: string): Promise<Game | undefined> {
+    return db
+      .selectFrom('game')
+      .where('publicId', '=', publicId)
+      .selectAll()
+      .executeTakeFirst();
+  }
+
   async create(values: InsertableGame): Promise<Game> {
     return db
       .insertInto('game')

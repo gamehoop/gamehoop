@@ -40,9 +40,11 @@ export function createLogger() {
 }
 
 export function logError(error: unknown) {
+  let message = 'Unknown error';
   if (error instanceof Error) {
-    logger.error({ error }, error.message);
-  } else {
-    logger.error({ error }, 'Unknown error');
+    message = error.message;
   }
+
+  logger.error({ error }, message);
+  return message;
 }

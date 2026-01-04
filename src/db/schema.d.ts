@@ -84,6 +84,46 @@ export interface Organization {
   slug: string;
 }
 
+export interface Player {
+  createdAt: Generated<Timestamp>;
+  email: string;
+  emailVerified: boolean;
+  gameId: Generated<number>;
+  id: string;
+  image: string | null;
+  isAnonymous: boolean | null;
+  name: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface PlayerAccount {
+  accessToken: string | null;
+  accessTokenExpiresAt: Timestamp | null;
+  accountId: string;
+  createdAt: Generated<Timestamp>;
+  id: string;
+  idToken: string | null;
+  password: string | null;
+  providerId: string;
+  refreshToken: string | null;
+  refreshTokenExpiresAt: Timestamp | null;
+  scope: string | null;
+  updatedAt: Timestamp;
+  userId: string;
+}
+
+export interface PlayerSession {
+  activeOrganizationId: string | null;
+  createdAt: Generated<Timestamp>;
+  expiresAt: Timestamp;
+  id: string;
+  ipAddress: string | null;
+  token: string;
+  updatedAt: Timestamp;
+  userAgent: string | null;
+  userId: string;
+}
+
 export interface Session {
   activeOrganizationId: string | null;
   createdAt: Generated<Timestamp>;
@@ -123,6 +163,9 @@ export interface DB {
   invitation: Invitation;
   member: Member;
   organization: Organization;
+  player: Player;
+  playerAccount: PlayerAccount;
+  playerSession: PlayerSession;
   session: Session;
   user: User;
   verification: Verification;

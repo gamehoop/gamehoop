@@ -18,6 +18,15 @@ export class GameApiKeyStore {
       .executeTakeFirst();
   }
 
+  async getByGamePublicId(publicId: string): Promise<GameApiKey[]> {
+    return db
+      .selectFrom('gameApiKey')
+      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
+      .where('game.publicId', '=', publicId)
+      .selectAll('gameApiKey')
+      .execute();
+  }
+
   async getByGameIdForUser(
     gameId: number,
     userId: string,
