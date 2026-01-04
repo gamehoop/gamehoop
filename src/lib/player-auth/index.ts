@@ -50,7 +50,7 @@ export function createPlayerAuth(gameId: number) {
       modelName: 'player_account',
     },
     user: {
-      modelName: 'player_user',
+      modelName: 'player',
       // Additional columns to add to the user database table
       additionalFields: {
         gameId: {

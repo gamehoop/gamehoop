@@ -36,6 +36,7 @@ export function ShellGameMenu() {
                 </Avatar>
               }
               size="md"
+              className="h-full"
             />
           </Menu.Target>
 
