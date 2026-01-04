@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { UISize } from '.';
 
 export interface NavLinkProps {
+  activeOptions?: { exact?: boolean };
   className?: string;
   component?: any;
   description?: string;
@@ -10,9 +11,8 @@ export interface NavLinkProps {
   label?: string;
   leftSection?: ReactNode;
   onClick?: () => void;
-  to?: string;
-  activeOptions?: { exact?: boolean };
   size?: UISize;
+  to?: string;
 }
 
 export function NavLink({ size, ...props }: NavLinkProps) {

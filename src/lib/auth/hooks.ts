@@ -11,7 +11,7 @@ async function createUserOrganization(newSession: Session) {
   const org = await auth.api.createOrganization({
     body: {
       name: `${newSession.user.name}'s Organization`,
-      slug: `org-${newSession.user.id}`,
+      slug: `user-org:${newSession.user.id}`,
       userId: newSession.user.id,
     },
   });

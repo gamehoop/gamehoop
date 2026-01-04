@@ -5,6 +5,7 @@ import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
 import { useSessionContext } from '@/hooks/use-session-context';
+import { useUserRole } from '@/hooks/use-user-role';
 import { Member, Organization } from '@/lib/auth';
 import { capitalize } from '@/utils/string';
 import {
@@ -28,6 +29,7 @@ export function OrganizationMembersTable({
   organization,
 }: OrganizationMembersTableProps) {
   const { user } = useSessionContext();
+  const { isMember } = useUserRole();
   const openInviteMemberModel = useInviteMemberModal({ organization });
   const openRemoveMemberModal = useRemoveMemberModal({ organization });
   const openUpdateMemberModal = useUpdateMemberModal({ organization });
@@ -39,7 +41,7 @@ export function OrganizationMembersTable({
         <Button
           leftSection={<UserPlus />}
           onClick={openInviteMemberModel}
-          disabled={user.role === 'member'}
+          disabled={isMember}
         >
           Invite Member
         </Button>
@@ -98,7 +100,7 @@ export function OrganizationMembersTable({
                         disabled={
                           member.userId === user.id ||
                           member.role === 'owner' ||
-                          user.role === 'member'
+                          isMember
                         }
                       >
                         Modify
@@ -106,9 +108,7 @@ export function OrganizationMembersTable({
                       <Menu.Item
                         leftSection={<UserRoundMinus />}
                         onClick={() => openRemoveMemberModal(member)}
-                        disabled={
-                          member.userId === user.id || user.role === 'member'
-                        }
+                        disabled={member.userId === user.id || isMember}
                       >
                         Remove
                       </Menu.Item>

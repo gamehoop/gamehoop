@@ -4,7 +4,11 @@ import { useLocation } from '@tanstack/react-router';
 import { Mail } from 'lucide-react';
 import { useEffect } from 'react';
 
-export function useAccountNotifier({ user }: { user?: User }) {
+export interface UseAccountNotifierProps {
+  user?: User;
+}
+
+export function useAccountNotifier({ user }: UseAccountNotifierProps) {
   const notify = useNotifications();
   const location = useLocation();
 

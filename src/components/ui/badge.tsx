@@ -4,13 +4,12 @@ import { PropsWithChildren } from 'react';
 
 export interface BadgeProps extends PropsWithChildren {
   color?: string;
-  variant?: 'filled' | 'light' | 'outline';
-  size?: UISize;
-  radius?: UISize;
   fullWidth?: boolean;
+  radius?: UISize;
+  size?: UISize;
+  variant?: 'filled' | 'light' | 'outline';
 }
 
-// https://mantine.dev/core/badge
 export function Badge(props: BadgeProps) {
   return <BaseBadge {...props} />;
 }

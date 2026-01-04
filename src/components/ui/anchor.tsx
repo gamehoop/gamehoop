@@ -11,7 +11,6 @@ export interface AnchorProps extends PropsWithChildren {
   underline?: 'always' | 'hover' | 'never';
 }
 
-// https://mantine.dev/core/anchor
 export function Anchor({ children, size = 'md', ...props }: AnchorProps) {
   return (
     <BaseAnchor fz={size} {...props}>

@@ -1,10 +1,9 @@
 import { nprogress } from '@/components/ui/nprogress';
-import { env } from '@/env/client';
-import * as Sentry from '@sentry/tanstackstart-react';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { SomethingWentWrong } from './components/app/sww';
 import { logError } from './lib/logger';
+import { initSentry } from './lib/sentry';
 import * as TanstackQuery from './queries';
 import { routeTree } from './routeTree.gen';
 
@@ -34,12 +33,7 @@ export const getRouter = () => {
   });
 
   if (!router.isServer) {
-    Sentry.init({
-      dsn: env.VITE_SENTRY_DSN,
-      integrations: [],
-      tracesSampleRate: 1.0,
-      sendDefaultPii: true,
-    });
+    initSentry();
   }
 
   // Update the navigation progress bar

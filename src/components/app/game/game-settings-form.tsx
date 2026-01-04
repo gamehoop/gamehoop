@@ -22,7 +22,11 @@ import { Copy, Gamepad2, Save } from 'lucide-react';
 import { ChangeEvent, useRef } from 'react';
 import z from 'zod';
 
-export function GameSettingsForm({ game }: { game: Game }) {
+export interface GameSettingsFormProps {
+  game: Game;
+}
+
+export function GameSettingsForm({ game }: GameSettingsFormProps) {
   const { user } = useSessionContext();
   const router = useRouter();
   const notify = useNotifications();

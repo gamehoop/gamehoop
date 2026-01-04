@@ -3,11 +3,13 @@ import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Member, Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
 
+export interface UseRemoveMemberModalProps {
+  organization: Organization;
+}
+
 export function useRemoveMemberModal({
   organization,
-}: {
-  organization: Organization;
-}) {
+}: UseRemoveMemberModalProps) {
   const notify = useNotifications();
   const openAsyncConfirmModel = useOpenAsyncConfirmModal();
 

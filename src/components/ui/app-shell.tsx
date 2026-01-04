@@ -4,9 +4,9 @@ import { PropsWithChildren } from 'react';
 export interface AppShellProps extends PropsWithChildren {
   className?: string;
   navbar?: {
-    width: number;
     breakpoint: string;
     collapsed?: { desktop?: boolean; mobile?: boolean };
+    width: number;
   };
 }
 

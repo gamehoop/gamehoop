@@ -5,10 +5,10 @@ import { MouseEventHandler, PropsWithChildren, ReactNode } from 'react';
 export interface MenuProps extends PropsWithChildren {
   className?: string;
   disabled?: boolean;
+  position?: UIPosition;
   radius?: UISize;
   shadow?: UISize;
   trigger?: 'hover' | 'click';
-  position?: UIPosition;
   width?: number;
   withArrow?: boolean;
 }

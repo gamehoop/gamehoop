@@ -14,8 +14,8 @@ import { useRouter } from '@tanstack/react-router';
 import z from 'zod';
 
 export function useCreateGameModal() {
-  const notify = useNotifications();
   const router = useRouter();
+  const notify = useNotifications();
   const openAsyncConfirmModel = useOpenAsyncConfirmModal();
 
   const formSchema = z.object({

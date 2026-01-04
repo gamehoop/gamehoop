@@ -6,7 +6,9 @@ import { env } from '@/env/client';
 import { Image } from '@unpic/react';
 import { PropsWithChildren } from 'react';
 
-export function AuthCardHeader({ children }: PropsWithChildren) {
+export interface AuthCardHeaderProps extends PropsWithChildren {}
+
+export function AuthCardHeader({ children }: AuthCardHeaderProps) {
   return (
     <div className="flex justify-between items-center mb-2">
       <Title order={2}>{children}</Title>

@@ -6,11 +6,13 @@ import { authClient } from '@/lib/auth/client';
 import { useForm } from '@tanstack/react-form';
 import z from 'zod';
 
+export interface UseUpdateMemberModalProps {
+  organization: Organization;
+}
+
 export function useUpdateMemberModal({
   organization,
-}: {
-  organization: Organization;
-}) {
+}: UseUpdateMemberModalProps) {
   const notify = useNotifications();
   const openAsyncConfirmModel = useOpenAsyncConfirmModal();
 

@@ -2,6 +2,7 @@ import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confir
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Select } from '@/components/ui/select';
 import { TextInput } from '@/components/ui/text-input';
+import { roleOptions } from '@/domain/user';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
@@ -74,19 +75,7 @@ export function useInviteMemberModal({
               {(field) => (
                 <Select
                   label="Role"
-                  data={[
-                    {
-                      value: 'admin',
-                      label: 'Admin',
-                      description: 'Full control over the organization',
-                    },
-                    {
-                      value: 'member',
-                      label: 'Member',
-                      description:
-                        'Can only read organization data and have no permissions to create, update, or delete resources',
-                    },
-                  ]}
+                  data={roleOptions}
                   renderOption={({ option }) => (
                     <div>
                       <strong>{option.label}</strong>

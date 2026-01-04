@@ -14,7 +14,6 @@ export interface CheckboxProps {
   size?: UISize;
 }
 
-// https://mantine.dev/core/checkbox
 export function Checkbox(props: CheckboxProps) {
   const theme = useMantineTheme();
   return <BaseCheckbox color={theme.primaryColor} {...props} />;

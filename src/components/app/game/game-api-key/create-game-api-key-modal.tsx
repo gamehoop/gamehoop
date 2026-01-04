@@ -5,6 +5,7 @@ import { modals } from '@/components/ui/modals';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { TextInput } from '@/components/ui/text-input';
 import { Game } from '@/db/types';
+import { Scope, scopeOptions } from '@/domain/game-api-key';
 import { createGameApiKey } from '@/functions/game/game-api-key/create-game-api-key';
 import { logError } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';
@@ -15,9 +16,15 @@ import z from 'zod';
 
 const modalId = 'create-game-api-key-modal';
 
-export function useCreateGameApiKeyModal({ game }: { game: Game }) {
-  const notify = useNotifications();
+export interface UseCreateGameApiKeyModalProps {
+  game: Game;
+}
+
+export function useCreateGameApiKeyModal({
+  game,
+}: UseCreateGameApiKeyModalProps) {
   const router = useRouter();
+  const notify = useNotifications();
 
   const formSchema = z.object({
     scopes: z.array(z.string()).min(1),
@@ -34,7 +41,7 @@ export function useCreateGameApiKeyModal({ game }: { game: Game }) {
   });
 
   const defaultValues: z.input<typeof formSchema> = {
-    scopes: ['*'],
+    scopes: [Scope.All],
     description: '',
   };
 
@@ -128,12 +135,7 @@ export function useCreateGameApiKeyModal({ game }: { game: Game }) {
             {(field) => (
               <MultiSelect
                 label="Scopes"
-                data={[
-                  {
-                    value: '*',
-                    label: 'All',
-                  },
-                ]}
+                data={scopeOptions}
                 name={field.name}
                 value={field.state.value}
                 onChange={(value) => value && field.handleChange(value)}

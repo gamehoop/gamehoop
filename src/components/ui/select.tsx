@@ -12,18 +12,18 @@ export type SelectItem = ComboboxItem & {
 
 export interface SelectProps extends PropsWithChildren {
   className?: string;
-  label?: string;
-  name?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  value?: string;
   data: string[] | Array<SelectItem>;
-  required?: boolean;
+  disabled?: boolean;
   error?: string;
+  label?: string;
+  leftSection?: ReactNode;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   onChange?: (value: string | null) => void;
+  name?: string;
+  placeholder?: string;
   renderOption?: (item: ComboboxLikeRenderOptionInput<SelectItem>) => ReactNode;
-  leftSection?: ReactNode;
+  required?: boolean;
+  value?: string;
 }
 
 export function Select({ required, ...props }: SelectProps) {

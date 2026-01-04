@@ -12,20 +12,20 @@ export type MultiSelectItem = ComboboxItem & {
 
 export interface MultiSelectProps extends PropsWithChildren {
   className?: string;
-  label?: string;
-  name?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  value?: string[];
   data: string[] | Array<MultiSelectItem>;
-  required?: boolean;
+  disabled?: boolean;
   error?: string;
+  label?: string;
+  leftSection?: ReactNode;
+  name?: string;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   onChange?: (value: string[] | null) => void;
+  placeholder?: string;
   renderOption?: (
     item: ComboboxLikeRenderOptionInput<MultiSelectItem>,
   ) => ReactNode;
-  leftSection?: ReactNode;
+  required?: boolean;
+  value?: string[];
 }
 
 export function MultiSelect({ required, ...props }: MultiSelectProps) {

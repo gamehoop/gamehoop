@@ -19,7 +19,6 @@ export interface TextareaProps {
   value: string;
 }
 
-// https://mantine.dev/core/textarea
 export function Textarea({ required, ...props }: TextareaProps) {
   return (
     <BaseTextarea

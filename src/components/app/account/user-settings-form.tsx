@@ -17,8 +17,8 @@ import z from 'zod';
 export function UserSettingsForm() {
   const { user } = useSessionContext();
   const router = useRouter();
-  const avatarInput = useRef<HTMLInputElement>(null);
   const notify = useNotifications();
+  const avatarInput = useRef<HTMLInputElement>(null);
 
   const form = useForm({
     defaultValues: {
@@ -143,7 +143,7 @@ export function UserSettingsForm() {
               ? `/api/user/avatar?url=${user.image}?updatedAt=${user.updatedAt.toString()}`
               : ''
           }
-          alt=""
+          alt={`${user.name}'s avatar`}
           className="cursor-pointer"
           size="xl"
         />

@@ -7,9 +7,13 @@ import { deleteGame } from '@/functions/game/delete-game';
 import { useRouter } from '@tanstack/react-router';
 import { Trash2 } from 'lucide-react';
 
-export function GameDangerZone({ game }: { game: Game }) {
-  const notify = useNotifications();
+export interface GameDangerZoneProps {
+  game: Game;
+}
+
+export function GameDangerZone({ game }: GameDangerZoneProps) {
   const router = useRouter();
+  const notify = useNotifications();
   const openAsyncConfirmModel = useOpenAsyncConfirmModal();
 
   const openDeleteGameConfirmModal = () =>

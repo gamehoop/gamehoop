@@ -10,10 +10,10 @@ export interface DatePickerInputProps {
   error?: string;
   label?: string;
   onChange?: (value: string | null) => void;
+  presets?: Array<{ value: string | null; label: string }>;
   name: string;
   readOnly?: boolean;
   required?: boolean;
-  presets?: Array<{ value: string | null; label: string }>;
 }
 
 export function DatePickerInput(props: DatePickerInputProps) {

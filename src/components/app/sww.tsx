@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Title } from '@/components/ui/title';
 import { logError } from '@/lib/logger';
-import { useRouter } from '@tanstack/react-router';
+import { ErrorComponentProps, useRouter } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 
-export function SomethingWentWrong({ error }: { error: Error }) {
+export function SomethingWentWrong({ error }: ErrorComponentProps) {
   const router = useRouter();
 
   logError(error);

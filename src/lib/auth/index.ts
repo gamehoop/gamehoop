@@ -121,16 +121,6 @@ export const auth = betterAuth({
   },
 });
 
-export type Session = typeof auth.$Infer.Session;
-
-export type Organization = typeof auth.$Infer.Organization;
-
-export type Member = typeof auth.$Infer.Member;
-
-export type Role = 'owner' | 'admin' | 'member';
-
-export type Invitation = typeof auth.$Infer.Invitation;
-
 export type UserSettings = {
   activeOrganizationId?: string;
   activeGameId?: number;
@@ -141,3 +131,13 @@ export type UserSettings = {
 export type User = Omit<typeof auth.$Infer.Session.user, 'settings'> & {
   settings?: UserSettings | null;
 };
+
+export type Session = typeof auth.$Infer.Session;
+
+export type Organization = typeof auth.$Infer.Organization;
+
+export type Invitation = typeof auth.$Infer.Invitation;
+
+export type Member = typeof auth.$Infer.Member;
+
+export type Role = 'owner' | 'admin' | 'member';

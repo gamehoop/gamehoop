@@ -18,7 +18,6 @@ export interface SwitchProps {
   size?: UISize;
 }
 
-// https://mantine.dev/core/switch
 export function Switch(props: SwitchProps) {
   return <BaseSwitch {...props} />;
 }

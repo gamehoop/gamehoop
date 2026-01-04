@@ -12,10 +12,13 @@ export enum HttpStatus {
 }
 
 export enum HttpMethod {
+  Connect = 'CONNECT',
+  Delete = 'DELETE',
   Get = 'GET',
   Head = 'HEAD',
   Options = 'OPTIONS',
   Patch = 'PATCH',
   Post = 'POST',
   Put = 'PUT',
+  Trace = 'TRACE',
 }

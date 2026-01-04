@@ -5,15 +5,14 @@ import { PropsWithChildren, ReactNode } from 'react';
 
 export interface AlertProps extends PropsWithChildren {
   className?: string;
-  title: string;
   status?: 'info' | 'success' | 'warning' | 'error';
+  title: string;
 }
 
-// https://mantine.dev/core/alert
 export function Alert({
   children,
-  title,
   status = 'info',
+  title,
   ...props
 }: AlertProps) {
   const [color, icon] = getColor(status);

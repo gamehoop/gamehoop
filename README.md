@@ -1,7 +1,7 @@
 # gamehoop
 
 <p align="center" style="width: 100%">
-  <img src="src/assets/logo.png" height="100" />
+  <img src="src/assets/logo.svg" height="100" />
 </p>
 
 The easy to use tools to build and scale your games.

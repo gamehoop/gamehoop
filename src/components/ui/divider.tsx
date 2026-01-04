@@ -8,7 +8,6 @@ export interface DividerProps {
   size?: UISize;
 }
 
-// https://mantine.dev/core/divider
 export function Divider(props: DividerProps) {
   return <BaseDivider my="md" {...props} />;
 }
