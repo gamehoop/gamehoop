@@ -1,8 +1,9 @@
 import { buildKey, deleteObject } from '@/lib/s3';
 import { gameStore } from '@/stores/game-store';
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
-import { getSessionContext } from '../auth/get-session-context';
+import { getUser } from '../auth/get-user';
 
 export const deleteGameLogo = createServerFn()
   .inputValidator(
@@ -11,17 +12,14 @@ export const deleteGameLogo = createServerFn()
     }),
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
-    const {
-      activeOrganization: { games, id: organizationId },
-    } = await getSessionContext();
-
-    const hasAccess = games.some((game) => game.id === gameId);
-    if (!hasAccess) {
-      throw new Error('Unauthorized');
+    const user = await getUser();
+    const game = await gameStore.getByIdForUser(gameId, user.id);
+    if (!game) {
+      throw notFound();
     }
 
     const key = buildKey(
-      `organizations/${organizationId}/games/${gameId}/logo`,
+      `organizations/${game.organizationId}/games/${gameId}/logo`,
     );
     await deleteObject(key);
     await gameStore.update(gameId, {

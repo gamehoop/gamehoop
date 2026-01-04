@@ -1,6 +1,7 @@
-import { getSessionContext } from '@/functions/auth/get-session-context';
+import { getUser } from '@/functions/auth/get-user';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { HttpMethod } from '@/utils/http';
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 
@@ -13,15 +14,13 @@ export const deleteGameApiKey = createServerFn({
     }),
   )
   .handler(async ({ data: { gameApiKeyId } }): Promise<void> => {
-    const {
-      activeOrganization: { games },
-    } = await getSessionContext();
-
-    const gameApiKey = await gameApiKeyStore.getById(gameApiKeyId);
-
-    const hasAccess = games.some((game) => game.id === gameApiKey.gameId);
-    if (!hasAccess) {
-      throw new Error('Unauthorized');
+    const user = await getUser();
+    const gameApiKey = await gameApiKeyStore.getByIdForUser(
+      gameApiKeyId,
+      user.id,
+    );
+    if (!gameApiKey) {
+      throw notFound();
     }
 
     await gameApiKeyStore.deleteById(gameApiKeyId);

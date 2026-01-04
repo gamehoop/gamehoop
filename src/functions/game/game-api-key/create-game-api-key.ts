@@ -1,9 +1,11 @@
 import { GameApiKey } from '@/db/types';
-import { getSessionContext } from '@/functions/auth/get-session-context';
+import { generateApiKey, hashApiKey } from '@/domain/game-api-key';
+import { getUser } from '@/functions/auth/get-user';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
+import { gameStore } from '@/stores/game-store';
 import { HttpMethod } from '@/utils/http';
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
-import crypto from 'crypto';
 import z from 'zod';
 
 export const createGameApiKey = createServerFn({
@@ -30,14 +32,10 @@ export const createGameApiKey = createServerFn({
     async ({
       data: { gameId, scopes, expiresAt, description },
     }): Promise<GameApiKey & { apiKey: string }> => {
-      const {
-        user,
-        activeOrganization: { games },
-      } = await getSessionContext();
-
-      const hasAccess = games.some((game) => game.id === gameId);
-      if (!hasAccess) {
-        throw new Error('Unauthorized');
+      const user = await getUser();
+      const game = await gameStore.getByIdForUser(gameId, user.id);
+      if (!game) {
+        throw notFound();
       }
 
       const apiKey = generateApiKey();
@@ -55,11 +53,3 @@ export const createGameApiKey = createServerFn({
       return { ...gameApiKey, apiKey };
     },
   );
-
-export function generateApiKey(): string {
-  return crypto.randomBytes(32).toString('hex');
-}
-
-export function hashApiKey(key: string): string {
-  return crypto.createHash('sha256').update(key).digest('hex');
-}

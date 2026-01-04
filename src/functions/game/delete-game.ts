@@ -1,8 +1,9 @@
 import { gameStore } from '@/stores/game-store';
 import { HttpMethod } from '@/utils/http';
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
-import { getSessionContext } from '../auth/get-session-context';
+import { getUser } from '../auth/get-user';
 
 export const deleteGame = createServerFn({
   method: HttpMethod.Post,
@@ -13,13 +14,10 @@ export const deleteGame = createServerFn({
     }),
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
-    const {
-      activeOrganization: { games },
-    } = await getSessionContext();
-
-    const hasAccess = games.some((game) => game.id === gameId);
-    if (!hasAccess) {
-      throw new Error('Unauthorized');
+    const user = await getUser();
+    const game = await gameStore.getByIdForUser(gameId, user.id);
+    if (!game) {
+      throw notFound();
     }
 
     await gameStore.deleteById(gameId);

@@ -1,8 +1,9 @@
 import { buildKey, getObjectUrl, putObject } from '@/lib/s3';
 import { gameStore } from '@/stores/game-store';
 import { HttpMethod } from '@/utils/http';
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
-import { getSessionContext } from '../auth/get-session-context';
+import { getUser } from '../auth/get-user';
 
 export const updateGameLogo = createServerFn({
   method: HttpMethod.Post,
@@ -25,17 +26,14 @@ export const updateGameLogo = createServerFn({
     return { gameId: parseInt(gameId, 10), logo };
   })
   .handler(async ({ data: { gameId, logo } }): Promise<void> => {
-    const {
-      activeOrganization: { games, id: organizationId },
-    } = await getSessionContext();
-
-    const hasAccess = games.some((game) => game.id === gameId);
-    if (!hasAccess) {
-      throw new Error('Unauthorized');
+    const user = await getUser();
+    const game = await gameStore.getByIdForUser(gameId, user.id);
+    if (!game) {
+      throw notFound();
     }
 
     const key = buildKey(
-      `organizations/${organizationId}/games/${gameId}/logo`,
+      `organizations/${game.organizationId}/games/${gameId}/logo`,
     );
     const body = await logo.arrayBuffer();
     const contentType = logo.type;

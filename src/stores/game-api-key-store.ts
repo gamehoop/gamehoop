@@ -2,19 +2,35 @@ import { db } from '@/db';
 import { GameApiKey, InsertableGameApiKey } from '@/db/types';
 
 export class GameApiKeyStore {
-  async getById(gameApiKeyId: number): Promise<GameApiKey> {
+  async getByIdForUser(
+    gameApiKeyId: number,
+    userId: string,
+  ): Promise<GameApiKey | undefined> {
     return db
       .selectFrom('gameApiKey')
-      .where('id', '=', gameApiKeyId)
-      .selectAll()
-      .executeTakeFirstOrThrow();
+      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
+      .innerJoin('organization', 'organization.id', 'game.organizationId')
+      .innerJoin('member', 'member.organizationId', 'organization.id')
+      .innerJoin('user', 'user.id', 'member.userId')
+      .where('user.id', '=', userId)
+      .where('gameApiKey.id', '=', gameApiKeyId)
+      .selectAll('gameApiKey')
+      .executeTakeFirst();
   }
 
-  async getByGameId(gameId: number): Promise<GameApiKey[]> {
+  async getByGameIdForUser(
+    gameId: number,
+    userId: string,
+  ): Promise<GameApiKey[]> {
     return db
       .selectFrom('gameApiKey')
-      .where('gameId', '=', gameId)
-      .selectAll()
+      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
+      .innerJoin('organization', 'organization.id', 'game.organizationId')
+      .innerJoin('member', 'member.organizationId', 'organization.id')
+      .innerJoin('user', 'user.id', 'member.userId')
+      .where('user.id', '=', userId)
+      .where('game.id', '=', gameId)
+      .selectAll('gameApiKey')
       .execute();
   }
 

@@ -13,14 +13,14 @@ export const getSessionContext = createServerFn().handler(
       auth.api.listOrganizations({ headers: getRequestHeaders() }),
     ]);
 
-    const activeOrganization = getActiveOrganization(user, organizations);
+    const activeOrganization = findActiveOrganization(user, organizations);
 
     const [membership, activeOrganizationGames] = await Promise.all([
       getUserMembership(user, activeOrganization),
       gameStore.getByOrganizationId(activeOrganization.id),
     ]);
 
-    const activeGame = getActiveGame(user, activeOrganizationGames);
+    const activeGame = findActiveGame(user, activeOrganizationGames);
 
     return {
       user: {
@@ -37,7 +37,7 @@ export const getSessionContext = createServerFn().handler(
   },
 );
 
-function getActiveOrganization(
+function findActiveOrganization(
   user: User,
   organizations: Organization[],
 ): Organization {
@@ -78,7 +78,7 @@ async function getUserMembership(
   return member;
 }
 
-function getActiveGame(
+function findActiveGame(
   user: User,
   activeOrganizationGames: Game[],
 ): Game | null {

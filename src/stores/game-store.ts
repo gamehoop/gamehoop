@@ -2,6 +2,21 @@ import { db } from '@/db';
 import { Game, InsertableGame, UpdateableGame } from '@/db/types';
 
 export class GameStore {
+  async getByIdForUser(
+    gameId: number,
+    userId: string,
+  ): Promise<Game | undefined> {
+    return db
+      .selectFrom('game')
+      .innerJoin('organization', 'organization.id', 'game.organizationId')
+      .innerJoin('member', 'member.organizationId', 'organization.id')
+      .innerJoin('user', 'user.id', 'member.userId')
+      .where('game.id', '=', gameId)
+      .where('user.id', '=', userId)
+      .selectAll('game')
+      .executeTakeFirst();
+  }
+
   async getByOrganizationId(organizationId: string): Promise<Game[]> {
     return db
       .selectFrom('game')
