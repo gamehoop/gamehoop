@@ -28,6 +28,7 @@ export const Route = createFileRoute(
           ).api.signUpEmail({
             body: {
               gameId: game.id,
+              callbackURL: '/player-verified',
               ...body,
             },
           });

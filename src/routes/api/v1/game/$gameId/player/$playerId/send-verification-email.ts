@@ -1,12 +1,12 @@
 import { verifyApiAccess } from '@/domain/api';
 import { logError } from '@/lib/logger';
-import { playerSessionStore } from '@/stores/player-session-store';
+import { createPlayerAuth } from '@/lib/player-auth';
 import { playerStore } from '@/stores/player-store';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute(
-  '/api/v1/game/$gameId/player/$playerId/sign-out',
+  '/api/v1/game/$gameId/player/$playerId/send-verification-email',
 )({
   server: {
     handlers: {
@@ -23,9 +23,16 @@ export const Route = createFileRoute(
             });
           }
 
-          await playerSessionStore.deleteByPlayerId(playerId);
+          const data = await createPlayerAuth(
+            game.id,
+          ).api.sendVerificationEmail({
+            body: {
+              email: player.email,
+              callbackURL: '/player-verified',
+            },
+          });
 
-          return Response.json('', { status: HttpStatus.Ok });
+          return Response.json(data, { status: HttpStatus.Ok });
         } catch (error) {
           logError(error);
           if (error instanceof Response) {

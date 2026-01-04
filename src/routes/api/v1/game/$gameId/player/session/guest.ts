@@ -22,7 +22,7 @@ export const Route = createFileRoute(
           }
 
           const data = { token: session.token, player: session.user };
-          return Response.json(data, { status: HttpStatus.Ok });
+          return Response.json(data, { status: HttpStatus.Created });
         } catch (error) {
           logError(error);
           if (error instanceof Response) {

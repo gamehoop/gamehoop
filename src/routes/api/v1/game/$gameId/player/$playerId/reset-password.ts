@@ -32,7 +32,7 @@ export const Route = createFileRoute(
             },
           );
 
-          return Response.json(data, { status: HttpStatus.Created });
+          return Response.json(data, { status: HttpStatus.Ok });
         } catch (error) {
           logError(error);
           if (error instanceof Response) {
