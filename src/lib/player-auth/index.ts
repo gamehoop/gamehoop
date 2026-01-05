@@ -15,7 +15,20 @@ import {
 import { logger } from '../logger';
 import { createHooks } from './hooks';
 
-export function createPlayerAuth(gameId: number) {
+export interface PlayerAuthOptions {
+  requireEmailVerification?: boolean;
+  minPasswordLength?: number;
+  sessionExpiresInDays?: number;
+}
+
+export function createPlayerAuth(
+  gameId: number,
+  options: PlayerAuthOptions = {
+    requireEmailVerification: false,
+    minPasswordLength: 8,
+    sessionExpiresInDays: 7,
+  },
+) {
   return betterAuth({
     database: {
       db,
@@ -28,9 +41,9 @@ export function createPlayerAuth(gameId: number) {
       // Automatically sign in after signing up
       autoSignIn: true,
       // Require a verfified email to sign in
-      requireEmailVerification: false,
+      requireEmailVerification: !!options.requireEmailVerification,
       // Passwords must be at least this length
-      minPasswordLength: 8,
+      minPasswordLength: options.minPasswordLength ?? 8,
       // Passwords cannot be greater than this length
       maxPasswordLength: 128,
       // The token sent to a user in the reset password flow expires after 1 hour
@@ -74,18 +87,9 @@ export function createPlayerAuth(gameId: number) {
     session: {
       modelName: 'player_session',
       // Expire a session in 7 days
-      expiresIn: daysToSeconds(7),
+      expiresIn: daysToSeconds(options.sessionExpiresInDays ?? 7),
       // Refresh a session every 1 day
       updateAge: daysToSeconds(1),
-      // Some operations require a fresh session.
-      // Consider a session fresh if it is less than 12 hours old
-      // freshAge: hoursToSeconds(12),
-      freshAge: 0, // Disable the freshness check,
-      // To avoid querying the database for every getSession() call
-      cookieCache: {
-        enabled: true,
-        maxAge: minutesToSeconds(5),
-      },
     },
     // Hooks to run custom logic at various points in the auth flow
     hooks: createHooks(gameId),
