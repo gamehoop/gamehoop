@@ -13,16 +13,22 @@ export const deleteGameLogo = createServerFn()
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.getByIdForUser(gameId, user.id);
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
     if (!game) {
       throw notFound();
     }
 
     const key = buildKey(
-      `organizations/${game.organizationId}/games/${gameId}/logo`,
+      `organizations/${game.organizationId}/game/${gameId}/logo`,
     );
     await deleteObject(key);
-    await gameStore.update(gameId, {
-      logo: null,
+    await gameStore.updateOne({
+      where: { id: gameId },
+      data: {
+        logo: null,
+      },
     });
   });

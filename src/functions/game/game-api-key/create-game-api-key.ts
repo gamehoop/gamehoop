@@ -33,7 +33,10 @@ export const createGameApiKey = createServerFn({
       data: { gameId, scopes, expiresAt, description },
     }): Promise<GameApiKey & { apiKey: string }> => {
       const user = await getUser();
-      const game = await gameStore.getByIdForUser(gameId, user.id);
+      const game = await gameStore.findOneForUser({
+        userId: user.id,
+        where: { id: gameId },
+      });
       if (!game) {
         throw notFound();
       }

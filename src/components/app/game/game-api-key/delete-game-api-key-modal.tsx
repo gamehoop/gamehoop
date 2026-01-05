@@ -15,7 +15,7 @@ export function useDeleteGameApiKeyModal() {
       destructive: true,
       onConfirm: async () => {
         await deleteGameApiKey({
-          data: { gameApiKeyId: gameApiKey.id },
+          data: { gameApiKeyId: gameApiKey.id, gameId: gameApiKey.gameId },
         });
       },
       onSuccess: () => {

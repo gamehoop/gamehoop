@@ -1,58 +1,36 @@
 import { db } from '@/db';
-import { GameApiKey, InsertableGameApiKey } from '@/db/types';
+import { GameApiKey } from '@/db/schema';
+import { Selectable } from 'kysely';
+import { BaseStore } from './base-store';
 
-export class GameApiKeyStore {
-  async getByIdForUser(
-    gameApiKeyId: number,
-    userId: string,
-  ): Promise<GameApiKey | undefined> {
-    return db
-      .selectFrom('gameApiKey')
-      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
-      .innerJoin('organization', 'organization.id', 'game.organizationId')
-      .innerJoin('member', 'member.organizationId', 'organization.id')
-      .innerJoin('user', 'user.id', 'member.userId')
-      .where('user.id', '=', userId)
-      .where('gameApiKey.id', '=', gameApiKeyId)
-      .selectAll('gameApiKey')
-      .executeTakeFirst();
+export class GameApiKeyStore extends BaseStore<GameApiKey> {
+  constructor() {
+    super('gameApiKey');
   }
 
-  async getByGamePublicId(publicId: string): Promise<GameApiKey[]> {
+  async findForGame(gamePublicId: string): Promise<Selectable<GameApiKey>[]> {
     return db
       .selectFrom('gameApiKey')
-      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
-      .where('game.publicId', '=', publicId)
       .selectAll('gameApiKey')
+      .innerJoin('game', 'game.id', 'gameApiKey.gameId')
+      .where('game.publicId', '=', gamePublicId)
       .execute();
   }
 
-  async getByGameIdForUser(
+  async findForGameAndUser(
     gameId: number,
     userId: string,
-  ): Promise<GameApiKey[]> {
+  ): Promise<Selectable<GameApiKey>[]> {
     return db
       .selectFrom('gameApiKey')
+      .selectAll('gameApiKey')
       .innerJoin('game', 'game.id', 'gameApiKey.gameId')
       .innerJoin('organization', 'organization.id', 'game.organizationId')
       .innerJoin('member', 'member.organizationId', 'organization.id')
       .innerJoin('user', 'user.id', 'member.userId')
       .where('user.id', '=', userId)
       .where('game.id', '=', gameId)
-      .selectAll('gameApiKey')
       .execute();
-  }
-
-  async create(values: InsertableGameApiKey): Promise<GameApiKey> {
-    return db
-      .insertInto('gameApiKey')
-      .values(values)
-      .returningAll()
-      .executeTakeFirstOrThrow();
-  }
-
-  async deleteById(gameApiKeyId: number): Promise<void> {
-    await db.deleteFrom('gameApiKey').where('id', '=', gameApiKeyId).execute();
   }
 }
 

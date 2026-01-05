@@ -59,8 +59,8 @@ export function GameSettingsForm({ game }: GameSettingsFormProps) {
             ...value,
           },
         });
-        form.reset(value);
         await router.invalidate();
+        form.reset(value);
         notify.success({
           title: 'Game updated',
           message: 'Your changes have been saved.',
@@ -158,7 +158,7 @@ export function GameSettingsForm({ game }: GameSettingsFormProps) {
           }}
           src={
             game.logo
-              ? `/api/games/${game.id}/logo?updatedAt=${game.updatedAt.toString()}`
+              ? `/api/game/${game.id}/logo?updatedAt=${game.updatedAt.toString()}`
               : ''
           }
           className="cursor-pointer"

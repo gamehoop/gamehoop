@@ -1,57 +1,32 @@
 import { db } from '@/db';
-import { Game, InsertableGame, UpdateableGame } from '@/db/types';
+import { Game } from '@/db/schema';
+import { Selectable } from 'kysely';
+import { BaseStore } from './base-store';
 
-export class GameStore {
-  async getByIdForUser(
-    gameId: number,
-    userId: string,
-  ): Promise<Game | undefined> {
-    return db
+export class GameStore extends BaseStore<Game> {
+  constructor() {
+    super('game');
+  }
+
+  async findOneForUser(args: {
+    userId: string;
+    where?: {
+      id?: number;
+    };
+  }): Promise<Promise<Selectable<Game> | undefined>> {
+    let query = db
       .selectFrom('game')
+      .selectAll('game')
       .innerJoin('organization', 'organization.id', 'game.organizationId')
       .innerJoin('member', 'member.organizationId', 'organization.id')
       .innerJoin('user', 'user.id', 'member.userId')
-      .where('game.id', '=', gameId)
-      .where('user.id', '=', userId)
-      .selectAll('game')
-      .executeTakeFirst();
-  }
+      .where('user.id', '=', args.userId);
 
-  async getByOrganizationId(organizationId: string): Promise<Game[]> {
-    return db
-      .selectFrom('game')
-      .where('organizationId', '=', organizationId)
-      .selectAll()
-      .execute();
-  }
+    if (args.where?.id) {
+      query = query.where('game.id', '=', args.where.id);
+    }
 
-  async getByPublicId(publicId: string): Promise<Game | undefined> {
-    return db
-      .selectFrom('game')
-      .where('publicId', '=', publicId)
-      .selectAll()
-      .executeTakeFirst();
-  }
-
-  async create(values: InsertableGame): Promise<Game> {
-    return db
-      .insertInto('game')
-      .values(values)
-      .returningAll()
-      .executeTakeFirstOrThrow();
-  }
-
-  async update(gameId: number, values: UpdateableGame): Promise<Game> {
-    return db
-      .updateTable('game')
-      .set({ ...values, updatedAt: new Date() })
-      .where('id', '=', gameId)
-      .returningAll()
-      .executeTakeFirstOrThrow();
-  }
-
-  async deleteById(gameId: number): Promise<void> {
-    await db.deleteFrom('game').where('id', '=', gameId).execute();
+    return query.executeTakeFirst();
   }
 }
 

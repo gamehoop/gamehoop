@@ -38,8 +38,8 @@ export function UserSettingsForm() {
         await updateUser({
           data: { ...value },
         });
-        form.reset(value);
         await router.invalidate();
+        form.reset(value);
         notify.success({
           title: 'Account updated',
           message: 'Your changes have been saved.',

@@ -34,7 +34,7 @@ export function ShellCollapsedGameMenu() {
                   color={themeColor}
                   src={
                     activeGame.logo
-                      ? `/api/games/${activeGame.id}/logo?updatedAt=${activeGame.updatedAt.toString()}`
+                      ? `/api/game/${activeGame.id}/logo?updatedAt=${activeGame.updatedAt.toString()}`
                       : ''
                   }
                 >

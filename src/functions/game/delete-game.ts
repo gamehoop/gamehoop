@@ -15,10 +15,13 @@ export const deleteGame = createServerFn({
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.getByIdForUser(gameId, user.id);
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
     if (!game) {
       throw notFound();
     }
 
-    await gameStore.deleteById(gameId);
+    await gameStore.deleteMany({ where: { id: gameId } });
   });

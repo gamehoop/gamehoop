@@ -1,7 +1,6 @@
-import { parseJson, verifyApiAccess } from '@/domain/api';
-import { logError } from '@/lib/logger';
+import { parseJson, withGameAccess } from '@/domain/api';
 import { playerSessionStore } from '@/stores/player-session-store';
-import { HttpStatus } from '@/utils/http';
+import { noContent, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
@@ -15,28 +14,21 @@ export const Route = createFileRoute(
   server: {
     handlers: {
       DELETE: async ({ params: { gameId: gamePublicId }, request }) => {
-        try {
-          const { game } = await verifyApiAccess(request, {
-            gamePublicId,
+        return withGameAccess({ gamePublicId, request }, async () => {
+          const { token } = await parseJson(request, zBody);
+
+          const sessions = await playerSessionStore.findMany({
+            where: { token },
           });
-
-          const body = await parseJson(request, zBody);
-
-          const sessions = await playerSessionStore.listForGame(game.id);
-          const session = sessions.find((s) => s.token === body.token);
-          if (!session) {
-            return new Response('', { status: HttpStatus.NotFound });
+          if (!sessions.length) {
+            return notFound();
           }
 
-          await playerSessionStore.deleteById(session.id);
-          return new Response('', { status: HttpStatus.NoContent });
-        } catch (error) {
-          logError(error);
-          if (error instanceof Response) {
-            return error;
-          }
-          return new Response('', { status: HttpStatus.ServerError });
-        }
+          await playerSessionStore.deleteMany({
+            where: { token },
+          });
+          return noContent();
+        });
       },
     },
   },

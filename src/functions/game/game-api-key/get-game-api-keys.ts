@@ -7,5 +7,5 @@ export const getGameApiKeys = createServerFn()
   .inputValidator(z.object({ gameId: z.int() }))
   .handler(async ({ data: { gameId } }) => {
     const user = await getUser();
-    return gameApiKeyStore.getByGameIdForUser(gameId, user.id);
+    return gameApiKeyStore.findForGameAndUser(gameId, user.id);
   });

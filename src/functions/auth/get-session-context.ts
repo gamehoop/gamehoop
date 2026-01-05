@@ -17,7 +17,7 @@ export const getSessionContext = createServerFn().handler(
 
     const [membership, activeOrganizationGames] = await Promise.all([
       getUserMembership(user, activeOrganization),
-      gameStore.getByOrganizationId(activeOrganization.id),
+      gameStore.findMany({ where: { organizationId: activeOrganization.id } }),
     ]);
 
     const activeGame = findActiveGame(user, activeOrganizationGames);

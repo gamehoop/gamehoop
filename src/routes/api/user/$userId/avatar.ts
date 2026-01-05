@@ -1,6 +1,6 @@
 import { getActiveOrganization } from '@/functions/organization/get-active-organization';
 import { getUserObject } from '@/lib/s3';
-import { HttpStatus } from '@/utils/http';
+import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/user/$userId/avatar')({
@@ -13,12 +13,12 @@ export const Route = createFileRoute('/api/user/$userId/avatar')({
           (m) => m.userId === userId,
         );
         if (!isMember) {
-          return new Response('', { status: HttpStatus.NotFound });
+          return notFound();
         }
 
         const avatar = await getUserObject({ userId, key: 'avatar' });
         if (!avatar) {
-          return new Response('', { status: HttpStatus.NotFound });
+          return notFound();
         }
 
         const byteArray = await avatar.transformToByteArray();

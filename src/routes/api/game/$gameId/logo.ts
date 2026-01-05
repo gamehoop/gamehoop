@@ -1,20 +1,20 @@
 import { getSessionContext } from '@/functions/auth/get-session-context';
 import { buildKey, getObject } from '@/lib/s3';
-import { HttpStatus } from '@/utils/http';
+import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/api/games/$gameId/logo')({
+export const Route = createFileRoute('/api/game/$gameId/logo')({
   server: {
     handlers: {
       GET: async ({ params: { gameId } }) => {
         const { activeOrganization } = await getSessionContext();
 
         const key = buildKey(
-          `organizations/${activeOrganization.id}/games/${gameId}/logo`,
+          `organizations/${activeOrganization.id}/game/${gameId}/logo`,
         );
         const logo = await getObject(key);
         if (!logo) {
-          return new Response('', { status: HttpStatus.NotFound });
+          return notFound();
         }
 
         const byteArray = await logo.transformToByteArray();

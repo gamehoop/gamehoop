@@ -1,5 +1,6 @@
 import { getUser } from '@/functions/auth/get-user';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
+import { gameStore } from '@/stores/game-store';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -11,17 +12,18 @@ export const deleteGameApiKey = createServerFn({
   .inputValidator(
     z.object({
       gameApiKeyId: z.int(),
+      gameId: z.int(),
     }),
   )
-  .handler(async ({ data: { gameApiKeyId } }): Promise<void> => {
+  .handler(async ({ data: { gameApiKeyId, gameId } }): Promise<void> => {
     const user = await getUser();
-    const gameApiKey = await gameApiKeyStore.getByIdForUser(
-      gameApiKeyId,
-      user.id,
-    );
-    if (!gameApiKey) {
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
+    if (!game) {
       throw notFound();
     }
 
-    await gameApiKeyStore.deleteById(gameApiKeyId);
+    await gameApiKeyStore.deleteMany({ where: { id: gameApiKeyId, gameId } });
   });

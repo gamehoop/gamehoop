@@ -15,3 +15,4 @@ export type InsertableGameApiKey = Insertable<GameApiKeyTable>;
 
 export type Player = Selectable<PlayerTable>;
 export type PlayerSession = Selectable<PlayerSessionTable>;
+export type UpdateablePlayerSession = Updateable<PlayerSessionTable>;

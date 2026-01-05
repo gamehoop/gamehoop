@@ -1,36 +1,38 @@
+import { Game, Player } from '@/db/types';
+import { logError } from '@/lib/logger';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { gameStore } from '@/stores/game-store';
-import { HttpStatus } from '@/utils/http';
+import { playerStore } from '@/stores/player-store';
+import {
+  badRequest,
+  forbidden,
+  notFound,
+  serverError,
+  unauthorized,
+} from '@/utils/http';
 import z from 'zod';
 import { hashApiKey } from './game-api-key';
 
-export async function verifyApiAccess(
+export async function verifyApiToken(
   request: Request,
   { gamePublicId }: { gamePublicId: string },
 ) {
   const token = getBearerToken(request);
   if (!token) {
-    throw new Response('', { status: HttpStatus.Unauthorized });
+    throw unauthorized({ error: 'Unauthorized' });
   }
 
-  const apiKeys = await gameApiKeyStore.getByGamePublicId(gamePublicId);
+  const apiKeys = await gameApiKeyStore.findForGame(gamePublicId);
   const apiKey = apiKeys.find(
     ({ active, keyHash }) => active && keyHash === hashApiKey(token),
   );
   if (!apiKey) {
-    throw new Response('', { status: HttpStatus.Forbidden });
+    throw forbidden({ error: 'Forbidden' });
   }
 
   if (apiKey.expiresAt && apiKey.expiresAt < new Date()) {
-    throw new Response('Expired API key', { status: HttpStatus.Forbidden });
+    throw forbidden({ error: 'Expired API key' });
   }
-
-  const game = await gameStore.getByPublicId(gamePublicId);
-  if (!game) {
-    throw new Response('Game not found', { status: HttpStatus.NotFound });
-  }
-
-  return { game };
 }
 
 export function getBearerToken(request: Request): string | null {
@@ -55,6 +57,56 @@ export async function parseJson<S extends z.ZodObject>(
     return schema.parse(await request.json());
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
-    throw Response.json({ error: message }, { status: HttpStatus.BadRequest });
+    logError(message);
+    throw badRequest({ error: message });
   }
+}
+
+export async function withGameAccess(
+  { request, gamePublicId }: { request: Request; gamePublicId: string },
+  handler: ({ game }: { game: Game }) => Promise<Response>,
+) {
+  try {
+    await verifyApiToken(request, { gamePublicId });
+
+    const game = await gameStore.findOne({ where: { publicId: gamePublicId } });
+    if (!game) {
+      throw notFound();
+    }
+
+    return await handler({ game });
+  } catch (error) {
+    logError(error);
+    if (error instanceof Response) {
+      return error;
+    }
+    return serverError();
+  }
+}
+
+export async function withPlayerAccess(
+  {
+    request,
+    gamePublicId,
+    playerId,
+  }: { request: Request; gamePublicId: string; playerId: string },
+  handler: ({
+    game,
+    player,
+  }: {
+    game: Game;
+    player: Player;
+  }) => Promise<Response>,
+) {
+  return withGameAccess({ gamePublicId, request }, async ({ game }) => {
+    const player = await playerStore.findOne({
+      where: { id: playerId, gameId: game.id },
+    });
+
+    if (!player) {
+      throw notFound();
+    }
+
+    return handler({ game, player });
+  });
 }

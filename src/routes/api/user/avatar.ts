@@ -1,6 +1,6 @@
 import { getUser } from '@/functions/auth/get-user';
 import { getUserObject } from '@/lib/s3';
-import { HttpStatus } from '@/utils/http';
+import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/api/user/avatar')({
@@ -15,7 +15,7 @@ async function GET() {
   const user = await getUser();
   const avatar = await getUserObject({ userId: user.id, key: 'avatar' });
   if (!avatar) {
-    return new Response('', { status: HttpStatus.NotFound });
+    return notFound();
   }
 
   const byteArray = await avatar.transformToByteArray();

@@ -27,13 +27,16 @@ export const updateGameLogo = createServerFn({
   })
   .handler(async ({ data: { gameId, logo } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.getByIdForUser(gameId, user.id);
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
     if (!game) {
       throw notFound();
     }
 
     const key = buildKey(
-      `organizations/${game.organizationId}/games/${gameId}/logo`,
+      `organizations/${game.organizationId}/game/${gameId}/logo`,
     );
     const body = await logo.arrayBuffer();
     const contentType = logo.type;
@@ -45,7 +48,10 @@ export const updateGameLogo = createServerFn({
     });
 
     const image = `${getObjectUrl(key)}?uploadedAt=${Date.now()}`;
-    await gameStore.update(gameId, {
-      logo: image,
+    await gameStore.updateOne({
+      where: { id: gameId },
+      data: {
+        logo: image,
+      },
     });
   });

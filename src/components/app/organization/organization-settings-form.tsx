@@ -42,8 +42,8 @@ export function OrganizationSettingsForm({
           organizationId: organization.id,
           data: value,
         });
-        form.reset(value);
         await router.invalidate();
+        form.reset(value);
         notify.success({
           title: 'Organization updated',
           message: 'Your changes have been saved.',

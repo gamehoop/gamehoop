@@ -20,13 +20,19 @@ export const updateGame = createServerFn({
   )
   .handler(async ({ data: { gameId, ...values } }): Promise<Game> => {
     const user = await getUser();
-    const game = await gameStore.getByIdForUser(gameId, user.id);
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
     if (!game) {
       throw notFound();
     }
 
-    return gameStore.update(gameId, {
-      ...values,
-      updatedBy: user.id,
+    return gameStore.updateOneOrThrow({
+      where: { id: gameId },
+      data: {
+        ...values,
+        updatedBy: user.id,
+      },
     });
   });

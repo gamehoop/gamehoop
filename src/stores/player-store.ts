@@ -1,14 +1,9 @@
-import { db } from '@/db';
-import { Player } from '@/db/types';
+import { Player } from '@/db/schema';
+import { BaseStore } from './base-store';
 
-export class PlayerStore {
-  async getById(playerId: string, gameId: number): Promise<Player | undefined> {
-    return db
-      .selectFrom('player')
-      .where('gameId', '=', gameId)
-      .where('id', '=', playerId)
-      .selectAll()
-      .executeTakeFirst();
+export class PlayerStore extends BaseStore<Player> {
+  constructor() {
+    super('player');
   }
 }
 
