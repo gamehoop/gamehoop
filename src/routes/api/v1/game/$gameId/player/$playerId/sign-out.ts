@@ -25,7 +25,7 @@ export const Route = createFileRoute(
 
           await playerSessionStore.deleteByPlayerId(playerId);
 
-          return Response.json('', { status: HttpStatus.Ok });
+          return new Response('', { status: HttpStatus.Ok });
         } catch (error) {
           logError(error);
           if (error instanceof Response) {

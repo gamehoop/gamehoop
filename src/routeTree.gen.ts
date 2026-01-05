@@ -31,6 +31,7 @@ import { Route as ApiGamesGameIdLogoRouteImport } from './routes/api/games/$game
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 import { Route as ApiV1GameGameIdPlayerSignInRouteImport } from './routes/api/v1/game/$gameId/player/sign-in'
 import { Route as ApiV1GameGameIdPlayerSignUpEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-up/email'
+import { Route as ApiV1GameGameIdPlayerSessionRevokeRouteImport } from './routes/api/v1/game/$gameId/player/session/revoke'
 import { Route as ApiV1GameGameIdPlayerSessionGuestRouteImport } from './routes/api/v1/game/$gameId/player/session/guest'
 import { Route as ApiV1GameGameIdPlayerPlayerIdSignOutRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/sign-out'
 import { Route as ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/send-verification-email'
@@ -149,6 +150,12 @@ const ApiV1GameGameIdPlayerSignUpEmailRoute =
     path: '/api/v1/game/$gameId/player/sign-up/email',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiV1GameGameIdPlayerSessionRevokeRoute =
+  ApiV1GameGameIdPlayerSessionRevokeRouteImport.update({
+    id: '/api/v1/game/$gameId/player/session/revoke',
+    path: '/api/v1/game/$gameId/player/session/revoke',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiV1GameGameIdPlayerSessionGuestRoute =
   ApiV1GameGameIdPlayerSessionGuestRouteImport.update({
     id: '/api/v1/game/$gameId/player/session/guest',
@@ -197,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/$playerId/sign-out': typeof ApiV1GameGameIdPlayerPlayerIdSignOutRoute
   '/api/v1/game/$gameId/player/session/guest': typeof ApiV1GameGameIdPlayerSessionGuestRoute
+  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
 }
 export interface FileRoutesByTo {
@@ -222,6 +230,7 @@ export interface FileRoutesByTo {
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/$playerId/sign-out': typeof ApiV1GameGameIdPlayerPlayerIdSignOutRoute
   '/api/v1/game/$gameId/player/session/guest': typeof ApiV1GameGameIdPlayerSessionGuestRoute
+  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
 }
 export interface FileRoutesById {
@@ -251,6 +260,7 @@ export interface FileRoutesById {
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/$playerId/sign-out': typeof ApiV1GameGameIdPlayerPlayerIdSignOutRoute
   '/api/v1/game/$gameId/player/session/guest': typeof ApiV1GameGameIdPlayerSessionGuestRoute
+  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
 }
 export interface FileRouteTypes {
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/$playerId/sign-out'
     | '/api/v1/game/$gameId/player/session/guest'
+    | '/api/v1/game/$gameId/player/session/revoke'
     | '/api/v1/game/$gameId/player/sign-up/email'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/$playerId/sign-out'
     | '/api/v1/game/$gameId/player/session/guest'
+    | '/api/v1/game/$gameId/player/session/revoke'
     | '/api/v1/game/$gameId/player/sign-up/email'
   id:
     | '__root__'
@@ -331,6 +343,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/$playerId/sign-out'
     | '/api/v1/game/$gameId/player/session/guest'
+    | '/api/v1/game/$gameId/player/session/revoke'
     | '/api/v1/game/$gameId/player/sign-up/email'
   fileRoutesById: FileRoutesById
 }
@@ -348,6 +361,7 @@ export interface RootRouteChildren {
   ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute: typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   ApiV1GameGameIdPlayerPlayerIdSignOutRoute: typeof ApiV1GameGameIdPlayerPlayerIdSignOutRoute
   ApiV1GameGameIdPlayerSessionGuestRoute: typeof ApiV1GameGameIdPlayerSessionGuestRoute
+  ApiV1GameGameIdPlayerSessionRevokeRoute: typeof ApiV1GameGameIdPlayerSessionRevokeRoute
   ApiV1GameGameIdPlayerSignUpEmailRoute: typeof ApiV1GameGameIdPlayerSignUpEmailRoute
 }
 
@@ -507,6 +521,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1GameGameIdPlayerSignUpEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/v1/game/$gameId/player/session/revoke': {
+      id: '/api/v1/game/$gameId/player/session/revoke'
+      path: '/api/v1/game/$gameId/player/session/revoke'
+      fullPath: '/api/v1/game/$gameId/player/session/revoke'
+      preLoaderRoute: typeof ApiV1GameGameIdPlayerSessionRevokeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/v1/game/$gameId/player/session/guest': {
       id: '/api/v1/game/$gameId/player/session/guest'
       path: '/api/v1/game/$gameId/player/session/guest'
@@ -608,6 +629,8 @@ const rootRouteChildren: RootRouteChildren = {
     ApiV1GameGameIdPlayerPlayerIdSignOutRoute,
   ApiV1GameGameIdPlayerSessionGuestRoute:
     ApiV1GameGameIdPlayerSessionGuestRoute,
+  ApiV1GameGameIdPlayerSessionRevokeRoute:
+    ApiV1GameGameIdPlayerSessionRevokeRoute,
   ApiV1GameGameIdPlayerSignUpEmailRoute: ApiV1GameGameIdPlayerSignUpEmailRoute,
 }
 export const routeTree = rootRouteImport
