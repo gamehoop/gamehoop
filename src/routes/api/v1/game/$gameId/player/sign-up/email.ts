@@ -15,24 +15,30 @@ export const Route = createFileRoute(
 )({
   server: {
     handlers: {
-      POST: async ({ params: { gameId: gamePublicId }, request }) => {
-        return withGameAccess({ gamePublicId, request }, async ({ game }) => {
-          const body = await parseJson(request, zBody);
-
-          const { token, user } = await createPlayerAuth(
-            game.id,
-          ).api.signUpEmail({
-            body: {
-              gameId: game.id,
-              callbackURL: '/player-verified',
-              ...body,
-            },
-          });
-
-          const data = { token, player: user };
-          return created(data);
-        });
-      },
+      POST,
     },
   },
 });
+
+export function POST({
+  params: { gameId: gamePublicId },
+  request,
+}: {
+  params: { gameId: string };
+  request: Request;
+}) {
+  return withGameAccess({ gamePublicId, request }, async ({ game }) => {
+    const body = await parseJson(request, zBody);
+
+    const { token, user } = await createPlayerAuth(game.id).api.signUpEmail({
+      body: {
+        gameId: game.id,
+        callbackURL: '/player-verified',
+        ...body,
+      },
+    });
+
+    const data = { token, player: user };
+    return created(data);
+  });
+}

@@ -7,9 +7,9 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   plugins: [tsConfigPaths(), react(), tailwindcss()],
   test: {
-    // Run tests in an emulated browser environment
-    environment: 'jsdom',
-    // Run the code in this file before the tests
+    // Run tests in a server environment
+    environment: 'node',
+    // Run the code in this file before each test file
     setupFiles: 'vitest.setup.ts',
     // Run these test files
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],

@@ -46,5 +46,11 @@ export function logError(error: unknown) {
   }
 
   logger.error({ error }, message);
+
+  // Needed as pino-pretty async logs are not output in vitest
+  if (process.env.VITEST) {
+    console.error({ message, error });
+  }
+
   return message;
 }
