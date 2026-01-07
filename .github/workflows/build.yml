@@ -6,27 +6,11 @@ on:
       push:
         type: boolean
         default: false
-      sentry:
-        type: boolean
-        default: false
-    secrets:
-      SENTRY_URL:
-        required: false
-      SENTRY_ORG:
-        required: false
-      SENTRY_PROJECT:
-        required: false
-      SENTRY_AUTH_TOKEN:
-        required: false
 
   workflow_dispatch:
     inputs:
       push:
         description: Whether to push the image to the registry
-        type: boolean
-        default: false
-      sentry:
-        description: Whether to upload to Sentry
         type: boolean
         default: false
 
@@ -72,11 +56,6 @@ jobs:
           build-args: |
             SOURCE_COMMIT=${{ github.sha }}
             VITE_SENTRY_DSN=${{ vars.VITE_SENTRY_DSN }}
-          secrets: |
-            SENTRY_AUTH_TOKEN=${{ inputs.sentry && secrets.SENTRY_AUTH_TOKEN || '' }}
-            SENTRY_ORG=${{ secrets.SENTRY_ORG }}
-            SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}
-            SENTRY_URL=${{ secrets.SENTRY_URL }}
       - name: Delete old docker images
         uses: actions/delete-package-versions@v4
         with:

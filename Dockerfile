@@ -36,11 +36,7 @@ ENV NODE_ENV=production \
     VITE_SOURCE_COMMIT=${SOURCE_COMMIT}
 
 COPY . .
-RUN --mount=type=secret,id=SENTRY_URL,env=SENTRY_URL \
-    --mount=type=secret,id=SENTRY_ORG,env=SENTRY_ORG \
-    --mount=type=secret,id=SENTRY_PROJECT,env=SENTRY_PROJECT \
-    --mount=type=secret,id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
-    pnpm build
+RUN pnpm build
 
 # Stage 4 - Run the application
 FROM base AS runtime

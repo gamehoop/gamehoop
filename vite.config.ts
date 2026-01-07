@@ -30,6 +30,7 @@ const config = defineConfig({
     viteTsConfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
     tanstackStart({
+      router: { routeFileIgnorePattern: '.test.ts' },
       serverFns: {
         generateFunctionId: ({ filename, functionName }) => {
           const hash = crypto.createHash('sha1').update(filename).digest('hex');
