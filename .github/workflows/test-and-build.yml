@@ -22,4 +22,3 @@ jobs:
       packages: write
     with:
       push: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
-      sentry: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
