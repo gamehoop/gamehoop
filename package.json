@@ -31,7 +31,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.962.0",
+    "@aws-sdk/client-s3": "^3.964.0",
     "@fontsource-variable/nunito-sans": "^5.2.7",
     "@mantine/core": "^8.3.11",
     "@mantine/dates": "^8.3.11",
@@ -42,15 +42,15 @@
     "@sentry/tanstackstart-react": "^10.32.1",
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-devtools": "^0.9.0",
+    "@tanstack/react-devtools": "^0.9.1",
     "@tanstack/react-form": "^1.27.7",
     "@tanstack/react-query": "^5.90.16",
     "@tanstack/react-query-devtools": "^5.91.2",
     "@tanstack/react-router": "^1.145.7",
     "@tanstack/react-router-devtools": "^1.145.7",
     "@tanstack/react-router-ssr-query": "^1.145.7",
-    "@tanstack/react-start": "^1.145.7",
-    "@tanstack/router-plugin": "^1.145.7",
+    "@tanstack/react-start": "^1.145.10",
+    "@tanstack/router-plugin": "^1.145.10",
     "@unpic/react": "^1.0.2",
     "better-auth": "^1.4.10",
     "clsx": "^2.1.1",
@@ -73,7 +73,7 @@
     "@commitlint/cli": "^20.3.0",
     "@commitlint/config-conventional": "^20.3.0",
     "@faker-js/faker": "^10.2.0",
-    "@tanstack/devtools-vite": "^0.4.0",
+    "@tanstack/devtools-vite": "^0.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
@@ -95,7 +95,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
-    "vite": "^7.3.0",
+    "vite": "^7.3.1",
     "vitest": "^4.0.16"
   }
 }
