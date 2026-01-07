@@ -1,5 +1,6 @@
 import { UIProvider } from '@/components/ui';
-import { generateApiKey, hashApiKey } from '@/domain/game-api-key';
+import { Game } from '@/db/types';
+import { generateApiKey, hashApiKey, Scope } from '@/domain/game-api-key';
 import { auth, Organization, User } from '@/lib/auth';
 import { getRouter } from '@/router';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
@@ -25,23 +26,27 @@ export function render(el: ReactElement) {
 }
 
 export function apiRequest(
-  uri: string,
-  options?: Omit<RequestInit, 'body'> & {
-    body?: object | null;
+  options: RequestInit & {
+    uri: string;
+    data?: object;
     apiKey?: string;
   },
 ): Request {
-  return new Request(`http://localhost:3000/api/${uri}`, {
+  return new Request(`http://localhost:3000/api/${options.uri}`, {
     method: HttpMethod.Post,
     headers: {
       Authorization: options?.apiKey ? `Bearer ${options.apiKey}` : '',
+      'Content-Type': 'application/json',
     },
+    body: options?.data ? JSON.stringify(options.data) : undefined,
     ...options,
-    body: options?.body ? JSON.stringify(options.body) : undefined,
   });
 }
 
-export async function initTestUser() {
+export async function createTestUser(): Promise<{
+  user: User;
+  organization: Organization;
+}> {
   const { user } = await auth.api.signUpEmail({
     body: {
       name: faker.person.fullName(),
@@ -65,7 +70,7 @@ export async function initTestUser() {
   return { user, organization };
 }
 
-export async function initApiKey({
+export async function createGameWithApiKey({
   user,
   organization,
   expired,
@@ -73,7 +78,7 @@ export async function initApiKey({
   user: User;
   organization: Organization;
   expired?: boolean;
-}) {
+}): Promise<{ game: Game; apiKey: string }> {
   const game = await gameStore.create({
     name: faker.lorem.word(),
     organizationId: organization.id,
@@ -87,7 +92,7 @@ export async function initApiKey({
   await gameApiKeyStore.create({
     gameId: game.id,
     keyHash,
-    scopes: ['*'],
+    scopes: [Scope.All],
     description: faker.lorem.sentence(),
     expiresAt: expired ? faker.date.past() : undefined,
     createdBy: user.id,

@@ -3,7 +3,8 @@ import pino from 'pino';
 export const logger = createLogger();
 
 export function createLogger() {
-  const isDevelopment = process.env.VITE_ENVIRONMENT === 'development';
+  const isDevelopment =
+    process.env.VITE_ENVIRONMENT === 'development' || process.env.VITEST;
 
   // Pretty print logs during development. JSON for production.
   const transport = isDevelopment

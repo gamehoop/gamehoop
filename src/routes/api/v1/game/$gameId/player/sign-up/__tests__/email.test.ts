@@ -1,18 +1,17 @@
-import { db } from '@/db';
 import { HttpStatus } from '@/utils/http';
-import { apiRequest, initApiKey, initTestUser } from '@/utils/testing';
+import {
+  apiRequest,
+  createGameWithApiKey,
+  createTestUser,
+} from '@/utils/testing';
 import { faker } from '@faker-js/faker';
-import { sql } from 'kysely';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { POST } from '../email';
 
 describe('email', () => {
-  beforeAll(async () => await sql`BEGIN`.execute(db));
-  afterAll(async () => await sql`ROLLBACK`.execute(db));
-
   it('should create a player and session', async () => {
-    const { user, organization } = await initTestUser();
-    const { game, apiKey } = await initApiKey({ user, organization });
+    const { user, organization } = await createTestUser();
+    const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
     const playerDetails = {
       name: faker.person.fullName(),
@@ -22,9 +21,10 @@ describe('email', () => {
 
     const res = await POST({
       params: { gameId: game.publicId },
-      request: apiRequest(`v1/game/${game.publicId}/player/sign-up/email`, {
+      request: apiRequest({
+        uri: `v1/game/${game.publicId}/player/sign-up/email`,
         apiKey,
-        body: playerDetails,
+        data: playerDetails,
       }),
     });
 
@@ -46,18 +46,21 @@ describe('email', () => {
   });
 
   it('should require an API token', async () => {
+    const gameId = faker.string.uuid();
     const res = await POST({
-      params: { gameId: '1' },
-      request: apiRequest('v1/game/1/player/sign-up/email'),
+      params: { gameId },
+      request: apiRequest({ uri: `v1/game/${gameId}/player/sign-up/email` }),
     });
 
     expect(res.status).toBe(HttpStatus.Unauthorized);
   });
 
   it('should require a valid API token', async () => {
+    const gameId = faker.string.uuid();
     const res = await POST({
-      params: { gameId: '1' },
-      request: apiRequest('v1/game/1/player/sign-up/email', {
+      params: { gameId },
+      request: apiRequest({
+        uri: `v1/game/${gameId}/player/sign-up/email`,
         apiKey: 'invalid',
       }),
     });
@@ -66,16 +69,18 @@ describe('email', () => {
   });
 
   it('should require an active API token', async () => {
-    const { user, organization } = await initTestUser();
-    const { apiKey } = await initApiKey({
+    const { user, organization } = await createTestUser();
+    const { apiKey } = await createGameWithApiKey({
       user,
       organization,
       expired: true,
     });
 
+    const gameId = faker.string.uuid();
     const res = await POST({
-      params: { gameId: '1' },
-      request: apiRequest('v1/game/1/player/sign-up/email', {
+      params: { gameId },
+      request: apiRequest({
+        uri: `v1/game/${gameId}/player/sign-up/email`,
         apiKey,
       }),
     });

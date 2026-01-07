@@ -1,9 +1,10 @@
 import { auth, Invitation, Member } from '@/lib/auth';
+import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { acceptInvitation } from '../accept-invitation';
 
-describe('accept-invitation', () => {
-  it('should accept an invitation', async () => {
+describe('accept-invitation serverFn', () => {
+  it('should accept a valid invitation', async () => {
     const acceptInvitationSpy = vi
       .spyOn(auth.api, 'acceptInvitation')
       .mockResolvedValue({
@@ -11,8 +12,9 @@ describe('accept-invitation', () => {
         member: {} as Member,
       });
 
-    const invitationId = '1';
-    await acceptInvitation({ data: { invitationId } });
+    const invitationId = faker.string.uuid();
+    const res = await acceptInvitation({ data: { invitationId } });
+    expect(res).toBeUndefined();
 
     expect(acceptInvitationSpy).toHaveBeenCalledTimes(1);
     expect(acceptInvitationSpy).toHaveBeenCalledWith(
@@ -22,5 +24,14 @@ describe('accept-invitation', () => {
         },
       }),
     );
+  });
+
+  it('should reject an invalid invitation', async () => {
+    const mockError = new Error('Invalid invitation');
+    vi.spyOn(auth.api, 'acceptInvitation').mockRejectedValue(mockError);
+
+    await expect(
+      acceptInvitation({ data: { invitationId: faker.string.uuid() } }),
+    ).rejects.toThrow(mockError);
   });
 });
