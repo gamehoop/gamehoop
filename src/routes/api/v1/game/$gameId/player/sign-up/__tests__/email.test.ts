@@ -135,7 +135,7 @@ describe('/api/v1/game/${gamePublicId}/player/sign-up/email', () => {
       }),
     });
 
-    expect(res.status).toBe(HttpStatus.Forbidden);
+    expect(res.status).toBe(HttpStatus.Unauthorized);
   });
 
   it('should require an active API token', async () => {
@@ -156,6 +156,6 @@ describe('/api/v1/game/${gamePublicId}/player/sign-up/email', () => {
       }),
     });
 
-    expect(res.status).toBe(HttpStatus.Forbidden);
+    expect(res.status).toBe(HttpStatus.Unauthorized);
   });
 });

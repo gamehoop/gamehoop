@@ -8,10 +8,12 @@ export function createHooks(gameId: number) {
         context.internalAdapter,
       );
 
+      // Create player "users" with a gameId
       context.internalAdapter.createUser = async (data) => {
         return internalCreateUser({ ...data, gameId });
       };
 
+      // Find player "users" by email with a gameId
       context.internalAdapter.findUserByEmail = async (
         email: string,
         options?: { includeAccounts?: boolean },

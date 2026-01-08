@@ -53,7 +53,7 @@ export function createPlayerAuth(
     },
     emailVerification: {
       // Send a verification email on sign up
-      sendOnSignUp: false,
+      sendOnSignUp: !!options.requireEmailVerification,
       // Automatically sign in after the email is verified
       autoSignInAfterVerification: true,
       // To send the verification email

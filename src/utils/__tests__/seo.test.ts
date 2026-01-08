@@ -1,7 +1,7 @@
 import { seo } from '@/utils/seo';
 import { describe, expect, test } from 'vitest';
 
-describe('seo', () => {
+describe('seo utils', () => {
   test('returns an array of metadata', () => {
     expect(seo({ title: 'My Title', description: 'My Description' })).toEqual([
       { title: 'My Title' },

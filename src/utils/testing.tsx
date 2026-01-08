@@ -1,4 +1,5 @@
 import { UIProvider } from '@/components/ui';
+import { db } from '@/db';
 import { Game } from '@/db/types';
 import { generateApiKey, hashApiKey, Scope } from '@/domain/game-api-key';
 import { auth, Organization, User } from '@/lib/auth';
@@ -9,11 +10,11 @@ import { theme } from '@/styles/theme';
 import { faker } from '@faker-js/faker';
 import { ModalsProvider } from '@mantine/modals';
 import { RouterContextProvider } from '@tanstack/react-router';
-import { render as baseRender } from '@testing-library/react';
+import { render as baseRender, RenderResult } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { HttpMethod } from './http';
 
-export function render(el: ReactElement) {
+export function render(el: ReactElement): RenderResult {
   const router = getRouter();
 
   return baseRender(
@@ -38,7 +39,7 @@ export function apiRequest(
       Authorization: options?.apiKey ? `Bearer ${options.apiKey}` : '',
       'Content-Type': 'application/json',
     },
-    body: options?.data ? JSON.stringify(options.data) : undefined,
+    body: JSON.stringify(options.data ?? {}),
     ...options,
   });
 }
@@ -55,17 +56,11 @@ export async function createTestUser(): Promise<{
     },
   });
 
-  const organization = await auth.api.createOrganization({
-    body: {
-      name: faker.company.name(),
-      slug: `org-${user.id}`,
-      userId: user.id,
-    },
-  });
-
-  if (!organization) {
-    throw new Error(`Failed to create test user organization`);
-  }
+  const organization = await db
+    .selectFrom('organization')
+    .selectAll()
+    .where('slug', '=', `user-org:${user.id}`)
+    .executeTakeFirstOrThrow();
 
   return { user, organization };
 }

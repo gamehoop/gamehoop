@@ -7,14 +7,6 @@ import { sql } from 'kysely';
 
 const processStartDate = new Date(Date.now() - process.uptime() * 1000);
 
-export const Route = createFileRoute('/api/health')({
-  server: {
-    handlers: {
-      GET,
-    },
-  },
-});
-
 export async function GET() {
   const database = await getDatabaseStatus();
 
@@ -44,3 +36,11 @@ async function getDatabaseStatus() {
     return 'unhealthy';
   }
 }
+
+export const Route = createFileRoute('/api/health')({
+  server: {
+    handlers: {
+      GET,
+    },
+  },
+});

@@ -3,13 +3,7 @@ import { logError } from '@/lib/logger';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { gameStore } from '@/stores/game-store';
 import { playerStore } from '@/stores/player-store';
-import {
-  badRequest,
-  forbidden,
-  notFound,
-  serverError,
-  unauthorized,
-} from '@/utils/http';
+import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
 import { hashApiKey } from './game-api-key';
 
@@ -27,11 +21,11 @@ export async function verifyApiToken(
     ({ active, keyHash }) => active && keyHash === hashApiKey(token),
   );
   if (!apiKey) {
-    throw forbidden({ error: 'Forbidden' });
+    throw unauthorized({ error: 'Unauthorized' });
   }
 
   if (apiKey.expiresAt && apiKey.expiresAt < new Date()) {
-    throw forbidden({ error: 'Expired API key' });
+    throw unauthorized({ error: 'Expired API key' });
   }
 }
 

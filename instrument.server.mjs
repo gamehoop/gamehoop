@@ -5,9 +5,9 @@ if (process.env.VITE_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.VITE_SENTRY_DSN,
     release: process.env.VITE_SENTRY_RELEASE,
-    sendDefaultPii: true,
-    tracesSampleRate: 1.0,
-    replaysSessionSampleRate: 1.0,
-    replaysOnErrorSampleRate: 1.0,
+    sendDefaultPii: false,
+    tracesSampleRate: 0.1,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 0.1,
   });
 }
