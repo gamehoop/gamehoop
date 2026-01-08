@@ -13,6 +13,7 @@ if (isServer) {
   mockMantine();
 }
 
+// Create a fake testing environment.
 function mockServerEnv() {
   process.env.DATABASE_URL =
     'postgres://postgres:secret@localhost:5432/gamehoop';
@@ -28,6 +29,8 @@ function mockServerEnv() {
   }));
 }
 
+// There is no official/recommended way to test this library atm.
+// This is a temporary workaround until a better solution is found.
 function mockTanstackStart() {
   const mockCreateServerFn: typeof createServerFn<'GET'> = vi.hoisted(() => {
     return vi.fn(() => {
@@ -77,6 +80,19 @@ function mockTanstackStart() {
   vi.mock('@tanstack/react-router', { spy: true });
 }
 
+// To avoid polluting our database and potential conflicts
+function testInDatabaseTransaction() {
+  beforeAll(async () => {
+    const { db } = await import('@/db');
+    await sql`BEGIN`.execute(db);
+  });
+
+  afterAll(async () => {
+    const { db } = await import('@/db');
+    await sql`ROLLBACK`.execute(db);
+  });
+}
+
 // https://mantine.dev/guides/vitest
 function mockMantine() {
   const getComputedStyle = window.getComputedStyle;
@@ -105,16 +121,4 @@ function mockMantine() {
   }
 
   window.ResizeObserver = ResizeObserver;
-}
-
-function testInDatabaseTransaction() {
-  beforeAll(async () => {
-    const { db } = await import('@/db');
-    await sql`BEGIN`.execute(db);
-  });
-
-  afterAll(async () => {
-    const { db } = await import('@/db');
-    await sql`ROLLBACK`.execute(db);
-  });
 }
