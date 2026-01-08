@@ -2,6 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import '@testing-library/jest-dom/vitest';
 import { sql } from 'kysely';
 import { afterAll, beforeAll, vi } from 'vitest';
+import z from 'zod';
 
 const isServer = typeof window === 'undefined';
 if (isServer) {
@@ -28,17 +29,33 @@ function mockServerEnv() {
 }
 
 function mockTanstackStart() {
-  const mockServerFunctionBuider: ReturnType<typeof createServerFn<'GET'>> =
-    vi.hoisted(() => {
-      return {
-        middleware: vi.fn(() => mockServerFunctionBuider),
-        inputValidator: vi.fn(() => mockServerFunctionBuider),
-        handler: vi.fn((func) => func),
-      } as unknown as ReturnType<typeof createServerFn<'GET'>>;
-    });
-
   const mockCreateServerFn: typeof createServerFn<'GET'> = vi.hoisted(() => {
-    return vi.fn(() => mockServerFunctionBuider);
+    return vi.fn(() => {
+      let inputValidatorSchema: z.Schema | undefined;
+
+      const builder = {
+        middleware: vi.fn(function (this: unknown) {
+          return this;
+        }),
+        inputValidator: vi.fn(function (this: unknown, schema?: z.Schema) {
+          inputValidatorSchema = schema;
+          return this;
+        }),
+        handler: vi.fn((func) => {
+          return (input?: { data?: object }, ...args: unknown[]) => {
+            if (inputValidatorSchema && input) {
+              const { error } = inputValidatorSchema.safeParse(input?.data);
+              if (error) {
+                return Promise.reject(error);
+              }
+            }
+            return func(input, ...args);
+          };
+        }),
+      } as unknown as ReturnType<typeof createServerFn<'GET'>>;
+
+      return builder;
+    });
   });
 
   vi.mock('@tanstack/react-start', async (importOriginal) => {

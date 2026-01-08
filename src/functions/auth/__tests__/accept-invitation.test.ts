@@ -34,4 +34,20 @@ describe('accept-invitation serverFn', () => {
       acceptInvitation({ data: { invitationId: faker.string.uuid() } }),
     ).rejects.toThrow(mockError);
   });
+
+  it('should validate the body', async () => {
+    await expect(
+      acceptInvitation({ data: { invitationId: '' } }),
+    ).rejects.toThrow(
+      expect.objectContaining({
+        name: 'ZodError',
+        issues: [
+          expect.objectContaining({
+            path: ['invitationId'],
+            message: 'Too small: expected string to have >=1 characters',
+          }),
+        ],
+      }),
+    );
+  });
 });

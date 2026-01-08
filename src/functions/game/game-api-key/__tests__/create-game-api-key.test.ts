@@ -79,4 +79,32 @@ describe('create-game-api-key serverFn', () => {
       }),
     ).rejects.toThrowError('Unauthorized');
   });
+
+  it('should validate the body', async () => {
+    await expect(
+      createGameApiKey({
+        data: {
+          expiresAt: faker.date.past().toISOString(),
+        } as any,
+      }),
+    ).rejects.toThrow(
+      expect.objectContaining({
+        name: 'ZodError',
+        issues: [
+          expect.objectContaining({
+            path: ['gameId'],
+            message: 'Invalid input: expected number, received undefined',
+          }),
+          expect.objectContaining({
+            path: ['scopes'],
+            message: 'Invalid input: expected array, received undefined',
+          }),
+          expect.objectContaining({
+            path: ['expiresAt'],
+            message: 'Cannot expire in the past',
+          }),
+        ],
+      }),
+    );
+  });
 });
