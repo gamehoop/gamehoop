@@ -63,20 +63,22 @@ describe('/api/v1/game/${gamePublicId}/player/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(JSON.parse(body.error)).toEqual([
-      expect.objectContaining({
-        path: ['email'],
-        message: 'Invalid input: expected string, received undefined',
-      }),
-      expect.objectContaining({
-        path: ['password'],
-        message: 'Invalid input: expected string, received undefined',
-      }),
-      expect.objectContaining({
-        path: ['name'],
-        message: 'Invalid input: expected string, received undefined',
-      }),
-    ]);
+    expect(body).toEqual({
+      error: [
+        expect.objectContaining({
+          path: ['email'],
+          message: 'Invalid input: expected string, received undefined',
+        }),
+        expect.objectContaining({
+          path: ['password'],
+          message: 'Invalid input: expected string, received undefined',
+        }),
+        expect.objectContaining({
+          path: ['name'],
+          message: 'Invalid input: expected string, received undefined',
+        }),
+      ],
+    });
   });
 
   it('should require passwords to have a min length', async () => {
@@ -101,12 +103,14 @@ describe('/api/v1/game/${gamePublicId}/player/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(JSON.parse(body.error)).toEqual([
-      expect.objectContaining({
-        path: ['password'],
-        message: 'Too small: expected string to have >=8 characters',
-      }),
-    ]);
+    expect(body).toEqual({
+      error: [
+        expect.objectContaining({
+          path: ['password'],
+          message: 'Too small: expected string to have >=8 characters',
+        }),
+      ],
+    });
   });
 
   it('should require an API token', async () => {

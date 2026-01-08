@@ -10,7 +10,7 @@ import {
   serverError,
   unauthorized,
 } from '@/utils/http';
-import z from 'zod';
+import z, { ZodError } from 'zod';
 import { hashApiKey } from './game-api-key';
 
 export async function verifyApiToken(
@@ -56,7 +56,12 @@ export async function parseJson<S extends z.ZodObject>(
   try {
     return schema.parse(await request.json());
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    let message: string | z.core.$ZodIssue[] = 'Unknown error';
+    if (error instanceof ZodError) {
+      message = error.issues;
+    } else if (error instanceof Error) {
+      message = error.message;
+    }
     logError(message);
     throw badRequest({ error: message });
   }
