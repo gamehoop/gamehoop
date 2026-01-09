@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { DELETE } from '../revoke';
 
-describe('/api/v1/game/${gamePublicId}/player/session/revoke', () => {
+describe('/api/v1/game/$gamePublicId/player/session/revoke', () => {
   it('should delete the session for a given token', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });

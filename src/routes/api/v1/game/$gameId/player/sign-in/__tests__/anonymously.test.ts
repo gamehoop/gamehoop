@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { POST } from '../anonymously';
 
-describe('/api/v1/game/${gamePublicId}/player/sign-in/anonymously', () => {
+describe('/api/v1/game/$gamePublicId/player/sign-in/anonymously', () => {
   it('should create and return an anonymous player session', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
