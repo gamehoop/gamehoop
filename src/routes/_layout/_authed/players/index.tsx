@@ -1,3 +1,4 @@
+import { PlayersTable } from '@/components/app/game/players/players-table';
 import { Title } from '@/components/ui/title';
 import { getPlayers } from '@/functions/game/get-players';
 import { createFileRoute, redirect } from '@tanstack/react-router';
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/_layout/_authed/players/')({
 
     const players = await getPlayers({ data: { gameId: activeGame.id } });
 
-    return { players };
+    return { activeGame, players };
   },
   component: Players,
 });
@@ -24,8 +25,8 @@ function Players() {
 
   return (
     <div>
-      <Title order={2}>Players</Title>
-      {JSON.stringify(players)}
+      <Title order={2}>Players ({players.length})</Title>
+      <PlayersTable players={players} />
     </div>
   );
 }
