@@ -3,15 +3,7 @@ import { getUserObject } from '@/lib/s3';
 import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/api/user/avatar')({
-  server: {
-    handlers: {
-      GET,
-    },
-  },
-});
-
-async function GET() {
+export async function GET() {
   const user = await getUser();
   const avatar = await getUserObject({ userId: user.id, key: 'avatar' });
   if (!avatar) {
@@ -27,3 +19,11 @@ async function GET() {
     status: HttpStatus.Ok,
   });
 }
+
+export const Route = createFileRoute('/api/user/avatar')({
+  server: {
+    handlers: {
+      GET,
+    },
+  },
+});
