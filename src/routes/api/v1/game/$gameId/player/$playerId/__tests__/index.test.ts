@@ -6,11 +6,11 @@ import {
   createTestUser,
 } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
-import { describe, expect, it, vi } from 'vitest';
-import { POST } from '../reset-password';
+import { describe, expect, it } from 'vitest';
+import { GET } from '..';
 
-describe('POST /api/v1/game/$gamePublicId/player/$playerId/reset-password', () => {
-  it('should send a reset password email', async () => {
+describe('GET /api/v1/game/$gamePublicId/player/$playerId', () => {
+  it('should return player data', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
@@ -24,43 +24,53 @@ describe('POST /api/v1/game/$gamePublicId/player/$playerId/reset-password', () =
       },
     });
 
-    const mockRequestPasswordReset = vi.fn().mockResolvedValue({});
-    vi.spyOn(
-      await import('@/lib/player-auth'),
-      'createPlayerAuth',
-    ).mockReturnValueOnce({
-      api: {
-        requestPasswordReset: mockRequestPasswordReset,
-      },
-    } as any);
-
-    const res = await POST({
+    const res = await GET({
       params: { gameId: game.publicId, playerId: player.id },
       request: apiRequest({
-        uri: `v1/game/${game.publicId}/player/${player.id}/reset-password`,
+        uri: `v1/game/${game.publicId}/player/${player.id}`,
         apiKey,
       }),
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
 
-    expect(mockRequestPasswordReset).toHaveBeenCalledTimes(1);
-    expect(mockRequestPasswordReset).toHaveBeenCalledWith({
-      body: {
-        email: player.email,
-        redirectTo: '/player/reset-password',
-      },
+    const body = await res.json();
+    expect(body).toEqual({
+      id: player.id,
+      name: player.name,
+      email: player.email,
+      emailVerified: false,
+      image: null,
+      gameId: game.publicId,
+      createdAt: player.createdAt.toISOString(),
+      updatedAt: player.updatedAt.toISOString(),
     });
+  });
+
+  it('should return not found if the player does not exist', async () => {
+    const { user, organization } = await createTestUser();
+    const { game, apiKey } = await createGameWithApiKey({ user, organization });
+
+    const playerId = faker.string.uuid();
+    const res = await GET({
+      params: { gameId: game.publicId, playerId },
+      request: apiRequest({
+        uri: `v1/game/${game.publicId}/player/${playerId}`,
+        apiKey,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.NotFound);
   });
 
   it('should require an API token', async () => {
     const gameId = faker.string.uuid();
     const playerId = faker.string.uuid();
 
-    const res = await POST({
+    const res = await GET({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/game/${gameId}/player/${playerId}/reset-password`,
+        uri: `v1/game/${gameId}/player/${playerId}`,
       }),
     });
 
@@ -71,10 +81,10 @@ describe('POST /api/v1/game/$gamePublicId/player/$playerId/reset-password', () =
     const gameId = faker.string.uuid();
     const playerId = faker.string.uuid();
 
-    const res = await POST({
+    const res = await GET({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/game/${gameId}/player/${playerId}/reset-password`,
+        uri: `v1/game/${gameId}/player/${playerId}`,
         apiKey: 'invalid',
       }),
     });
@@ -93,10 +103,10 @@ describe('POST /api/v1/game/$gamePublicId/player/$playerId/reset-password', () =
     const gameId = faker.string.uuid();
     const playerId = faker.string.uuid();
 
-    const res = await POST({
+    const res = await GET({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/game/${gameId}/player/${playerId}/reset-password`,
+        uri: `v1/game/${gameId}/player/${playerId}`,
         apiKey,
       }),
     });

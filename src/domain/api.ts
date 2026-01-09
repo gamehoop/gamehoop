@@ -75,10 +75,10 @@ export async function withGameAccess(
 
     return await handler({ game });
   } catch (error) {
-    logError(error);
     if (error instanceof Response) {
       return error;
     }
+    logError(error);
     return serverError();
   }
 }

@@ -29,6 +29,7 @@ import { Route as ApiUserUserIdAvatarRouteImport } from './routes/api/user/$user
 import { Route as ApiOrganizationOrganizationIdLogoRouteImport } from './routes/api/organization/$organizationId/logo'
 import { Route as ApiGameGameIdLogoRouteImport } from './routes/api/game/$gameId/logo'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
+import { Route as ApiV1GameGameIdPlayerPlayerIdIndexRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/index'
 import { Route as ApiV1GameGameIdPlayerSignUpEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-up/email'
 import { Route as ApiV1GameGameIdPlayerSignInEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/email'
 import { Route as ApiV1GameGameIdPlayerSignInAnonymouslyRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/anonymously'
@@ -137,6 +138,12 @@ const AuthInvitationInvitationIdAcceptRoute =
     path: '/invitation/$invitationId/accept',
     getParentRoute: () => AuthRoute,
   } as any)
+const ApiV1GameGameIdPlayerPlayerIdIndexRoute =
+  ApiV1GameGameIdPlayerPlayerIdIndexRouteImport.update({
+    id: '/api/v1/game/$gameId/player/$playerId/',
+    path: '/api/v1/game/$gameId/player/$playerId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiV1GameGameIdPlayerSignUpEmailRoute =
   ApiV1GameGameIdPlayerSignUpEmailRouteImport.update({
     id: '/api/v1/game/$gameId/player/sign-up/email',
@@ -198,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
   '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
+  '/api/v1/game/$gameId/player/$playerId': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -223,6 +231,7 @@ export interface FileRoutesByTo {
   '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
   '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
+  '/api/v1/game/$gameId/player/$playerId': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -252,6 +261,7 @@ export interface FileRoutesById {
   '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
   '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
   '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
+  '/api/v1/game/$gameId/player/$playerId/': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/sign-in/anonymously'
     | '/api/v1/game/$gameId/player/sign-in/email'
     | '/api/v1/game/$gameId/player/sign-up/email'
+    | '/api/v1/game/$gameId/player/$playerId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -304,6 +315,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/sign-in/anonymously'
     | '/api/v1/game/$gameId/player/sign-in/email'
     | '/api/v1/game/$gameId/player/sign-up/email'
+    | '/api/v1/game/$gameId/player/$playerId'
   id:
     | '__root__'
     | '/_auth'
@@ -332,6 +344,7 @@ export interface FileRouteTypes {
     | '/api/v1/game/$gameId/player/sign-in/anonymously'
     | '/api/v1/game/$gameId/player/sign-in/email'
     | '/api/v1/game/$gameId/player/sign-up/email'
+    | '/api/v1/game/$gameId/player/$playerId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -349,6 +362,7 @@ export interface RootRouteChildren {
   ApiV1GameGameIdPlayerSignInAnonymouslyRoute: typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
   ApiV1GameGameIdPlayerSignInEmailRoute: typeof ApiV1GameGameIdPlayerSignInEmailRoute
   ApiV1GameGameIdPlayerSignUpEmailRoute: typeof ApiV1GameGameIdPlayerSignUpEmailRoute
+  ApiV1GameGameIdPlayerPlayerIdIndexRoute: typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -493,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthInvitationInvitationIdAcceptRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/api/v1/game/$gameId/player/$playerId/': {
+      id: '/api/v1/game/$gameId/player/$playerId/'
+      path: '/api/v1/game/$gameId/player/$playerId'
+      fullPath: '/api/v1/game/$gameId/player/$playerId'
+      preLoaderRoute: typeof ApiV1GameGameIdPlayerPlayerIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/v1/game/$gameId/player/sign-up/email': {
       id: '/api/v1/game/$gameId/player/sign-up/email'
       path: '/api/v1/game/$gameId/player/sign-up/email'
@@ -609,6 +630,8 @@ const rootRouteChildren: RootRouteChildren = {
     ApiV1GameGameIdPlayerSignInAnonymouslyRoute,
   ApiV1GameGameIdPlayerSignInEmailRoute: ApiV1GameGameIdPlayerSignInEmailRoute,
   ApiV1GameGameIdPlayerSignUpEmailRoute: ApiV1GameGameIdPlayerSignUpEmailRoute,
+  ApiV1GameGameIdPlayerPlayerIdIndexRoute:
+    ApiV1GameGameIdPlayerPlayerIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

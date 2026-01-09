@@ -41,17 +41,9 @@ export function createLogger() {
 }
 
 export function logError(error: unknown) {
-  let message = 'Unknown error';
   if (error instanceof Error) {
-    message = error.message;
+    logger.error({ stack: error.stack }, error.message);
+  } else {
+    logger.error({ error }, 'Unknown error');
   }
-
-  logger.error({ error }, message);
-
-  // Needed as pino-pretty async logs are not output in vitest
-  if (process.env.VITEST) {
-    console.error({ message, error });
-  }
-
-  return message;
 }

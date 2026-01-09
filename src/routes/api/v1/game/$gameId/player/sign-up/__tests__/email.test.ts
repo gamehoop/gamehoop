@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { POST } from '../email';
 
-describe('/api/v1/game/$gamePublicId/player/sign-up/email', () => {
+describe('POST /api/v1/game/$gamePublicId/player/sign-up/email', () => {
   it('should create a player and session', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -37,7 +37,7 @@ describe('/api/v1/game/$gamePublicId/player/sign-up/email', () => {
       email: playerDetails.email,
       id: expect.any(String),
       emailVerified: false,
-      gameId: game.id,
+      gameId: game.publicId,
       image: null,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),

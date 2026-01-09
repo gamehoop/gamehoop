@@ -17,7 +17,7 @@ const zResBody = z.object({
     name: z.string(),
     email: z.email(),
     emailVerified: z.boolean(),
-    gameId: z.int(),
+    gameId: z.string(),
     image: z.string().nullable(),
     createdAt: z.string(),
     updatedAt: z.string(),
@@ -48,6 +48,7 @@ export function POST({
       token,
       player: {
         ...player,
+        gameId: game.publicId,
         createdAt: player.createdAt.toISOString(),
         updatedAt: player.updatedAt.toISOString(),
       },
