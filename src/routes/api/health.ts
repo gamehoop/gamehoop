@@ -4,8 +4,17 @@ import { logger } from '@/lib/logger';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { sql } from 'kysely';
+import z from 'zod';
 
 const processStartDate = new Date(Date.now() - process.uptime() * 1000);
+
+const zResBody = z.object({
+  commit: z.string(),
+  database: z.enum(['healthy', 'unhealthy']),
+  memoryMB: z.int().nonnegative(),
+  timestamp: z.string(),
+  uptimeSeconds: z.int().nonnegative(),
+});
 
 export async function GET() {
   const database = await getDatabaseStatus();
@@ -13,18 +22,15 @@ export async function GET() {
   const status =
     database === 'healthy' ? HttpStatus.Ok : HttpStatus.ServerError;
 
-  return Response.json(
-    {
-      commit: env.VITE_SOURCE_COMMIT ?? '',
-      database,
-      memoryMB: Math.round(process.memoryUsage().rss / 1024 / 1024),
-      timestamp: processStartDate.toISOString(),
-      uptimeSeconds: Math.floor(process.uptime()),
-    },
-    {
-      status,
-    },
-  );
+  const data = zResBody.parse({
+    commit: env.VITE_SOURCE_COMMIT ?? '',
+    database,
+    memoryMB: Math.round(process.memoryUsage().rss / 1024 / 1024),
+    timestamp: processStartDate.toISOString(),
+    uptimeSeconds: Math.floor(process.uptime()),
+  });
+
+  return Response.json(data, { status });
 }
 
 async function getDatabaseStatus() {

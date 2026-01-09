@@ -39,7 +39,6 @@ describe('/api/v1/game/${gamePublicId}/player/sign-up/email', () => {
       emailVerified: false,
       gameId: game.id,
       image: null,
-      isAnonymous: false,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
     });

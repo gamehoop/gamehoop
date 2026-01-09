@@ -4,6 +4,26 @@ import { created } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
+const zReqBody = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+  name: z.string().min(1),
+});
+
+const zResBody = z.object({
+  token: z.string(),
+  player: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.email(),
+    emailVerified: z.boolean(),
+    gameId: z.int(),
+    image: z.string().nullable(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+});
+
 export function POST({
   params: { gameId: gamePublicId },
   request,
@@ -12,16 +32,11 @@ export function POST({
   request: Request;
 }): Promise<Response> {
   return withGameAccess({ gamePublicId, request }, async ({ game }) => {
-    const body = await parseJson(
-      request,
-      z.object({
-        email: z.email(),
-        password: z.string().min(8),
-        name: z.string().min(1),
-      }),
-    );
+    const body = await parseJson(request, zReqBody);
 
-    const { token, user } = await createPlayerAuth(game.id).api.signUpEmail({
+    const { token, user: player } = await createPlayerAuth(
+      game.id,
+    ).api.signUpEmail({
       body: {
         gameId: game.id,
         callbackURL: '/player-verified',
@@ -29,7 +44,15 @@ export function POST({
       },
     });
 
-    const data = { token, player: user };
+    const data = zResBody.parse({
+      token,
+      player: {
+        ...player,
+        createdAt: player.createdAt.toISOString(),
+        updatedAt: player.updatedAt.toISOString(),
+      },
+    });
+
     return created(data);
   });
 }

@@ -31,6 +31,8 @@ describe('/api/v1/game/${gamePublicId}/player/sign-in/anonymously', () => {
         email: expect.any(String),
         id: expect.any(String),
         emailVerified: false,
+        gameId: game.id,
+        image: null,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       },

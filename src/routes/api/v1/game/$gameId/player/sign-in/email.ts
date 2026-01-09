@@ -4,6 +4,25 @@ import { created, unauthorized } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
+const zReqBody = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+});
+
+const zResBody = z.object({
+  token: z.string(),
+  player: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.email(),
+    emailVerified: z.boolean(),
+    gameId: z.int(),
+    image: z.string().nullable(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+});
+
 export async function POST({
   params: { gameId: gamePublicId },
   request,
@@ -12,20 +31,21 @@ export async function POST({
   request: Request;
 }) {
   return withGameAccess({ gamePublicId, request }, async ({ game }) => {
-    const body = await parseJson(
-      request,
-      z.object({
-        email: z.email(),
-        password: z.string().min(8),
-      }),
-    );
+    const body = await parseJson(request, zReqBody);
 
     try {
       const { token, user: player } = await createPlayerAuth(
         game.id,
       ).api.signInEmail({ body });
 
-      const data = { token, player };
+      const data = zResBody.parse({
+        token,
+        player: {
+          ...player,
+          createdAt: player.createdAt.toISOString(),
+          updatedAt: player.updatedAt.toISOString(),
+        },
+      });
       return created(data);
     } catch {
       return unauthorized();

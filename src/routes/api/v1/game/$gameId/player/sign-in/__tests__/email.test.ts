@@ -54,7 +54,6 @@ describe('/api/v1/game/${gamePublicId}/player/sign-in/email', () => {
         updatedAt: expect.any(String),
         image: null,
         gameId: game.id,
-        isAnonymous: false,
       },
     });
   });
