@@ -30,8 +30,8 @@ export const ok = (body: object = {}, init?: ResponseInit) =>
 export const created = (body: object = {}, init?: ResponseInit) =>
   Response.json(body, { ...init, status: HttpStatus.Created });
 
-export const noContent = (body: object = {}, init?: ResponseInit) =>
-  Response.json(body, { ...init, status: HttpStatus.NoContent });
+export const noContent = () =>
+  new Response(null, { status: HttpStatus.NoContent });
 
 export const badRequest = (body: object = {}, init?: ResponseInit) =>
   Response.json(body, { ...init, status: HttpStatus.BadRequest });
