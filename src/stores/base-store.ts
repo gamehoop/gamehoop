@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { DB } from '@/db/schema';
-import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import { ColumnType, Insertable, Selectable, sql, Updateable } from 'kysely';
 
 export abstract class BaseStore<T> {
   private tableName: keyof DB;
@@ -95,7 +95,11 @@ export abstract class BaseStore<T> {
     let q = query;
     for (const [key, value] of Object.entries(where)) {
       if (value !== undefined) {
-        q = q.where(key as any, '=', value);
+        if (Array.isArray(value)) {
+          q = q.where(sql`${sql.ref(key)} @> ${value}::text[]`);
+        } else {
+          q = q.where(key as any, '=', value);
+        }
       }
     }
     return q;
