@@ -92,6 +92,7 @@ export interface Player {
   id: string;
   image: string | null;
   isAnonymous: boolean | null;
+  lastLoginAt: Timestamp | null;
   name: string;
   updatedAt: Generated<Timestamp>;
 }

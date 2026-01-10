@@ -70,6 +70,10 @@ export function createPlayerAuth(
           type: 'number',
           required: true,
         },
+        lastLoginAt: {
+          type: 'date',
+          required: false,
+        },
       },
       changeEmail: {
         // Allow users to change their email

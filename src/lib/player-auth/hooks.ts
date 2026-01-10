@@ -40,5 +40,17 @@ export function createHooks(gameId: number) {
         }
       };
     }),
+    after: createAuthMiddleware(async ({ path, context }) => {
+      // Track the last login time on sign in
+      if (path.startsWith('/sign-in') && context.newSession) {
+        await db
+          .updateTable('player')
+          .set({
+            lastLoginAt: new Date().toISOString(),
+          })
+          .where('id', '=', context.newSession.user.id)
+          .execute();
+      }
+    }),
   };
 }

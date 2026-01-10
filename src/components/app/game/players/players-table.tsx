@@ -22,6 +22,7 @@ export function PlayersTable({ players }: PlayersTableProps) {
           <Table.Th>Email</Table.Th>
           <Table.Th>Email Verified</Table.Th>
           <Table.Th>Anonymous</Table.Th>
+          <Table.Th>Last Login At</Table.Th>
           <Table.Th className="flex flex-row gap-1 items-center">
             Created At <ArrowDown />
           </Table.Th>
@@ -38,6 +39,15 @@ export function PlayersTable({ players }: PlayersTableProps) {
               <Table.Td>{player.email}</Table.Td>
               <Table.Td>{player.emailVerified ? 'Yes' : 'No'}</Table.Td>
               <Table.Td>{player.isAnonymous ? 'Yes' : 'No'}</Table.Td>
+              <Table.Td title={player.lastLoginAt?.toISOString()}>
+                {player.lastLoginAt?.toLocaleDateString(undefined, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                })}
+              </Table.Td>
               <Table.Td title={player.createdAt.toISOString()}>
                 {player.createdAt.toLocaleDateString(undefined, {
                   year: 'numeric',
