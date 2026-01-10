@@ -52,6 +52,7 @@ Table.Th = function TableTh(props: TableThProps) {
 };
 
 export interface TableTdProps extends PropsWithChildren {
+  title?: string;
   className?: string;
 }
 

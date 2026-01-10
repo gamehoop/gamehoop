@@ -4,6 +4,7 @@ import { Table } from '@/components/ui/table';
 import { Player } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { ArrowDown, Ellipsis, Trash2 } from 'lucide-react';
+import { useDeletePlayerModal } from './delete-player-modal';
 
 export interface PlayersTableProps {
   players: Player[];
@@ -11,8 +12,7 @@ export interface PlayersTableProps {
 
 export function PlayersTable({ players }: PlayersTableProps) {
   const { user } = useSessionContext();
-
-  console.log(players);
+  const openDeletePlayerModal = useDeletePlayerModal();
 
   return (
     <Table striped withTableBorder className="mt-4">
@@ -31,25 +31,29 @@ export function PlayersTable({ players }: PlayersTableProps) {
       </Table.Head>
       <Table.Body>
         {players
-          .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
           .map((player) => (
             <Table.Tr key={player.id}>
               <Table.Td>{player.name}</Table.Td>
               <Table.Td>{player.email}</Table.Td>
               <Table.Td>{player.emailVerified ? 'Yes' : 'No'}</Table.Td>
               <Table.Td>{player.isAnonymous ? 'Yes' : 'No'}</Table.Td>
-              <Table.Td>
+              <Table.Td title={player.createdAt.toISOString()}>
                 {player.createdAt.toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
                 })}
               </Table.Td>
-              <Table.Td>
+              <Table.Td title={player.createdAt.toISOString()}>
                 {player.updatedAt?.toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
                 }) ?? ''}
               </Table.Td>
               <Table.Td>
@@ -62,7 +66,7 @@ export function PlayersTable({ players }: PlayersTableProps) {
                   <Menu.Dropdown>
                     <Menu.Item
                       leftSection={<Trash2 />}
-                      onClick={() => {}}
+                      onClick={() => openDeletePlayerModal(player)}
                       disabled={user.role === 'member'}
                     >
                       Delete

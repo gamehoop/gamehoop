@@ -47,25 +47,27 @@ export function GameApiKeysTable({ game, gameApiKeys }: GameApiKeysTableProps) {
         </Table.Head>
         <Table.Body>
           {gameApiKeys
-            .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
             .map((apiKey) => (
               <Table.Tr key={apiKey.id}>
-                <Table.Td className="flex justify-center">
-                  {apiKey.description}
-                </Table.Td>
-                <Table.Td>
+                <Table.Td>{apiKey.description}</Table.Td>
+                <Table.Td title={apiKey.createdAt.toISOString()}>
                   {apiKey.createdAt.toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
                   })}
                 </Table.Td>
-                <Table.Td>
+                <Table.Td title={apiKey.createdAt.toISOString()}>
                   {apiKey.expiresAt?.toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
-                  }) ?? ''}
+                    hour: 'numeric',
+                    minute: 'numeric',
+                  }) ?? 'Never'}
                 </Table.Td>
                 <Table.Td>
                   {
