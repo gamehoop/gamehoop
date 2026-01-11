@@ -12,6 +12,7 @@ export class GameStore extends BaseStore<Game> {
     userId: string;
     where?: {
       id?: number;
+      publicId?: string;
     };
   }): Promise<Promise<Selectable<Game> | undefined>> {
     let query = db
@@ -24,6 +25,10 @@ export class GameStore extends BaseStore<Game> {
 
     if (args.where?.id) {
       query = query.where('game.id', '=', args.where.id);
+    }
+
+    if (args.where?.publicId) {
+      query = query.where('game.publicId', '=', args.where.publicId);
     }
 
     return query.executeTakeFirst();

@@ -29,6 +29,8 @@ import { Route as ApiUserUserIdAvatarRouteImport } from './routes/api/user/$user
 import { Route as ApiOrganizationOrganizationIdLogoRouteImport } from './routes/api/organization/$organizationId/logo'
 import { Route as ApiGameGameIdLogoRouteImport } from './routes/api/game/$gameId/logo'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
+import { Route as LayoutAuthedGameGameIdIndexRouteImport } from './routes/_layout/_authed/game/$gameId/index'
+import { Route as LayoutAuthedGameGameIdPlayersIndexRouteImport } from './routes/_layout/_authed/game/$gameId/players/index'
 import { Route as ApiV1GameGameIdPlayerPlayerIdIndexRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/index'
 import { Route as ApiV1GameGameIdPlayerSignUpEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-up/email'
 import { Route as ApiV1GameGameIdPlayerSignInEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/email'
@@ -138,6 +140,18 @@ const AuthInvitationInvitationIdAcceptRoute =
     path: '/invitation/$invitationId/accept',
     getParentRoute: () => AuthRoute,
   } as any)
+const LayoutAuthedGameGameIdIndexRoute =
+  LayoutAuthedGameGameIdIndexRouteImport.update({
+    id: '/game/$gameId/',
+    path: '/game/$gameId/',
+    getParentRoute: () => LayoutAuthedRoute,
+  } as any)
+const LayoutAuthedGameGameIdPlayersIndexRoute =
+  LayoutAuthedGameGameIdPlayersIndexRouteImport.update({
+    id: '/game/$gameId/players/',
+    path: '/game/$gameId/players/',
+    getParentRoute: () => LayoutAuthedRoute,
+  } as any)
 const ApiV1GameGameIdPlayerPlayerIdIndexRoute =
   ApiV1GameGameIdPlayerPlayerIdIndexRouteImport.update({
     id: '/api/v1/game/$gameId/player/$playerId/',
@@ -199,6 +213,8 @@ export interface FileRoutesByFullPath {
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/game': typeof LayoutAuthedGameIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
+  '/game/$gameId': typeof LayoutAuthedGameGameIdIndexRoute
+  '/game/$gameId/players': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
@@ -225,6 +241,8 @@ export interface FileRoutesByTo {
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/game': typeof LayoutAuthedGameIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
+  '/game/$gameId': typeof LayoutAuthedGameGameIdIndexRoute
+  '/game/$gameId/players': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
@@ -255,6 +273,8 @@ export interface FileRoutesById {
   '/api/user/$userId/avatar': typeof ApiUserUserIdAvatarRoute
   '/_layout/_authed/game/': typeof LayoutAuthedGameIndexRoute
   '/_layout/_authed/players/': typeof LayoutAuthedPlayersIndexRoute
+  '/_layout/_authed/game/$gameId/': typeof LayoutAuthedGameGameIdIndexRoute
+  '/_layout/_authed/game/$gameId/players/': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
   '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
@@ -283,6 +303,8 @@ export interface FileRouteTypes {
     | '/api/user/$userId/avatar'
     | '/game'
     | '/players'
+    | '/game/$gameId'
+    | '/game/$gameId/players'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/session/revoke'
@@ -309,6 +331,8 @@ export interface FileRouteTypes {
     | '/api/user/$userId/avatar'
     | '/game'
     | '/players'
+    | '/game/$gameId'
+    | '/game/$gameId/players'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/session/revoke'
@@ -338,6 +362,8 @@ export interface FileRouteTypes {
     | '/api/user/$userId/avatar'
     | '/_layout/_authed/game/'
     | '/_layout/_authed/players/'
+    | '/_layout/_authed/game/$gameId/'
+    | '/_layout/_authed/game/$gameId/players/'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
     | '/api/v1/game/$gameId/player/session/revoke'
@@ -507,6 +533,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthInvitationInvitationIdAcceptRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_layout/_authed/game/$gameId/': {
+      id: '/_layout/_authed/game/$gameId/'
+      path: '/game/$gameId'
+      fullPath: '/game/$gameId'
+      preLoaderRoute: typeof LayoutAuthedGameGameIdIndexRouteImport
+      parentRoute: typeof LayoutAuthedRoute
+    }
+    '/_layout/_authed/game/$gameId/players/': {
+      id: '/_layout/_authed/game/$gameId/players/'
+      path: '/game/$gameId/players'
+      fullPath: '/game/$gameId/players'
+      preLoaderRoute: typeof LayoutAuthedGameGameIdPlayersIndexRouteImport
+      parentRoute: typeof LayoutAuthedRoute
+    }
     '/api/v1/game/$gameId/player/$playerId/': {
       id: '/api/v1/game/$gameId/player/$playerId/'
       path: '/api/v1/game/$gameId/player/$playerId'
@@ -585,6 +625,8 @@ interface LayoutAuthedRouteChildren {
   LayoutAuthedIndexRoute: typeof LayoutAuthedIndexRoute
   LayoutAuthedGameIndexRoute: typeof LayoutAuthedGameIndexRoute
   LayoutAuthedPlayersIndexRoute: typeof LayoutAuthedPlayersIndexRoute
+  LayoutAuthedGameGameIdIndexRoute: typeof LayoutAuthedGameGameIdIndexRoute
+  LayoutAuthedGameGameIdPlayersIndexRoute: typeof LayoutAuthedGameGameIdPlayersIndexRoute
 }
 
 const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
@@ -593,6 +635,9 @@ const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
   LayoutAuthedIndexRoute: LayoutAuthedIndexRoute,
   LayoutAuthedGameIndexRoute: LayoutAuthedGameIndexRoute,
   LayoutAuthedPlayersIndexRoute: LayoutAuthedPlayersIndexRoute,
+  LayoutAuthedGameGameIdIndexRoute: LayoutAuthedGameGameIdIndexRoute,
+  LayoutAuthedGameGameIdPlayersIndexRoute:
+    LayoutAuthedGameGameIdPlayersIndexRoute,
 }
 
 const LayoutAuthedRouteWithChildren = LayoutAuthedRoute._addFileChildren(

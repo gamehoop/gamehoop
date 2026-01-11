@@ -4,8 +4,8 @@ import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 
 export const getGameApiKeys = createServerFn()
-  .inputValidator(z.object({ gameId: z.int() }))
-  .handler(async ({ data: { gameId } }) => {
+  .inputValidator(z.object({ gamePublicId: z.string() }))
+  .handler(async ({ data: { gamePublicId } }) => {
     const user = await getUser();
-    return gameApiKeyStore.findForGameAndUser(gameId, user.id);
+    return gameApiKeyStore.findManyForUserAndGame(user.id, gamePublicId);
   });

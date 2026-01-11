@@ -13,6 +13,7 @@ export interface NavLinkProps {
   onClick?: () => void;
   size?: UISize;
   to?: string;
+  params?: Record<string, string>;
 }
 
 export function NavLink({ size, ...props }: NavLinkProps) {
