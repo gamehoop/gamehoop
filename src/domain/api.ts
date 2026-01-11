@@ -1,5 +1,4 @@
 import { Game, Player } from '@/db/types';
-import { logError } from '@/lib/logger';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { gameStore } from '@/stores/game-store';
 import { playerStore } from '@/stores/player-store';
@@ -56,7 +55,6 @@ export async function parseJson<S extends z.ZodObject>(
     } else if (error instanceof Error) {
       message = error.message;
     }
-    logError(message);
     throw badRequest({ error: message });
   }
 }
@@ -78,7 +76,6 @@ export async function withGameAccess(
     if (error instanceof Response) {
       return error;
     }
-    logError(error);
     return serverError();
   }
 }

@@ -1,10 +1,9 @@
 import { Game, Player } from '@/db/types';
-import { gameStore } from '@/stores/game-store';
 import { playerStore } from '@/stores/player-store';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
-import { getUser } from '../../auth/get-user';
+import { getGame } from '../get-game';
 
 export const getPlayers = createServerFn()
   .inputValidator(z.object({ gamePublicId: z.string() }))
@@ -12,11 +11,7 @@ export const getPlayers = createServerFn()
     async ({
       data: { gamePublicId },
     }): Promise<{ game: Game; players: Player[] }> => {
-      const user = await getUser();
-      const game = await gameStore.findOneForUser({
-        userId: user.id,
-        where: { publicId: gamePublicId },
-      });
+      const game = await getGame({ data: { gamePublicId } });
       if (!game) {
         throw notFound();
       }

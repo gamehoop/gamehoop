@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_layout/_authed/game/')({
+export const Route = createFileRoute('/_layout/_authed/games/')({
   beforeLoad: async ({
     context: {
       activeOrganization: { activeGame },
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_layout/_authed/game/')({
     }
 
     throw redirect({
-      to: `/game/$gameId`,
+      to: `/games/$gameId`,
       params: { gameId: activeGame.publicId },
     });
   },

@@ -41,13 +41,11 @@ export const loggerMiddleware = createMiddleware().server(
     } catch (error) {
       const duration = Date.now() - startTime;
       logger.error(
-        env.VITE_ENVIRONMENT === 'development'
-          ? {}
-          : {
-              ...requestInfo,
-              error,
-              duration,
-            },
+        {
+          ...requestInfo,
+          err: error,
+          duration,
+        },
         `${method} ${url} ERROR ${duration}ms`,
       );
       throw error;

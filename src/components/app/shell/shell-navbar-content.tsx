@@ -40,7 +40,7 @@ export function ShellNavbarContent({
         <NavLink component={Link} to="/" label="Home" leftSection={<Home />} />
         <NavLink
           component={Link}
-          to={`/game/$gameId/players`}
+          to={`/games/$gameId/players`}
           params={{ gameId: activeGame?.publicId ?? '' }}
           label="Players"
           leftSection={<Users />}
@@ -48,7 +48,7 @@ export function ShellNavbarContent({
         />
         <NavLink
           component={Link}
-          to={`/game/$gameId`}
+          to={`/games/$gameId`}
           activeOptions={{ exact: true }}
           params={{ gameId: activeGame?.publicId ?? '' }}
           label="Configuration"

@@ -70,7 +70,10 @@ export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
         </Link>
 
         {organizations.length === 1 ? (
-          <Link to="/organization">
+          <Link
+            to="/organizations/$organizationId"
+            params={{ organizationId: activeOrganization.id }}
+          >
             <Menu.Item leftSection={<Castle />}>
               {activeOrganization.name}
             </Menu.Item>
@@ -84,7 +87,10 @@ export function ShellAvatarMenu({ withDescription }: ShellAvatarMenuProps) {
             </Menu.Sub.Target>
 
             <Menu.Sub.Dropdown>
-              <Link to="/organization">
+              <Link
+                to="/organizations/$organizationId"
+                params={{ organizationId: activeOrganization.id }}
+              >
                 <Menu.Item leftSection={<Cog />}>
                   Manage {activeOrganization.name}
                 </Menu.Item>

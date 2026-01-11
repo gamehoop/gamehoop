@@ -7,7 +7,7 @@ import { env } from '@/env/client';
 import { getSessionContext } from '@/functions/auth/get-session-context';
 import { logError } from '@/lib/logger';
 import { theme, themeColor } from '@/styles/theme';
-import { HttpStatus } from '@/utils/http';
+import { isUnauthorizedResponse } from '@/utils/http';
 import { seo } from '@/utils/seo';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import type { QueryClient } from '@tanstack/react-query';
@@ -66,12 +66,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         await getSessionContext();
       return { user, organizations, activeOrganization };
     } catch (error) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'statusCode' in error &&
-        error.statusCode !== HttpStatus.Unauthorized
-      ) {
+      if (!isUnauthorizedResponse(error)) {
         logError(error);
       }
 

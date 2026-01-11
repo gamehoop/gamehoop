@@ -6,7 +6,7 @@ import z from 'zod';
 export const acceptInvitation = createServerFn()
   .inputValidator(
     z.object({
-      invitationId: z.string().min(1),
+      invitationId: z.string(),
     }),
   )
   .handler(async ({ data: { invitationId } }): Promise<void> => {

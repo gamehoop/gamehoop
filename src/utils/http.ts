@@ -50,3 +50,12 @@ export const conflict = (body: object = {}, init?: ResponseInit) =>
 
 export const serverError = (body: object = {}, init?: ResponseInit) =>
   Response.json(body, { ...init, status: HttpStatus.ServerError });
+
+export function isUnauthorizedResponse(object?: unknown): object is Response {
+  return (
+    !!object &&
+    typeof object === 'object' &&
+    'statusCode' in object &&
+    object.statusCode !== HttpStatus.Unauthorized
+  );
+}

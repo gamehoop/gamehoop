@@ -3,13 +3,9 @@ import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
 export const getUser = createServerFn().handler(async (): Promise<User> => {
-  const headers = getRequestHeaders();
-  const session = await auth.api.getSession({ headers });
-
-  const user = session?.user;
-  if (!user) {
+  const session = await auth.api.getSession({ headers: getRequestHeaders() });
+  if (!session?.user) {
     throw new Error('Unauthorized');
   }
-
-  return user;
+  return session.user;
 });

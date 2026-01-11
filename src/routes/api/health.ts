@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { env } from '@/env/client';
-import { logger } from '@/lib/logger';
+import { logError } from '@/lib/logger';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { sql } from 'kysely';
@@ -37,8 +37,8 @@ async function getDatabaseStatus() {
   try {
     await sql`SELECT 1`.execute(db);
     return 'healthy';
-  } catch (err) {
-    logger.error(err);
+  } catch (error) {
+    logError(error);
     return 'unhealthy';
   }
 }

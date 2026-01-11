@@ -19,7 +19,7 @@ export function PlayersTable({ game, players }: PlayersTableProps) {
 
   const onRowClick = async (player: Player) => {
     await router.navigate({
-      to: `/game/$gameId/players/$playerId`,
+      to: `/games/$gameId/players/$playerId`,
       params: {
         gameId: game.publicId,
         playerId: player.id,

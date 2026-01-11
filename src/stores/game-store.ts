@@ -10,10 +10,7 @@ export class GameStore extends BaseStore<Game> {
 
   async findOneForUser(args: {
     userId: string;
-    where?: {
-      id?: number;
-      publicId?: string;
-    };
+    where?: Partial<Selectable<Game>>;
   }): Promise<Promise<Selectable<Game> | undefined>> {
     let query = db
       .selectFrom('game')

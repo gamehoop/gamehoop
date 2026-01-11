@@ -1,9 +1,27 @@
 import { Title } from '@/components/ui/title';
+import { env } from '@/env/client';
 import { useSessionContext } from '@/hooks/use-session-context';
+import { seo } from '@/utils/seo';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
 export const Route = createFileRoute('/_layout/_authed/')({
+  loader: async ({
+    context: {
+      activeOrganization: { activeGame },
+    },
+  }) => {
+    return { activeGame };
+  },
+  head: ({ loaderData }) => {
+    let title = `Home | ${env.VITE_APP_NAME}`;
+    if (loaderData?.activeGame) {
+      title = `Home | ${loaderData?.activeGame?.name} | ${env.VITE_APP_NAME}`;
+    }
+    return {
+      meta: seo({ title }),
+    };
+  },
   validateSearch: z.object({
     verified: z.boolean().optional(),
     accountDeleted: z.boolean().optional(),

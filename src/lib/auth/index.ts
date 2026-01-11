@@ -136,6 +136,11 @@ export type Session = typeof auth.$Infer.Session;
 
 export type Organization = typeof auth.$Infer.Organization;
 
+export type FullOrganization = Organization & {
+  members: Member[];
+  invitations: Invitation[];
+};
+
 export type Invitation = typeof auth.$Infer.Invitation;
 
 export type Member = typeof auth.$Infer.Member;

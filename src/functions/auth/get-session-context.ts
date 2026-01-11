@@ -15,7 +15,7 @@ export const getSessionContext = createServerFn().handler(
 
     const activeOrganization = findActiveOrganization(user, organizations);
 
-    const [membership, activeOrganizationGames] = await Promise.all([
+    const [userMembership, activeOrganizationGames] = await Promise.all([
       getUserMembership(user, activeOrganization),
       gameStore.findMany({ where: { organizationId: activeOrganization.id } }),
     ]);
@@ -25,7 +25,7 @@ export const getSessionContext = createServerFn().handler(
     return {
       user: {
         ...user,
-        role: membership.role,
+        role: userMembership.role,
       },
       organizations,
       activeOrganization: {

@@ -42,7 +42,7 @@ export function createLogger() {
 
 export function logError(error: unknown) {
   if (error instanceof Error) {
-    logger.error({ stack: error.stack }, error.message);
+    logger.error({ err: error }, error.message);
   } else {
     logger.error({ error }, 'Unknown error');
   }

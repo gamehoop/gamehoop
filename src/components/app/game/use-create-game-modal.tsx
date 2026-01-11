@@ -113,7 +113,7 @@ export function useCreateGameModal() {
       onClose: () => form.reset(),
       onConfirm: () => form.handleSubmit(),
       onSuccess: async () => {
-        await router.navigate({ to: '/game' });
+        await router.navigate({ to: '/games' });
       },
       onError: () => {
         notify.error({
