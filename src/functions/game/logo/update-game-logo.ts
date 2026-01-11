@@ -3,7 +3,7 @@ import { gameStore } from '@/stores/game-store';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
-import { getUser } from '../auth/get-user';
+import { getUser } from '../../auth/get-user';
 
 export const updateGameLogo = createServerFn({
   method: HttpMethod.Post,

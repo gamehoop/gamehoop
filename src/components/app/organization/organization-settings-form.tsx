@@ -2,8 +2,8 @@ import { Avatar } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { TextInput } from '@/components/ui/text-input';
-import { deleteActiveOrganizationLogo } from '@/functions/organization/delete-active-organization-logo';
-import { updateActiveOrganizationLogo } from '@/functions/organization/update-active-organization-logo';
+import { deleteOrganizationLogo } from '@/functions/organization/logo/delete-organization-logo';
+import { updateOrganizationLogo } from '@/functions/organization/logo/update-organization-logo';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Organization } from '@/lib/auth';
 import { authClient } from '@/lib/auth/client';
@@ -84,7 +84,8 @@ export function OrganizationSettingsForm({
     try {
       const formData = new FormData();
       formData.append('logo', file);
-      await updateActiveOrganizationLogo({ data: formData });
+      formData.append('organizationId', organization.id);
+      await updateOrganizationLogo({ data: formData });
       await router.invalidate();
       notify.success({
         title: 'Logo updated',
@@ -101,7 +102,9 @@ export function OrganizationSettingsForm({
 
   const onDeleteLogo = async () => {
     try {
-      await deleteActiveOrganizationLogo();
+      await deleteOrganizationLogo({
+        data: { organizationId: organization.id },
+      });
       await router.invalidate();
       notify.success({
         title: 'Logo deleted',

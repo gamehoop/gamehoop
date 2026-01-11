@@ -3,9 +3,9 @@ import { buildKey, getObjectUrl, putObject } from '@/lib/s3';
 import { HttpMethod } from '@/utils/http';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
-import { getSessionContext } from '../auth/get-session-context';
+import { getSessionContext } from '../../auth/get-session-context';
 
-export const updateActiveOrganizationLogo = createServerFn({
+export const updateOrganizationLogo = createServerFn({
   method: HttpMethod.Post,
 })
   .inputValidator((formData) => {
@@ -18,15 +18,21 @@ export const updateActiveOrganizationLogo = createServerFn({
       throw new Error('logo is required');
     }
 
-    return { logo };
-  })
-  .handler(async ({ data: { logo } }): Promise<void> => {
-    const { user, activeOrganization } = await getSessionContext();
-    if (user.role === 'member') {
-      throw new Error('Unauthorized');
+    const organizationId = formData.get('organizationId') as string;
+    if (!organizationId) {
+      throw new Error('organizationId is required');
     }
 
-    const key = buildKey(`organizations/${activeOrganization.id}/logo`);
+    return { logo, organizationId };
+  })
+  .handler(async ({ data: { logo, organizationId } }): Promise<void> => {
+    const { user, organizations } = await getSessionContext();
+    const isMember = organizations.some((org) => org.id === organizationId);
+    if (!isMember || user.role === 'member') {
+      throw new Error('Forbidden');
+    }
+
+    const key = buildKey(`organizations/${organizationId}/logo`);
     const body = await logo.arrayBuffer();
     const contentType = logo.type;
 
@@ -39,7 +45,7 @@ export const updateActiveOrganizationLogo = createServerFn({
     const image = `${getObjectUrl(key)}?uploadedAt=${Date.now()}`;
     await auth.api.updateOrganization({
       body: {
-        organizationId: activeOrganization.id,
+        organizationId,
         data: {
           logo: image,
         },

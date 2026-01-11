@@ -57,7 +57,7 @@ export function useCreateGameApiKeyModal({
           confirmProps: { loading: true },
         });
         const result = await createGameApiKey({
-          data: { ...value, gameId: game.id },
+          data: { ...value, gamePublicId: game.publicId },
         });
         modals.updateModal({
           modalId,

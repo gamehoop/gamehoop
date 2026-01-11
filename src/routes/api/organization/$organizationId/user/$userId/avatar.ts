@@ -1,16 +1,18 @@
-import { getActiveOrganization } from '@/functions/organization/get-active-organization';
+import { auth } from '@/lib/auth';
 import { getUserObject } from '@/lib/s3';
 import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { getRequestHeaders } from '@tanstack/react-start/server';
 
 export async function GET({
-  params: { userId },
+  params: { userId, organizationId },
 }: {
-  params: { userId: string };
+  params: { userId: string; organizationId: string };
 }) {
-  const activeOrganization = await getActiveOrganization();
-
-  const isMember = activeOrganization.members.find((m) => m.userId === userId);
+  const organizations = await auth.api.listOrganizations({
+    headers: getRequestHeaders(),
+  });
+  const isMember = organizations.some((org) => org.id === organizationId);
   if (!isMember) {
     return notFound();
   }
@@ -30,7 +32,9 @@ export async function GET({
   });
 }
 
-export const Route = createFileRoute('/api/user/$userId/avatar')({
+export const Route = createFileRoute(
+  '/api/organization/$organizationId/user/$userId/avatar',
+)({
   server: {
     handlers: {
       GET,

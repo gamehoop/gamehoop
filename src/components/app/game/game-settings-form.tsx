@@ -11,9 +11,9 @@ import {
   gamePlatformOptions,
   gameSdkOptions,
 } from '@/domain/game';
-import { deleteGameLogo } from '@/functions/game/delete-game-logo';
+import { deleteGameLogo } from '@/functions/game/logo/delete-game-logo';
+import { updateGameLogo } from '@/functions/game/logo/update-game-logo';
 import { updateGame } from '@/functions/game/update-game';
-import { updateGameLogo } from '@/functions/game/update-game-logo';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { logError } from '@/lib/logger';
 import { useForm } from '@tanstack/react-form';

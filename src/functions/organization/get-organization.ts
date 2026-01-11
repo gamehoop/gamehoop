@@ -27,7 +27,9 @@ export const getOrganization = createServerFn()
     });
 
     if (!organization) {
-      throw new Error(`No organization found for user ${user.id}`);
+      throw new Error(
+        `No organization found with ID ${organizationId} for user ${user.id}`,
+      );
     }
 
     return organization;

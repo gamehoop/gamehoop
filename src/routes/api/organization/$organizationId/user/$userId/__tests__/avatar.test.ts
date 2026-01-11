@@ -1,16 +1,14 @@
-import { auth, Session } from '@/lib/auth';
+import { auth, Organization, Session } from '@/lib/auth';
 import { getUserObject } from '@/lib/s3';
 
-import { getActiveOrganization } from '@/functions/organization/get-active-organization';
 import { HttpStatus } from '@/utils/http';
 import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET } from '../avatar';
 
 vi.mock('@/lib/s3', { spy: true });
-vi.mock('@/functions/organization/get-active-organization');
 
-describe('GET /api/user/$userId/avatar', () => {
+describe('GET /api/organization/$organizationId/user/$userId/avatar', () => {
   const mockUser = { id: faker.string.uuid() };
 
   beforeEach(() => {
@@ -29,11 +27,18 @@ describe('GET /api/user/$userId/avatar', () => {
 
     const userId = faker.string.uuid();
 
-    vi.mocked(getActiveOrganization).mockResolvedValue({
-      members: [{ userId }],
-    } as any);
+    const mockOrganizationId = faker.string.uuid();
+    const mockOrganizations = [
+      { id: mockOrganizationId },
+      { id: faker.string.uuid() },
+    ] as Organization[];
+    vi.spyOn(auth.api, 'listOrganizations').mockResolvedValue(
+      mockOrganizations,
+    );
 
-    const res = await GET({ params: { userId } });
+    const res = await GET({
+      params: { userId, organizationId: mockOrganizationId },
+    });
 
     expect(res.status).toEqual(HttpStatus.Ok);
 
@@ -47,16 +52,34 @@ describe('GET /api/user/$userId/avatar', () => {
     });
   });
 
-  it('should return 404 when the logo does not exist', async () => {
+  it('should return 404 for organizations the user is not a member of', async () => {
     const userId = faker.string.uuid();
 
-    vi.mocked(getActiveOrganization).mockResolvedValue({
-      members: [{ userId }],
-    } as any);
+    vi.spyOn(auth.api, 'listOrganizations').mockResolvedValue([
+      { id: faker.string.uuid() },
+      { id: faker.string.uuid() },
+    ] as Organization[]);
 
     vi.mocked(getUserObject).mockResolvedValue(undefined);
 
-    const res = await GET({ params: { userId } });
+    const res = await GET({
+      params: { userId, organizationId: faker.string.uuid() },
+    });
+
+    expect(res.status).toEqual(HttpStatus.NotFound);
+  });
+
+  it('should return 404 when the logo does not exist', async () => {
+    const userId = faker.string.uuid();
+
+    vi.spyOn(auth.api, 'listOrganizations').mockResolvedValue([
+      { id: faker.string.uuid() },
+      { id: faker.string.uuid() },
+    ] as Organization[]);
+
+    vi.mocked(getUserObject).mockResolvedValue(undefined);
+
+    const res = await GET({ params: { userId, organizationId: '' } });
 
     expect(res.status).toEqual(HttpStatus.NotFound);
   });

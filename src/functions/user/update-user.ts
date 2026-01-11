@@ -5,16 +5,16 @@ import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 import z from 'zod';
 
-const zUpdateUser = z.object({
-  email: z.email().optional(),
-  name: z.string().optional(),
-  image: z.string().optional(),
-  activeOrganizationId: z.string().nullable().optional(),
-  darkMode: z.boolean().optional(),
-});
-
 export const updateUser = createServerFn({ method: HttpMethod.Post })
-  .inputValidator(zUpdateUser)
+  .inputValidator(
+    z.object({
+      email: z.email().optional(),
+      name: z.string().optional(),
+      image: z.string().optional(),
+      activeOrganizationId: z.string().nullable().optional(),
+      darkMode: z.boolean().optional(),
+    }),
+  )
   .handler(
     async ({
       data: { email, name, image, darkMode, activeOrganizationId },
