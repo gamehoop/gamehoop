@@ -79,7 +79,7 @@ export function useSwitchGameModal() {
           (game) => game.id === form.getFieldValue('gameId'),
         );
         form.reset({ gameId: game?.id });
-        await router.navigate({ to: '/game' });
+        await router.navigate({ to: '/' });
       },
       onError: () => {
         notify.error({

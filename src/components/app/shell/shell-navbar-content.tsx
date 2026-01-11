@@ -41,7 +41,6 @@ export function ShellNavbarContent({
         <NavLink
           component={Link}
           to={`/game/$gameId/players`}
-          activeOptions={{ exact: true }}
           params={{ gameId: activeGame?.publicId ?? '' }}
           label="Players"
           leftSection={<Users />}

@@ -1,21 +1,34 @@
 import { ActionIcon } from '@/components/ui/action-icon';
 import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
-import { Player } from '@/db/types';
+import { Game, Player } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { ArrowDown, Ellipsis, Trash2 } from 'lucide-react';
+import { useRouter } from '@tanstack/react-router';
+import { ArrowDown, Ellipsis, Eye, Trash2 } from 'lucide-react';
 import { useDeletePlayerModal } from './delete-player-modal';
 
 export interface PlayersTableProps {
+  game: Game;
   players: Player[];
 }
 
-export function PlayersTable({ players }: PlayersTableProps) {
+export function PlayersTable({ game, players }: PlayersTableProps) {
   const { user } = useSessionContext();
+  const router = useRouter();
   const openDeletePlayerModal = useDeletePlayerModal();
 
+  const onRowClick = async (player: Player) => {
+    await router.navigate({
+      to: `/game/$gameId/players/$playerId`,
+      params: {
+        gameId: game.publicId,
+        playerId: player.id,
+      },
+    });
+  };
+
   return (
-    <Table striped withTableBorder className="mt-4">
+    <Table striped withTableBorder highlightOnHover className="mt-4">
       <Table.Head>
         <Table.Tr>
           <Table.Th>Name</Table.Th>
@@ -34,7 +47,11 @@ export function PlayersTable({ players }: PlayersTableProps) {
         {players
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
           .map((player) => (
-            <Table.Tr key={player.id}>
+            <Table.Tr
+              key={player.id}
+              onClick={() => onRowClick(player)}
+              className="cursor-pointer"
+            >
               <Table.Td>{player.name}</Table.Td>
               <Table.Td>{player.email}</Table.Td>
               <Table.Td>{player.emailVerified ? 'Yes' : 'No'}</Table.Td>
@@ -66,7 +83,7 @@ export function PlayersTable({ players }: PlayersTableProps) {
                   minute: 'numeric',
                 }) ?? ''}
               </Table.Td>
-              <Table.Td>
+              <Table.Td onClick={(e) => e.stopPropagation()}>
                 <Menu>
                   <Menu.Target>
                     <ActionIcon variant="subtle">
@@ -74,6 +91,12 @@ export function PlayersTable({ players }: PlayersTableProps) {
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={<Eye />}
+                      onClick={() => onRowClick(player)}
+                    >
+                      Open
+                    </Menu.Item>
                     <Menu.Item
                       leftSection={<Trash2 />}
                       onClick={() => openDeletePlayerModal(player)}

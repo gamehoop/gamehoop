@@ -55,11 +55,11 @@ export function ShellNavbarCollapsedContent({
               <Users
                 className="text-xl"
                 style={{
-                  color:
-                    location.pathname ===
-                    `/game/${activeGame?.publicId}/players`
-                      ? themeColor
-                      : undefined,
+                  color: location.pathname.startsWith(
+                    `/game/${activeGame?.publicId}/players`,
+                  )
+                    ? themeColor
+                    : undefined,
                 }}
               />
             </ActionIcon>

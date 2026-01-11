@@ -14,12 +14,12 @@ export const Route = createFileRoute('/_layout/_authed/game/$gameId/players/')({
 });
 
 function Players() {
-  const { players } = Route.useLoaderData();
+  const { game, players } = Route.useLoaderData();
 
   return (
     <div>
       <Title order={2}>Players ({players.length})</Title>
-      <PlayersTable players={players} />
+      <PlayersTable game={game} players={players} />
     </div>
   );
 }

@@ -31,6 +31,7 @@ import { Route as ApiGameGameIdLogoRouteImport } from './routes/api/game/$gameId
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 import { Route as LayoutAuthedGameGameIdIndexRouteImport } from './routes/_layout/_authed/game/$gameId/index'
 import { Route as LayoutAuthedGameGameIdPlayersIndexRouteImport } from './routes/_layout/_authed/game/$gameId/players/index'
+import { Route as LayoutAuthedGameGameIdPlayersPlayerIdRouteImport } from './routes/_layout/_authed/game/$gameId/players/$playerId'
 import { Route as ApiV1GameGameIdPlayerPlayerIdIndexRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/index'
 import { Route as ApiV1GameGameIdPlayerSignUpEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-up/email'
 import { Route as ApiV1GameGameIdPlayerSignInEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/email'
@@ -152,6 +153,12 @@ const LayoutAuthedGameGameIdPlayersIndexRoute =
     path: '/game/$gameId/players/',
     getParentRoute: () => LayoutAuthedRoute,
   } as any)
+const LayoutAuthedGameGameIdPlayersPlayerIdRoute =
+  LayoutAuthedGameGameIdPlayersPlayerIdRouteImport.update({
+    id: '/game/$gameId/players/$playerId',
+    path: '/game/$gameId/players/$playerId',
+    getParentRoute: () => LayoutAuthedRoute,
+  } as any)
 const ApiV1GameGameIdPlayerPlayerIdIndexRoute =
   ApiV1GameGameIdPlayerPlayerIdIndexRouteImport.update({
     id: '/api/v1/game/$gameId/player/$playerId/',
@@ -214,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/game': typeof LayoutAuthedGameIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
   '/game/$gameId': typeof LayoutAuthedGameGameIdIndexRoute
+  '/game/$gameId/players/$playerId': typeof LayoutAuthedGameGameIdPlayersPlayerIdRoute
   '/game/$gameId/players': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
@@ -242,6 +250,7 @@ export interface FileRoutesByTo {
   '/game': typeof LayoutAuthedGameIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
   '/game/$gameId': typeof LayoutAuthedGameGameIdIndexRoute
+  '/game/$gameId/players/$playerId': typeof LayoutAuthedGameGameIdPlayersPlayerIdRoute
   '/game/$gameId/players': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
@@ -274,6 +283,7 @@ export interface FileRoutesById {
   '/_layout/_authed/game/': typeof LayoutAuthedGameIndexRoute
   '/_layout/_authed/players/': typeof LayoutAuthedPlayersIndexRoute
   '/_layout/_authed/game/$gameId/': typeof LayoutAuthedGameGameIdIndexRoute
+  '/_layout/_authed/game/$gameId/players/$playerId': typeof LayoutAuthedGameGameIdPlayersPlayerIdRoute
   '/_layout/_authed/game/$gameId/players/': typeof LayoutAuthedGameGameIdPlayersIndexRoute
   '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
   '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/game'
     | '/players'
     | '/game/$gameId'
+    | '/game/$gameId/players/$playerId'
     | '/game/$gameId/players'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/game'
     | '/players'
     | '/game/$gameId'
+    | '/game/$gameId/players/$playerId'
     | '/game/$gameId/players'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
@@ -363,6 +375,7 @@ export interface FileRouteTypes {
     | '/_layout/_authed/game/'
     | '/_layout/_authed/players/'
     | '/_layout/_authed/game/$gameId/'
+    | '/_layout/_authed/game/$gameId/players/$playerId'
     | '/_layout/_authed/game/$gameId/players/'
     | '/api/v1/game/$gameId/player/$playerId/reset-password'
     | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
@@ -547,6 +560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedGameGameIdPlayersIndexRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
+    '/_layout/_authed/game/$gameId/players/$playerId': {
+      id: '/_layout/_authed/game/$gameId/players/$playerId'
+      path: '/game/$gameId/players/$playerId'
+      fullPath: '/game/$gameId/players/$playerId'
+      preLoaderRoute: typeof LayoutAuthedGameGameIdPlayersPlayerIdRouteImport
+      parentRoute: typeof LayoutAuthedRoute
+    }
     '/api/v1/game/$gameId/player/$playerId/': {
       id: '/api/v1/game/$gameId/player/$playerId/'
       path: '/api/v1/game/$gameId/player/$playerId'
@@ -626,6 +646,7 @@ interface LayoutAuthedRouteChildren {
   LayoutAuthedGameIndexRoute: typeof LayoutAuthedGameIndexRoute
   LayoutAuthedPlayersIndexRoute: typeof LayoutAuthedPlayersIndexRoute
   LayoutAuthedGameGameIdIndexRoute: typeof LayoutAuthedGameGameIdIndexRoute
+  LayoutAuthedGameGameIdPlayersPlayerIdRoute: typeof LayoutAuthedGameGameIdPlayersPlayerIdRoute
   LayoutAuthedGameGameIdPlayersIndexRoute: typeof LayoutAuthedGameGameIdPlayersIndexRoute
 }
 
@@ -636,6 +657,8 @@ const LayoutAuthedRouteChildren: LayoutAuthedRouteChildren = {
   LayoutAuthedGameIndexRoute: LayoutAuthedGameIndexRoute,
   LayoutAuthedPlayersIndexRoute: LayoutAuthedPlayersIndexRoute,
   LayoutAuthedGameGameIdIndexRoute: LayoutAuthedGameGameIdIndexRoute,
+  LayoutAuthedGameGameIdPlayersPlayerIdRoute:
+    LayoutAuthedGameGameIdPlayersPlayerIdRoute,
   LayoutAuthedGameGameIdPlayersIndexRoute:
     LayoutAuthedGameGameIdPlayersIndexRoute,
 }

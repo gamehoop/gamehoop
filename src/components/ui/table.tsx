@@ -1,5 +1,5 @@
 import { Table as BaseTable } from '@mantine/core';
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 import { UISize } from '.';
 
 export interface TableProps extends PropsWithChildren {
@@ -37,6 +37,7 @@ Table.Body = function TableBody(props: TableBodyProps) {
 
 export interface TableTrProps extends PropsWithChildren {
   className?: string;
+  onClick?: MouseEventHandler<HTMLTableRowElement>;
 }
 
 Table.Tr = function TableTr(props: TableTrProps) {
@@ -52,8 +53,9 @@ Table.Th = function TableTh(props: TableThProps) {
 };
 
 export interface TableTdProps extends PropsWithChildren {
-  title?: string;
   className?: string;
+  onClick?: MouseEventHandler<HTMLTableCellElement>;
+  title?: string;
 }
 
 Table.Td = function TableTd(props: TableTdProps) {
