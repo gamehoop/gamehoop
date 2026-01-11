@@ -1,18 +1,22 @@
-import { Game, Player, PlayerSession } from '@/db/types';
 import { gameStore } from '@/stores/game-store';
 import { playerSessionStore } from '@/stores/player-session-store';
 import { playerStore } from '@/stores/player-store';
+import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 import { getUser } from '../../auth/get-user';
 
-export const getPlayer = createServerFn()
-  .inputValidator(z.object({ gamePublicId: z.string(), playerId: z.string() }))
+export const revokePlayerSession = createServerFn({ method: HttpMethod.Post })
+  .inputValidator(
+    z.object({
+      gamePublicId: z.string(),
+      playerId: z.string(),
+      sessionId: z.string(),
+    }),
+  )
   .handler(
-    async ({
-      data: { gamePublicId, playerId },
-    }): Promise<{ game: Game; player: Player; sessions: PlayerSession[] }> => {
+    async ({ data: { gamePublicId, playerId, sessionId } }): Promise<void> => {
       const user = await getUser();
       const game = await gameStore.findOneForUser({
         userId: user.id,
@@ -30,10 +34,6 @@ export const getPlayer = createServerFn()
         throw notFound();
       }
 
-      const sessions = await playerSessionStore.findMany({
-        where: { userId: player.id },
-      });
-
-      return { game, player, sessions };
+      await playerSessionStore.deleteMany({ where: { id: sessionId } });
     },
   );

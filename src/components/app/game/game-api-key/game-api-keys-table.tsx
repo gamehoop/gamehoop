@@ -60,7 +60,7 @@ export function GameApiKeysTable({ game, gameApiKeys }: GameApiKeysTableProps) {
                     minute: 'numeric',
                   })}
                 </Table.Td>
-                <Table.Td title={apiKey.createdAt.toISOString()}>
+                <Table.Td title={apiKey.expiresAt?.toISOString()}>
                   {apiKey.expiresAt?.toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
