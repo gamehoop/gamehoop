@@ -1,4 +1,4 @@
-import { parseJson, withGameAccess } from '@/domain/api';
+import { parseJson, withPlayerAccess } from '@/domain/api';
 import { playerSessionStore } from '@/stores/player-session-store';
 import { noContent, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
@@ -9,17 +9,17 @@ const zReqBody = z.object({
 });
 
 export async function DELETE({
-  params: { gameId },
+  params: { gameId, playerId },
   request,
 }: {
-  params: { gameId: string };
+  params: { gameId: string; playerId: string };
   request: Request;
 }) {
-  return withGameAccess({ gameId, request }, async () => {
+  return withPlayerAccess({ gameId, playerId, request }, async () => {
     const { token } = await parseJson(request, zReqBody);
 
     const sessions = await playerSessionStore.findMany({
-      where: { token },
+      where: { token, userId: playerId },
     });
     if (!sessions.length) {
       return notFound();
@@ -32,7 +32,9 @@ export async function DELETE({
   });
 }
 
-export const Route = createFileRoute('/api/v1/games/$gameId/sessions/revoke')({
+export const Route = createFileRoute(
+  '/api/v1/games/$gameId/players/$playerId/revoke-session',
+)({
   server: {
     handlers: {
       DELETE,

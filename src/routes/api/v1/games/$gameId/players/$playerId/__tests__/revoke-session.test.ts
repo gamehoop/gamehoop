@@ -8,23 +8,24 @@ import {
 } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { DELETE } from '../revoke';
+import { DELETE } from '../revoke-session';
 
-describe('DELETE /api/v1/games/$gameId/sessions/revoke', () => {
+describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => {
   it('should delete the session for a given token', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
     const session = await createPlayerAuth(game.id).api.signInAnonymous();
+    const player = session?.user;
 
     expect(
       await playerSessionStore.findOne({ where: { token: session?.token } }),
     ).toBeDefined();
 
     const res = await DELETE({
-      params: { gameId: game.id },
+      params: { gameId: game.id, playerId: player?.id ?? '' },
       request: apiRequest({
-        uri: `v1/games/${game.id}/sessions/revoke`,
+        uri: `v1/games/${game.id}/players/$playerId/revoke-session`,
         apiKey,
         data: {
           token: session?.token,
@@ -41,11 +42,12 @@ describe('DELETE /api/v1/games/$gameId/sessions/revoke', () => {
 
   it('should require an API token', async () => {
     const gameId = faker.string.uuid();
+    const playerId = faker.string.uuid();
 
     const res = await DELETE({
-      params: { gameId },
+      params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/sessions/revoke`,
+        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
       }),
     });
 
@@ -54,11 +56,12 @@ describe('DELETE /api/v1/games/$gameId/sessions/revoke', () => {
 
   it('should require a valid API token', async () => {
     const gameId = faker.string.uuid();
+    const playerId = faker.string.uuid();
 
     const res = await DELETE({
-      params: { gameId },
+      params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/sessions/revoke`,
+        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
         apiKey: 'invalid',
       }),
     });
@@ -75,11 +78,12 @@ describe('DELETE /api/v1/games/$gameId/sessions/revoke', () => {
     });
 
     const gameId = faker.string.uuid();
+    const playerId = faker.string.uuid();
 
     const res = await DELETE({
-      params: { gameId },
+      params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/sessions/revoke`,
+        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
         apiKey,
       }),
     });
