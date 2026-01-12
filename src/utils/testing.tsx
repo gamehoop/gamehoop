@@ -31,6 +31,7 @@ export function apiRequest(
     uri: string;
     data?: object;
     apiKey?: string;
+    sessionToken?: string;
   },
 ): Request {
   return new Request(`http://localhost:3000/api/${options.uri}`, {
@@ -38,6 +39,7 @@ export function apiRequest(
     headers: {
       Authorization: options?.apiKey ? `Bearer ${options.apiKey}` : '',
       'Content-Type': 'application/json',
+      'X-Session-Token': options?.sessionToken ?? '',
     },
     body: JSON.stringify(options.data ?? {}),
     ...options,

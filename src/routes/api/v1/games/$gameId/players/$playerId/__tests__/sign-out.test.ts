@@ -8,14 +8,15 @@ import {
 } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
-import { DELETE } from '../revoke-session';
+import { DELETE } from '../sign-out';
 
-describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => {
+describe('DELETE /api/v1/games/$gameId/players/$playerId/sign-out', () => {
   it('should delete the session for a given token', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
     const session = await createPlayerAuth(game.id).api.signInAnonymous();
+    const sessionToken = session?.token;
     const player = session?.user;
 
     expect(
@@ -24,12 +25,11 @@ describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => 
 
     const res = await DELETE({
       params: { gameId: game.id, playerId: player?.id ?? '' },
+
       request: apiRequest({
-        uri: `v1/games/${game.id}/players/$playerId/revoke-session`,
+        uri: `v1/games/${game.id}/players/$playerId/sign-out`,
         apiKey,
-        data: {
-          token: session?.token,
-        },
+        sessionToken,
       }),
     });
 
@@ -40,6 +40,24 @@ describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => 
     ).not.toBeDefined();
   });
 
+  it('should require a session token', async () => {
+    const { user, organization } = await createTestUser();
+    const { apiKey } = await createGameWithApiKey({ user, organization });
+
+    const gameId = faker.string.uuid();
+    const playerId = faker.string.uuid();
+
+    const res = await DELETE({
+      params: { gameId, playerId },
+      request: apiRequest({
+        uri: `v1/games/${gameId}/players/$playerId/sign-out`,
+        apiKey,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Unauthorized);
+  });
+
   it('should require an API token', async () => {
     const gameId = faker.string.uuid();
     const playerId = faker.string.uuid();
@@ -47,7 +65,7 @@ describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => 
     const res = await DELETE({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
+        uri: `v1/games/${gameId}/players/$playerId/sign-out`,
       }),
     });
 
@@ -61,7 +79,7 @@ describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => 
     const res = await DELETE({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
+        uri: `v1/games/${gameId}/players/$playerId/sign-out`,
         apiKey: 'invalid',
       }),
     });
@@ -83,7 +101,7 @@ describe('DELETE /api/v1/games/$gameId/players/$playerId/revoke-session', () => 
     const res = await DELETE({
       params: { gameId, playerId },
       request: apiRequest({
-        uri: `v1/games/${gameId}/players/$playerId/revoke-session`,
+        uri: `v1/games/${gameId}/players/$playerId/sign-out`,
         apiKey,
       }),
     });

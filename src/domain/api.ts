@@ -1,6 +1,7 @@
-import { Game, Player } from '@/db/types';
+import { Game, Player, PlayerSession } from '@/db/types';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { gameStore } from '@/stores/game-store';
+import { playerSessionStore } from '@/stores/player-session-store';
 import { playerStore } from '@/stores/player-store';
 import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
@@ -105,4 +106,40 @@ export async function withPlayerAccess(
 
     return handler({ game, player });
   });
+}
+
+export async function withPlayerSessionAccess(
+  {
+    request,
+    gameId,
+    playerId,
+  }: { request: Request; gameId: string; playerId: string },
+  handler: ({
+    game,
+    player,
+    session,
+  }: {
+    game: Game;
+    player: Player;
+    session: PlayerSession;
+  }) => Promise<Response>,
+) {
+  return withPlayerAccess(
+    { gameId, playerId, request },
+    async ({ game, player }) => {
+      const token = request.headers.get('X-Session-Token');
+      if (!token) {
+        throw unauthorized();
+      }
+
+      const session = await playerSessionStore.findOne({
+        where: { token, userId: player.id },
+      });
+      if (!session) {
+        throw unauthorized();
+      }
+
+      return handler({ game, player, session });
+    },
+  );
 }
