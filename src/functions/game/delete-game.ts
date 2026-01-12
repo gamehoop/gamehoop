@@ -10,7 +10,7 @@ export const deleteGame = createServerFn({
 })
   .inputValidator(
     z.object({
-      gameId: z.int(),
+      gameId: z.string(),
     }),
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {

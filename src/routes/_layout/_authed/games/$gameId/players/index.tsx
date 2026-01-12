@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_layout/_authed/games/$gameId/players/')(
   {
     loader: async ({ params: { gameId } }) => {
       const { game, players } = await getPlayers({
-        data: { gamePublicId: gameId },
+        data: { gameId },
       });
       return { game, players };
     },

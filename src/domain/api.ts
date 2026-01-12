@@ -8,14 +8,14 @@ import { hashApiKey } from './game-api-key';
 
 export async function verifyApiToken(
   request: Request,
-  { gamePublicId }: { gamePublicId: string },
+  { gameId }: { gameId: string },
 ) {
   const token = getBearerToken(request);
   if (!token) {
     throw unauthorized({ error: 'Unauthorized' });
   }
 
-  const apiKeys = await gameApiKeyStore.findForGame(gamePublicId);
+  const apiKeys = await gameApiKeyStore.findForGame(gameId);
   const apiKey = apiKeys.find(
     ({ active, keyHash }) => active && keyHash === hashApiKey(token),
   );
@@ -60,13 +60,13 @@ export async function parseJson<S extends z.ZodObject>(
 }
 
 export async function withGameAccess(
-  { request, gamePublicId }: { request: Request; gamePublicId: string },
+  { request, gameId }: { request: Request; gameId: string },
   handler: ({ game }: { game: Game }) => Promise<Response>,
 ) {
   try {
-    await verifyApiToken(request, { gamePublicId });
+    await verifyApiToken(request, { gameId });
 
-    const game = await gameStore.findOne({ where: { publicId: gamePublicId } });
+    const game = await gameStore.findOne({ where: { id: gameId } });
     if (!game) {
       throw notFound();
     }
@@ -83,9 +83,9 @@ export async function withGameAccess(
 export async function withPlayerAccess(
   {
     request,
-    gamePublicId,
+    gameId,
     playerId,
-  }: { request: Request; gamePublicId: string; playerId: string },
+  }: { request: Request; gameId: string; playerId: string },
   handler: ({
     game,
     player,
@@ -94,7 +94,7 @@ export async function withPlayerAccess(
     player: Player;
   }) => Promise<Response>,
 ) {
-  return withGameAccess({ gamePublicId, request }, async ({ game }) => {
+  return withGameAccess({ gameId, request }, async ({ game }) => {
     const player = await playerStore.findOne({
       where: { id: playerId, gameId: game.id },
     });

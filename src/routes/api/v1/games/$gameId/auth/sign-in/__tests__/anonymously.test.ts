@@ -8,15 +8,15 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { POST } from '../anonymously';
 
-describe('POST /api/v1/games/$gamePublicId/auth/sign-in/anonymously', () => {
+describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
   it('should create and return an anonymous player session', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/anonymously`,
+        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
         apiKey,
       }),
     });
@@ -31,7 +31,7 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-in/anonymously', () => {
         email: expect.any(String),
         id: expect.any(String),
         emailVerified: false,
-        gameId: game.publicId,
+        gameId: game.id,
         image: null,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
@@ -44,9 +44,9 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-in/anonymously', () => {
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
     let res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/anonymously`,
+        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
         apiKey,
       }),
     });
@@ -54,9 +54,9 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-in/anonymously', () => {
     const { player } = await res.json();
 
     res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/anonymously`,
+        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
         apiKey,
         data: { playerId: player.id },
       }),

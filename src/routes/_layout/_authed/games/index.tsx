@@ -12,7 +12,7 @@ export const Route = createFileRoute('/_layout/_authed/games/')({
 
     throw redirect({
       to: `/games/$gameId`,
-      params: { gameId: activeGame.publicId },
+      params: { gameId: activeGame.id },
     });
   },
 });

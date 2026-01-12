@@ -123,7 +123,7 @@ export const auth = betterAuth({
 
 export type UserSettings = {
   activeOrganizationId?: string;
-  activeGameId?: number;
+  activeGameId?: string;
   darkMode?: boolean;
   navbarCollapsed?: boolean;
 };

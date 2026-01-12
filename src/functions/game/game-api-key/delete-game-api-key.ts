@@ -11,8 +11,8 @@ export const deleteGameApiKey = createServerFn({
 })
   .inputValidator(
     z.object({
-      gameApiKeyId: z.int(),
-      gameId: z.int(),
+      gameApiKeyId: z.string(),
+      gameId: z.string(),
     }),
   )
   .handler(async ({ data: { gameApiKeyId, gameId } }): Promise<void> => {

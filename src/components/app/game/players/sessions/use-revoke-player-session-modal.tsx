@@ -24,7 +24,7 @@ export function useRevokePlayerSessionModal() {
       onConfirm: async () => {
         await revokePlayerSession({
           data: {
-            gamePublicId: game.publicId,
+            gameId: game.id,
             playerId: player.id,
             sessionId: session.id,
           },

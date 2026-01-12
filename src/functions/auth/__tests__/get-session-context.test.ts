@@ -32,7 +32,7 @@ describe('get-session-context serverFn', () => {
       total: mockMembers.length,
     });
 
-    const mockGames = [{ id: faker.number.int() }] as Game[];
+    const mockGames = [{ id: faker.string.uuid() }] as Game[];
 
     const findManyGamesSpy = vi
       .spyOn(gameStore, 'findMany')
@@ -106,7 +106,7 @@ describe('get-session-context serverFn', () => {
     });
 
     const mockGames = [
-      { id: faker.number.int() },
+      { id: faker.string.uuid() },
       { id: mockUser.settings.activeGameId },
     ] as Game[];
 

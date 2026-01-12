@@ -32,12 +32,11 @@ export interface Game {
   createdAt: Generated<Timestamp>;
   createdBy: string;
   genre: string | null;
-  id: Generated<number>;
+  id: Generated<string>;
   logo: string | null;
   name: string;
   organizationId: string;
   platforms: string[] | null;
-  publicId: Generated<string>;
   sdk: string | null;
   updatedAt: Generated<Timestamp>;
   updatedBy: string;
@@ -49,8 +48,8 @@ export interface GameApiKey {
   createdBy: string;
   description: string | null;
   expiresAt: Timestamp | null;
-  gameId: Generated<number>;
-  id: Generated<number>;
+  gameId: string;
+  id: Generated<string>;
   keyHash: string;
   lastUsedAt: Timestamp | null;
   scopes: Generated<string[]>;
@@ -88,7 +87,7 @@ export interface Player {
   createdAt: Generated<Timestamp>;
   email: string;
   emailVerified: boolean;
-  gameId: Generated<number>;
+  gameId: string;
   id: string;
   image: string | null;
   isAnonymous: boolean | null;

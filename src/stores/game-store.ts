@@ -24,10 +24,6 @@ export class GameStore extends BaseStore<Game> {
       query = query.where('game.id', '=', args.where.id);
     }
 
-    if (args.where?.publicId) {
-      query = query.where('game.publicId', '=', args.where.publicId);
-    }
-
     return query.executeTakeFirst();
   }
 }

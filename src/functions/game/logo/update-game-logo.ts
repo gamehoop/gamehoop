@@ -23,7 +23,7 @@ export const updateGameLogo = createServerFn({
       throw new Error('logo is required');
     }
 
-    return { gameId: parseInt(gameId, 10), logo };
+    return { gameId, logo };
   })
   .handler(async ({ data: { gameId, logo } }): Promise<void> => {
     const user = await getUser();

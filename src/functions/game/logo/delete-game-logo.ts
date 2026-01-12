@@ -9,7 +9,7 @@ import { getUser } from '../../auth/get-user';
 export const deleteGameLogo = createServerFn({ method: HttpMethod.Post })
   .inputValidator(
     z.object({
-      gameId: z.int(),
+      gameId: z.string(),
     }),
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {

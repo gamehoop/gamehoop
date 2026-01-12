@@ -46,7 +46,9 @@ export function useSwitchOrganizationModal() {
                 data={organizations.map((org) => ({
                   value: org.id,
                   label: org.name,
-                  avatarSrc: org.logo ? `/api/organization/${org.id}/logo` : '',
+                  avatarSrc: org.logo
+                    ? `/api/organizations/${org.id}/logo`
+                    : '',
                 }))}
                 renderOption={({ option }) => {
                   return (

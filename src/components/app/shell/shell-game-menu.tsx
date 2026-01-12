@@ -28,7 +28,7 @@ export function ShellGameMenu() {
                   color={themeColor}
                   src={
                     activeGame.logo
-                      ? `/api/game/${activeGame.id}/logo?updatedAt=${activeGame.updatedAt.toString()}`
+                      ? `/api/games/${activeGame.id}/logo?updatedAt=${activeGame.updatedAt.toString()}`
                       : ''
                   }
                 >

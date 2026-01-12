@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { POST } from '../email';
 
-describe('POST /api/v1/games/$gamePublicId/auth/sign-up/email', () => {
+describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
   it('should create a player and session', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -20,9 +20,9 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-up/email', () => {
     };
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-up/email`,
+        uri: `v1/games/${game.id}/auth/sign-up/email`,
         apiKey,
         data: playerDetails,
       }),
@@ -37,7 +37,7 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-up/email', () => {
       email: playerDetails.email,
       id: expect.any(String),
       emailVerified: false,
-      gameId: game.publicId,
+      gameId: game.id,
       image: null,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -51,9 +51,9 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-up/email', () => {
     const playerDetails = {};
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-up/email`,
+        uri: `v1/games/${game.id}/auth/sign-up/email`,
         apiKey,
         data: playerDetails,
       }),
@@ -91,9 +91,9 @@ describe('POST /api/v1/games/$gamePublicId/auth/sign-up/email', () => {
     };
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-up/email`,
+        uri: `v1/games/${game.id}/auth/sign-up/email`,
         apiKey,
         data: playerDetails,
       }),

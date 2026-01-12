@@ -4,14 +4,14 @@ import { ok } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
 export async function POST({
-  params: { gameId: gamePublicId, playerId },
+  params: { gameId, playerId },
   request,
 }: {
   params: { gameId: string; playerId: string };
   request: Request;
 }) {
   return withPlayerAccess(
-    { gamePublicId, playerId, request },
+    { gameId, playerId, request },
     async ({ game, player }) => {
       const data = await createPlayerAuth(game.id).api.requestPasswordReset({
         body: {

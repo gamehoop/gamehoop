@@ -11,7 +11,7 @@ export const updateGame = createServerFn({
 })
   .inputValidator(
     z.object({
-      gameId: z.int(),
+      gameId: z.string(),
       name: z.string().optional(),
       genre: z.string().optional(),
       platforms: z.array(z.string()).optional(),

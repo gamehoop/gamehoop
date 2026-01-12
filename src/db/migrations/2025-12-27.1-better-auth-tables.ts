@@ -9,13 +9,13 @@ export async function up(db: Kysely<DB>): Promise<void> {
     .addColumn('email', 'text', (col) => col.notNull().unique())
     .addColumn('email_verified', 'boolean', (col) => col.notNull())
     .addColumn('image', 'text')
+    .addColumn('settings', 'text')
     .addColumn('created_at', 'timestamptz', (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
     )
     .addColumn('updated_at', 'timestamptz', (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
     )
-    .addColumn('dark_mode', 'boolean')
     .execute();
 
   await db.schema

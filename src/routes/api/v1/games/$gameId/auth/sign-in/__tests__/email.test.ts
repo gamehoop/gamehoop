@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { POST } from '../email';
 
-describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
+describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
   it('should create and return a new player session', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -29,9 +29,9 @@ describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
     });
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/email`,
+        uri: `v1/games/${game.id}/auth/sign-in/email`,
         apiKey,
         data: {
           email: playerDetails.email,
@@ -53,7 +53,7 @@ describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         image: null,
-        gameId: game.publicId,
+        gameId: game.id,
       },
     });
   });
@@ -77,9 +77,9 @@ describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
     });
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/email`,
+        uri: `v1/games/${game.id}/auth/sign-in/email`,
         apiKey,
         data: {
           email: faker.internet.email().toLowerCase(),
@@ -110,9 +110,9 @@ describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
     });
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/email`,
+        uri: `v1/games/${game.id}/auth/sign-in/email`,
         apiKey,
         data: {
           email: playerDetails.email,
@@ -134,9 +134,9 @@ describe('POST /api/v1/game/$gamePublicId/auth/sign-in/email', () => {
     };
 
     const res = await POST({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/auth/sign-in/email`,
+        uri: `v1/games/${game.id}/auth/sign-in/email`,
         apiKey,
         data: playerDetails,
       }),

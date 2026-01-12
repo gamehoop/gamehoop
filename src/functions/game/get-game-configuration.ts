@@ -6,15 +6,15 @@ import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 
 export const getGameConfiguration = createServerFn()
-  .inputValidator(z.object({ gamePublicId: z.string() }))
-  .handler(async ({ data: { gamePublicId } }) => {
+  .inputValidator(z.object({ gameId: z.string() }))
+  .handler(async ({ data: { gameId } }) => {
     const user = await getUser();
     const [game, gameApiKeys] = await Promise.all([
       gameStore.findOneForUser({
         userId: user.id,
-        where: { publicId: gamePublicId },
+        where: { id: gameId },
       }),
-      gameApiKeyStore.findManyForUserAndGame(user.id, gamePublicId),
+      gameApiKeyStore.findManyForUserAndGame(user.id, gameId),
     ]);
 
     if (!game) {

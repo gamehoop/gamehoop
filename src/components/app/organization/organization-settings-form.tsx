@@ -138,7 +138,9 @@ export function OrganizationSettingsForm({
             }
           }}
           src={
-            organization.logo ? `/api/organization/${organization.id}/logo` : ''
+            organization.logo
+              ? `/api/organizations/${organization.id}/logo`
+              : ''
           }
           className={cn(user.role !== 'member', 'cursor-pointer')}
           size="xl"

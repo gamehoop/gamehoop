@@ -23,7 +23,7 @@ export function useSwitchGameModal() {
     },
     validators: {
       onSubmit: z.object({
-        gameId: z.int(),
+        gameId: z.string(),
       }),
     },
     onSubmit: async ({ value }) => {
@@ -55,9 +55,7 @@ export function useSwitchGameModal() {
                 leftSection={<Gamepad2 />}
                 name={field.name}
                 value={field.state.value?.toString()}
-                onChange={(value) =>
-                  value && field.handleChange(parseInt(value, 10))
-                }
+                onChange={(value) => value && field.handleChange(value)}
                 onBlur={field.handleBlur}
                 error={field.state.meta.errors[0]?.message}
                 required

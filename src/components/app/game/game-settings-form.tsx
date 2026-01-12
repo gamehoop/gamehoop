@@ -135,7 +135,7 @@ export function GameSettingsForm({ game }: GameSettingsFormProps) {
   };
 
   const onCopyId = async () => {
-    await window.navigator.clipboard.writeText(game.publicId);
+    await window.navigator.clipboard.writeText(game.id);
   };
 
   return (
@@ -158,7 +158,7 @@ export function GameSettingsForm({ game }: GameSettingsFormProps) {
           }}
           src={
             game.logo
-              ? `/api/game/${game.id}/logo?updatedAt=${game.updatedAt.toString()}`
+              ? `/api/games/${game.id}/logo?updatedAt=${game.updatedAt.toString()}`
               : ''
           }
           className="cursor-pointer"
@@ -176,7 +176,7 @@ export function GameSettingsForm({ game }: GameSettingsFormProps) {
       <TextInput
         label="ID"
         name="id"
-        value={game.publicId}
+        value={game.id}
         rightSection={
           <ActionIcon variant="transparent" onClick={onCopyId}>
             <Copy />

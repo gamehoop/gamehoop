@@ -8,9 +8,9 @@ export const Route = createFileRoute(
 )({
   server: {
     handlers: {
-      POST: async ({ params: { gameId: gamePublicId, playerId }, request }) => {
+      POST: async ({ params: { gameId, playerId }, request }) => {
         return withPlayerAccess(
-          { gamePublicId, playerId, request },
+          { gameId, playerId, request },
           async ({ game, player }) => {
             const data = await createPlayerAuth(
               game.id,

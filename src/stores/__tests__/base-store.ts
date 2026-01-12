@@ -37,7 +37,6 @@ describe('BaseStore', () => {
       expect(game).toEqual({
         ...values,
         id: expect.any(Number),
-        publicId: expect.any(String),
         logo: null,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -73,7 +72,7 @@ describe('BaseStore', () => {
 
     it('should return undefined if the game does not exist', async () => {
       const foundGame = await gameStore.findOne({
-        where: { id: faker.number.int({ max: 10 }) },
+        where: { id: faker.string.uuid() },
       });
       expect(foundGame).toBeUndefined();
     });
@@ -102,7 +101,7 @@ describe('BaseStore', () => {
     it('should throw an error if the game does not exist', async () => {
       await expect(
         gameStore.findOneOrThrow({
-          where: { id: faker.number.int({ max: 10 }) },
+          where: { id: faker.string.uuid() },
         }),
       ).rejects.toThrowError('No record found');
     });
@@ -167,7 +166,7 @@ describe('BaseStore', () => {
     it('should throw an error if the game does not exist', async () => {
       await expect(
         gameStore.updateOneOrThrow({
-          where: { id: faker.number.int({ max: 10 }) },
+          where: { id: faker.string.uuid() },
           data: { name: faker.lorem.words(), updatedBy: user.id },
         }),
       ).rejects.toThrowError('Record not found');

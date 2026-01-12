@@ -47,7 +47,7 @@ export function ShellNavbarCollapsedContent({
         <Tooltip label="Players" position="right" withArrow>
           <Link
             to={`/games/$gameId/players`}
-            params={{ gameId: activeGame?.publicId ?? '' }}
+            params={{ gameId: activeGame?.id ?? '' }}
             activeProps={{ style: { color: themeColor } }}
             disabled={!activeGame}
           >
@@ -56,7 +56,7 @@ export function ShellNavbarCollapsedContent({
                 className="text-xl"
                 style={{
                   color: location.pathname.startsWith(
-                    `/games/${activeGame?.publicId}/players`,
+                    `/games/${activeGame?.id}/players`,
                   )
                     ? themeColor
                     : undefined,
@@ -69,7 +69,7 @@ export function ShellNavbarCollapsedContent({
         <Tooltip label="Configuration" position="right" withArrow>
           <Link
             to={`/games/$gameId`}
-            params={{ gameId: activeGame?.publicId ?? '' }}
+            params={{ gameId: activeGame?.id ?? '' }}
             activeProps={{ style: { color: themeColor } }}
             disabled={!activeGame}
           >
@@ -78,7 +78,7 @@ export function ShellNavbarCollapsedContent({
                 className="text-xl"
                 style={{
                   color:
-                    location.pathname === `/games/${activeGame?.publicId}`
+                    location.pathname === `/games/${activeGame?.id}`
                       ? themeColor
                       : undefined,
                 }}

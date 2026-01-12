@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { GET } from '..';
 
-describe('GET /api/v1/games/$gamePublicId/players/$playerId', () => {
+describe('GET /api/v1/games/$gameId/players/$playerId', () => {
   it('should return player data', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -25,9 +25,9 @@ describe('GET /api/v1/games/$gamePublicId/players/$playerId', () => {
     });
 
     const res = await GET({
-      params: { gameId: game.publicId, playerId: player.id },
+      params: { gameId: game.id, playerId: player.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/players/${player.id}`,
+        uri: `v1/games/${game.id}/players/${player.id}`,
         apiKey,
       }),
     });
@@ -41,7 +41,7 @@ describe('GET /api/v1/games/$gamePublicId/players/$playerId', () => {
       email: player.email,
       emailVerified: false,
       image: null,
-      gameId: game.publicId,
+      gameId: game.id,
       createdAt: player.createdAt.toISOString(),
       updatedAt: player.updatedAt.toISOString(),
     });
@@ -53,9 +53,9 @@ describe('GET /api/v1/games/$gamePublicId/players/$playerId', () => {
 
     const playerId = faker.string.uuid();
     const res = await GET({
-      params: { gameId: game.publicId, playerId },
+      params: { gameId: game.id, playerId },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/players/${playerId}`,
+        uri: `v1/games/${game.id}/players/${playerId}`,
         apiKey,
       }),
     });

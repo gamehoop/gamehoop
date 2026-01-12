@@ -7,7 +7,7 @@ import z from 'zod';
 import { getUser } from '../../auth/get-user';
 
 export const deletePlayer = createServerFn({ method: HttpMethod.Post })
-  .inputValidator(z.object({ gameId: z.int(), playerId: z.string() }))
+  .inputValidator(z.object({ gameId: z.string(), playerId: z.string() }))
   .handler(async ({ data: { gameId, playerId } }): Promise<void> => {
     const user = await getUser();
     const game = await gameStore.findOneForUser({

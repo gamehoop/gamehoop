@@ -69,7 +69,7 @@ export function OrganizationMembersTable({
                   <Avatar
                     src={
                       member.user.image
-                        ? `/api/organization/${member.organizationId}/user/${member.userId}/avatar`
+                        ? `/api/organizations/${member.organizationId}/users/${member.userId}/avatar`
                         : ''
                     }
                     name={member.user.name}

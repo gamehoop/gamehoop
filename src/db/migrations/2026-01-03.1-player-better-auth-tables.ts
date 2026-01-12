@@ -10,7 +10,8 @@ export async function up(db: Kysely<DB>): Promise<void> {
     .addColumn('email_verified', 'boolean', (col) => col.notNull())
     .addColumn('image', 'text')
     .addColumn('is_anonymous', 'boolean')
-    .addColumn('game_id', 'serial', (col) =>
+    .addColumn('last_login_at', 'timestamptz')
+    .addColumn('game_id', 'text', (col) =>
       col.notNull().references('game.id').onDelete('cascade'),
     )
     .addColumn('created_at', 'timestamptz', (col) =>

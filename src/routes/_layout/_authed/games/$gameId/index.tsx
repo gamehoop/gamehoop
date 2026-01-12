@@ -6,7 +6,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout/_authed/games/$gameId/')({
   loader: async ({ params: { gameId } }) => {
-    return getGameConfiguration({ data: { gamePublicId: gameId } });
+    return getGameConfiguration({ data: { gameId } });
   },
   head: ({ loaderData }) => ({
     meta: seo({

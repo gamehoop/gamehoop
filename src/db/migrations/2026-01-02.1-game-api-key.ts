@@ -4,8 +4,13 @@ import { DB } from '../schema';
 export async function up(db: Kysely<DB>): Promise<void> {
   await db.schema
     .createTable('game_api_key')
-    .addColumn('id', 'serial', (col) => col.notNull().primaryKey())
-    .addColumn('game_id', 'serial', (col) =>
+    .addColumn('id', 'text', (col) =>
+      col
+        .notNull()
+        .primaryKey()
+        .defaultTo(sql`uuidv7()`),
+    )
+    .addColumn('game_id', 'text', (col) =>
       col.notNull().references('game.id').onDelete('cascade'),
     )
     .addColumn('key_hash', 'char(64)', (col) => col.notNull().unique())
@@ -29,16 +34,8 @@ export async function up(db: Kysely<DB>): Promise<void> {
     .on('game_api_key')
     .columns(['game_id', 'active', 'key_hash'])
     .execute();
-
-  await db.schema
-    .alterTable('game')
-    .addColumn('public_id', 'text', (col) =>
-      col.notNull().defaultTo(sql`gen_random_uuid()`),
-    )
-    .execute();
 }
 
 export async function down(db: Kysely<DB>): Promise<void> {
-  await db.schema.alterTable('game').dropColumn('public_id').execute();
   await db.schema.dropTable('game_api_key').ifExists().execute();
 }

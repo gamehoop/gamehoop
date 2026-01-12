@@ -10,30 +10,28 @@ import { getUser } from '../../auth/get-user';
 export const revokePlayerSession = createServerFn({ method: HttpMethod.Post })
   .inputValidator(
     z.object({
-      gamePublicId: z.string(),
+      gameId: z.string(),
       playerId: z.string(),
       sessionId: z.string(),
     }),
   )
-  .handler(
-    async ({ data: { gamePublicId, playerId, sessionId } }): Promise<void> => {
-      const user = await getUser();
-      const game = await gameStore.findOneForUser({
-        userId: user.id,
-        where: { publicId: gamePublicId },
-      });
-      if (!game) {
-        throw notFound();
-      }
+  .handler(async ({ data: { gameId, playerId, sessionId } }): Promise<void> => {
+    const user = await getUser();
+    const game = await gameStore.findOneForUser({
+      userId: user.id,
+      where: { id: gameId },
+    });
+    if (!game) {
+      throw notFound();
+    }
 
-      const player = await playerStore.findOne({
-        where: { id: playerId },
-      });
+    const player = await playerStore.findOne({
+      where: { id: playerId },
+    });
 
-      if (!player || player.gameId !== game.id) {
-        throw notFound();
-      }
+    if (!player || player.gameId !== game.id) {
+      throw notFound();
+    }
 
-      await playerSessionStore.deleteMany({ where: { id: sessionId } });
-    },
-  );
+    await playerSessionStore.deleteMany({ where: { id: sessionId } });
+  });

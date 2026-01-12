@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it } from 'vitest';
 import { DELETE } from '../revoke';
 
-describe('DELETE /api/v1/games/$gamePublicId/sessions/revoke', () => {
+describe('DELETE /api/v1/games/$gameId/sessions/revoke', () => {
   it('should delete the session for a given token', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -22,9 +22,9 @@ describe('DELETE /api/v1/games/$gamePublicId/sessions/revoke', () => {
     ).toBeDefined();
 
     const res = await DELETE({
-      params: { gameId: game.publicId },
+      params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/sessions/revoke`,
+        uri: `v1/games/${game.id}/sessions/revoke`,
         apiKey,
         data: {
           token: session?.token,

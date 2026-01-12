@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { createAuthMiddleware } from 'better-auth/plugins';
 
-export function createHooks(gameId: number) {
+export function createHooks(gameId: string) {
   return {
     before: createAuthMiddleware(async ({ context }) => {
       const internalCreateUser = context.internalAdapter.createUser.bind(

@@ -4,7 +4,12 @@ import { DB } from '../schema';
 export async function up(db: Kysely<DB>): Promise<void> {
   await db.schema
     .createTable('game')
-    .addColumn('id', 'serial', (col) => col.notNull().primaryKey())
+    .addColumn('id', 'text', (col) =>
+      col
+        .notNull()
+        .primaryKey()
+        .defaultTo(sql`uuidv7()`),
+    )
     .addColumn('organization_id', 'text', (col) =>
       col.notNull().references('organization.id').onDelete('cascade'),
     )

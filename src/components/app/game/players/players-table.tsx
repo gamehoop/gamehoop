@@ -21,7 +21,7 @@ export function PlayersTable({ game, players }: PlayersTableProps) {
     await router.navigate({
       to: `/games/$gameId/players/$playerId`,
       params: {
-        gameId: game.publicId,
+        gameId: game.id,
         playerId: player.id,
       },
     });

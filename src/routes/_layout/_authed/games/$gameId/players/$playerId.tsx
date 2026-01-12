@@ -10,7 +10,7 @@ export const Route = createFileRoute(
   '/_layout/_authed/games/$gameId/players/$playerId',
 )({
   loader: async ({ params: { gameId, playerId } }) => {
-    return getPlayer({ data: { gamePublicId: gameId, playerId } });
+    return getPlayer({ data: { gameId, playerId } });
   },
   head: ({ loaderData }) => ({
     meta: seo({

@@ -29,7 +29,7 @@ describe('create-game-api-key serverFn', () => {
 
     const result = await createGameApiKey({
       data: {
-        gamePublicId: game.publicId,
+        gameId: game.id,
         scopes: [Scope.All],
       },
     });
@@ -44,7 +44,7 @@ describe('create-game-api-key serverFn', () => {
       expiresAt: null,
       keyHash: expect.any(String),
       lastUsedAt: null,
-      id: expect.any(Number),
+      id: expect.any(String),
       active: true,
     });
 
@@ -62,7 +62,7 @@ describe('create-game-api-key serverFn', () => {
     await expect(
       createGameApiKey({
         data: {
-          gamePublicId: faker.string.uuid(),
+          gameId: faker.string.uuid(),
           scopes: [Scope.All],
         },
       }),
@@ -73,7 +73,7 @@ describe('create-game-api-key serverFn', () => {
     await expect(
       createGameApiKey({
         data: {
-          gamePublicId: faker.string.uuid(),
+          gameId: faker.string.uuid(),
           scopes: [Scope.All],
         },
       }),
@@ -92,7 +92,7 @@ describe('create-game-api-key serverFn', () => {
         name: 'ZodError',
         issues: [
           expect.objectContaining({
-            path: ['gamePublicId'],
+            path: ['gameId'],
             message: 'Invalid input: expected string, received undefined',
           }),
           expect.objectContaining({

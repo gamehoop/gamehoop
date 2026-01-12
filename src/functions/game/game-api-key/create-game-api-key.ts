@@ -13,7 +13,7 @@ export const createGameApiKey = createServerFn({
 })
   .inputValidator(
     z.object({
-      gamePublicId: z.string(),
+      gameId: z.string(),
       scopes: z.array(z.string()),
       expiresAt: z
         .string()
@@ -30,12 +30,12 @@ export const createGameApiKey = createServerFn({
   )
   .handler(
     async ({
-      data: { gamePublicId, scopes, expiresAt, description },
+      data: { gameId, scopes, expiresAt, description },
     }): Promise<GameApiKey & { apiKey: string }> => {
       const user = await getUser();
       const game = await gameStore.findOneForUser({
         userId: user.id,
-        where: { publicId: gamePublicId },
+        where: { id: gameId },
       });
       if (!game) {
         throw notFound();

@@ -15,24 +15,20 @@ const zResBody = z.object({
 });
 
 export async function GET({
-  params: { gameId: gamePublicId, playerId },
+  params: { gameId, playerId },
   request,
 }: {
   params: { gameId: string; playerId: string };
   request: Request;
 }) {
-  return withPlayerAccess(
-    { gamePublicId, playerId, request },
-    async ({ player }) => {
-      const data = zResBody.parse({
-        ...player,
-        gameId: gamePublicId,
-        createdAt: player.createdAt.toISOString(),
-        updatedAt: player.updatedAt.toISOString(),
-      });
-      return ok(data);
-    },
-  );
+  return withPlayerAccess({ gameId, playerId, request }, async ({ player }) => {
+    const data = zResBody.parse({
+      ...player,
+      createdAt: player.createdAt.toISOString(),
+      updatedAt: player.updatedAt.toISOString(),
+    });
+    return ok(data);
+  });
 }
 
 export const Route = createFileRoute(

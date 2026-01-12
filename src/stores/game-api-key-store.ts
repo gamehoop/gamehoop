@@ -8,18 +8,18 @@ export class GameApiKeyStore extends BaseStore<GameApiKey> {
     super('gameApiKey');
   }
 
-  async findForGame(gamePublicId: string): Promise<Selectable<GameApiKey>[]> {
+  async findForGame(gameId: string): Promise<Selectable<GameApiKey>[]> {
     return db
       .selectFrom('gameApiKey')
       .selectAll('gameApiKey')
       .innerJoin('game', 'game.id', 'gameApiKey.gameId')
-      .where('game.publicId', '=', gamePublicId)
+      .where('game.id', '=', gameId)
       .execute();
   }
 
   async findManyForUserAndGame(
     userId: string,
-    gamePublicId: string,
+    gameId: string,
   ): Promise<Selectable<GameApiKey>[]> {
     return db
       .selectFrom('gameApiKey')
@@ -29,7 +29,7 @@ export class GameApiKeyStore extends BaseStore<GameApiKey> {
       .innerJoin('member', 'member.organizationId', 'organization.id')
       .innerJoin('user', 'user.id', 'member.userId')
       .where('user.id', '=', userId)
-      .where('game.publicId', '=', gamePublicId)
+      .where('game.id', '=', gameId)
       .execute();
   }
 }

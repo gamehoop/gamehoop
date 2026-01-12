@@ -26,13 +26,13 @@ const zResBody = z.object({
 });
 
 export async function POST({
-  params: { gameId: gamePublicId },
+  params: { gameId },
   request,
 }: {
   params: { gameId: string };
   request: Request;
 }) {
-  return withGameAccess({ gamePublicId, request }, async ({ game }) => {
+  return withGameAccess({ gameId, request }, async ({ game }) => {
     const { playerId } = await parseJson(request, zReqBody);
 
     const session = await createPlayerAuth(game.id).api.signInAnonymous();
@@ -66,7 +66,6 @@ export async function POST({
       token,
       player: {
         ...player,
-        gameId: game.publicId,
         createdAt: player.createdAt.toISOString(),
         updatedAt: player.updatedAt.toISOString(),
       },

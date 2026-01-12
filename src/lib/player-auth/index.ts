@@ -22,7 +22,7 @@ export interface PlayerAuthOptions {
 }
 
 export function createPlayerAuth(
-  gameId: number,
+  gameId: string,
   options: PlayerAuthOptions = {
     requireEmailVerification: false,
     minPasswordLength: 8,
@@ -67,7 +67,7 @@ export function createPlayerAuth(
       // Additional columns to add to the user database table
       additionalFields: {
         gameId: {
-          type: 'number',
+          type: 'string',
           required: true,
         },
         lastLoginAt: {

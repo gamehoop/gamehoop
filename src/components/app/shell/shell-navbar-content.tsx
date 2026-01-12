@@ -41,7 +41,7 @@ export function ShellNavbarContent({
         <NavLink
           component={Link}
           to={`/games/$gameId/players`}
-          params={{ gameId: activeGame?.publicId ?? '' }}
+          params={{ gameId: activeGame?.id ?? '' }}
           label="Players"
           leftSection={<Users />}
           disabled={!activeGame}
@@ -50,7 +50,7 @@ export function ShellNavbarContent({
           component={Link}
           to={`/games/$gameId`}
           activeOptions={{ exact: true }}
-          params={{ gameId: activeGame?.publicId ?? '' }}
+          params={{ gameId: activeGame?.id ?? '' }}
           label="Configuration"
           leftSection={<Cog />}
           disabled={!activeGame}

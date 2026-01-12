@@ -9,13 +9,13 @@ const zReqBody = z.object({
 });
 
 export async function DELETE({
-  params: { gameId: gamePublicId },
+  params: { gameId },
   request,
 }: {
   params: { gameId: string };
   request: Request;
 }) {
-  return withGameAccess({ gamePublicId, request }, async () => {
+  return withGameAccess({ gameId, request }, async () => {
     const { token } = await parseJson(request, zReqBody);
 
     const sessions = await playerSessionStore.findMany({

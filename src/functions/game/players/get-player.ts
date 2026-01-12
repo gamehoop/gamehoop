@@ -7,12 +7,12 @@ import z from 'zod';
 import { getGame } from '../get-game';
 
 export const getPlayer = createServerFn()
-  .inputValidator(z.object({ gamePublicId: z.string(), playerId: z.string() }))
+  .inputValidator(z.object({ gameId: z.string(), playerId: z.string() }))
   .handler(
     async ({
-      data: { gamePublicId, playerId },
+      data: { gameId, playerId },
     }): Promise<{ game: Game; player: Player; sessions: PlayerSession[] }> => {
-      const game = await getGame({ data: { gamePublicId } });
+      const game = await getGame({ data: { gameId } });
       if (!game) {
         throw notFound();
       }

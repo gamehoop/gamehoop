@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { POST } from '../reset-password';
 
-describe('POST /api/v1/games/$gamePublicId/players/$playerId/reset-password', () => {
+describe('POST /api/v1/games/$gameId/players/$playerId/reset-password', () => {
   it('should send a reset password email', async () => {
     const { user, organization } = await createTestUser();
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
@@ -35,9 +35,9 @@ describe('POST /api/v1/games/$gamePublicId/players/$playerId/reset-password', ()
     } as any);
 
     const res = await POST({
-      params: { gameId: game.publicId, playerId: player.id },
+      params: { gameId: game.id, playerId: player.id },
       request: apiRequest({
-        uri: `v1/games/${game.publicId}/players/${player.id}/reset-password`,
+        uri: `v1/games/${game.id}/players/${player.id}/reset-password`,
         apiKey,
       }),
     });
