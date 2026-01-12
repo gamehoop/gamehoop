@@ -25,21 +25,21 @@ import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authe
 import { Route as LayoutAuthedPlayersIndexRouteImport } from './routes/_layout/_authed/players/index'
 import { Route as LayoutAuthedOrganizationsIndexRouteImport } from './routes/_layout/_authed/organizations/index'
 import { Route as LayoutAuthedGamesIndexRouteImport } from './routes/_layout/_authed/games/index'
-import { Route as ApiOrganizationOrganizationIdLogoRouteImport } from './routes/api/organization/$organizationId/logo'
-import { Route as ApiGameGameIdLogoRouteImport } from './routes/api/game/$gameId/logo'
+import { Route as ApiOrganizationsOrganizationIdLogoRouteImport } from './routes/api/organizations/$organizationId/logo'
+import { Route as ApiGamesGameIdLogoRouteImport } from './routes/api/games/$gameId/logo'
 import { Route as LayoutAuthedOrganizationsOrganizationIdRouteImport } from './routes/_layout/_authed/organizations/$organizationId'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 import { Route as LayoutAuthedGamesGameIdIndexRouteImport } from './routes/_layout/_authed/games/$gameId/index'
 import { Route as LayoutAuthedGamesGameIdPlayersIndexRouteImport } from './routes/_layout/_authed/games/$gameId/players/index'
-import { Route as ApiOrganizationOrganizationIdUserUserIdAvatarRouteImport } from './routes/api/organization/$organizationId/user/$userId/avatar'
+import { Route as ApiV1GamesGameIdSessionsRevokeRouteImport } from './routes/api/v1/games/$gameId/sessions/revoke'
+import { Route as ApiOrganizationsOrganizationIdUsersUserIdAvatarRouteImport } from './routes/api/organizations/$organizationId/users/$userId/avatar'
 import { Route as LayoutAuthedGamesGameIdPlayersPlayerIdRouteImport } from './routes/_layout/_authed/games/$gameId/players/$playerId'
-import { Route as ApiV1GameGameIdPlayerPlayerIdIndexRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/index'
-import { Route as ApiV1GameGameIdPlayerSignUpEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-up/email'
-import { Route as ApiV1GameGameIdPlayerSignInEmailRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/email'
-import { Route as ApiV1GameGameIdPlayerSignInAnonymouslyRouteImport } from './routes/api/v1/game/$gameId/player/sign-in/anonymously'
-import { Route as ApiV1GameGameIdPlayerSessionRevokeRouteImport } from './routes/api/v1/game/$gameId/player/session/revoke'
-import { Route as ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/send-verification-email'
-import { Route as ApiV1GameGameIdPlayerPlayerIdResetPasswordRouteImport } from './routes/api/v1/game/$gameId/player/$playerId/reset-password'
+import { Route as ApiV1GamesGameIdPlayersPlayerIdIndexRouteImport } from './routes/api/v1/games/$gameId/players/$playerId/index'
+import { Route as ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRouteImport } from './routes/api/v1/games/$gameId/players/$playerId/send-verification-email'
+import { Route as ApiV1GamesGameIdPlayersPlayerIdResetPasswordRouteImport } from './routes/api/v1/games/$gameId/players/$playerId/reset-password'
+import { Route as ApiV1GamesGameIdAuthSignUpEmailRouteImport } from './routes/api/v1/games/$gameId/auth/sign-up/email'
+import { Route as ApiV1GamesGameIdAuthSignInEmailRouteImport } from './routes/api/v1/games/$gameId/auth/sign-in/email'
+import { Route as ApiV1GamesGameIdAuthSignInAnonymouslyRouteImport } from './routes/api/v1/games/$gameId/auth/sign-in/anonymously'
 
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
@@ -120,15 +120,15 @@ const LayoutAuthedGamesIndexRoute = LayoutAuthedGamesIndexRouteImport.update({
   path: '/games/',
   getParentRoute: () => LayoutAuthedRoute,
 } as any)
-const ApiOrganizationOrganizationIdLogoRoute =
-  ApiOrganizationOrganizationIdLogoRouteImport.update({
-    id: '/api/organization/$organizationId/logo',
-    path: '/api/organization/$organizationId/logo',
+const ApiOrganizationsOrganizationIdLogoRoute =
+  ApiOrganizationsOrganizationIdLogoRouteImport.update({
+    id: '/api/organizations/$organizationId/logo',
+    path: '/api/organizations/$organizationId/logo',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiGameGameIdLogoRoute = ApiGameGameIdLogoRouteImport.update({
-  id: '/api/game/$gameId/logo',
-  path: '/api/game/$gameId/logo',
+const ApiGamesGameIdLogoRoute = ApiGamesGameIdLogoRouteImport.update({
+  id: '/api/games/$gameId/logo',
+  path: '/api/games/$gameId/logo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LayoutAuthedOrganizationsOrganizationIdRoute =
@@ -155,10 +155,16 @@ const LayoutAuthedGamesGameIdPlayersIndexRoute =
     path: '/games/$gameId/players/',
     getParentRoute: () => LayoutAuthedRoute,
   } as any)
-const ApiOrganizationOrganizationIdUserUserIdAvatarRoute =
-  ApiOrganizationOrganizationIdUserUserIdAvatarRouteImport.update({
-    id: '/api/organization/$organizationId/user/$userId/avatar',
-    path: '/api/organization/$organizationId/user/$userId/avatar',
+const ApiV1GamesGameIdSessionsRevokeRoute =
+  ApiV1GamesGameIdSessionsRevokeRouteImport.update({
+    id: '/api/v1/games/$gameId/sessions/revoke',
+    path: '/api/v1/games/$gameId/sessions/revoke',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute =
+  ApiOrganizationsOrganizationIdUsersUserIdAvatarRouteImport.update({
+    id: '/api/organizations/$organizationId/users/$userId/avatar',
+    path: '/api/organizations/$organizationId/users/$userId/avatar',
     getParentRoute: () => rootRouteImport,
   } as any)
 const LayoutAuthedGamesGameIdPlayersPlayerIdRoute =
@@ -167,46 +173,40 @@ const LayoutAuthedGamesGameIdPlayersPlayerIdRoute =
     path: '/games/$gameId/players/$playerId',
     getParentRoute: () => LayoutAuthedRoute,
   } as any)
-const ApiV1GameGameIdPlayerPlayerIdIndexRoute =
-  ApiV1GameGameIdPlayerPlayerIdIndexRouteImport.update({
-    id: '/api/v1/game/$gameId/player/$playerId/',
-    path: '/api/v1/game/$gameId/player/$playerId/',
+const ApiV1GamesGameIdPlayersPlayerIdIndexRoute =
+  ApiV1GamesGameIdPlayersPlayerIdIndexRouteImport.update({
+    id: '/api/v1/games/$gameId/players/$playerId/',
+    path: '/api/v1/games/$gameId/players/$playerId/',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1GameGameIdPlayerSignUpEmailRoute =
-  ApiV1GameGameIdPlayerSignUpEmailRouteImport.update({
-    id: '/api/v1/game/$gameId/player/sign-up/email',
-    path: '/api/v1/game/$gameId/player/sign-up/email',
+const ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute =
+  ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRouteImport.update({
+    id: '/api/v1/games/$gameId/players/$playerId/send-verification-email',
+    path: '/api/v1/games/$gameId/players/$playerId/send-verification-email',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1GameGameIdPlayerSignInEmailRoute =
-  ApiV1GameGameIdPlayerSignInEmailRouteImport.update({
-    id: '/api/v1/game/$gameId/player/sign-in/email',
-    path: '/api/v1/game/$gameId/player/sign-in/email',
+const ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute =
+  ApiV1GamesGameIdPlayersPlayerIdResetPasswordRouteImport.update({
+    id: '/api/v1/games/$gameId/players/$playerId/reset-password',
+    path: '/api/v1/games/$gameId/players/$playerId/reset-password',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1GameGameIdPlayerSignInAnonymouslyRoute =
-  ApiV1GameGameIdPlayerSignInAnonymouslyRouteImport.update({
-    id: '/api/v1/game/$gameId/player/sign-in/anonymously',
-    path: '/api/v1/game/$gameId/player/sign-in/anonymously',
+const ApiV1GamesGameIdAuthSignUpEmailRoute =
+  ApiV1GamesGameIdAuthSignUpEmailRouteImport.update({
+    id: '/api/v1/games/$gameId/auth/sign-up/email',
+    path: '/api/v1/games/$gameId/auth/sign-up/email',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1GameGameIdPlayerSessionRevokeRoute =
-  ApiV1GameGameIdPlayerSessionRevokeRouteImport.update({
-    id: '/api/v1/game/$gameId/player/session/revoke',
-    path: '/api/v1/game/$gameId/player/session/revoke',
+const ApiV1GamesGameIdAuthSignInEmailRoute =
+  ApiV1GamesGameIdAuthSignInEmailRouteImport.update({
+    id: '/api/v1/games/$gameId/auth/sign-in/email',
+    path: '/api/v1/games/$gameId/auth/sign-in/email',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute =
-  ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRouteImport.update({
-    id: '/api/v1/game/$gameId/player/$playerId/send-verification-email',
-    path: '/api/v1/game/$gameId/player/$playerId/send-verification-email',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute =
-  ApiV1GameGameIdPlayerPlayerIdResetPasswordRouteImport.update({
-    id: '/api/v1/game/$gameId/player/$playerId/reset-password',
-    path: '/api/v1/game/$gameId/player/$playerId/reset-password',
+const ApiV1GamesGameIdAuthSignInAnonymouslyRoute =
+  ApiV1GamesGameIdAuthSignInAnonymouslyRouteImport.update({
+    id: '/api/v1/games/$gameId/auth/sign-in/anonymously',
+    path: '/api/v1/games/$gameId/auth/sign-in/anonymously',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -223,22 +223,22 @@ export interface FileRoutesByFullPath {
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
   '/organizations/$organizationId': typeof LayoutAuthedOrganizationsOrganizationIdRoute
-  '/api/game/$gameId/logo': typeof ApiGameGameIdLogoRoute
-  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
+  '/api/games/$gameId/logo': typeof ApiGamesGameIdLogoRoute
+  '/api/organizations/$organizationId/logo': typeof ApiOrganizationsOrganizationIdLogoRoute
   '/games': typeof LayoutAuthedGamesIndexRoute
   '/organizations': typeof LayoutAuthedOrganizationsIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
   '/games/$gameId': typeof LayoutAuthedGamesGameIdIndexRoute
   '/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
-  '/api/organization/$organizationId/user/$userId/avatar': typeof ApiOrganizationOrganizationIdUserUserIdAvatarRoute
+  '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
+  '/api/v1/games/$gameId/sessions/revoke': typeof ApiV1GamesGameIdSessionsRevokeRoute
   '/games/$gameId/players': typeof LayoutAuthedGamesGameIdPlayersIndexRoute
-  '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
-  '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
-  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
-  '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
-  '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
-  '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
-  '/api/v1/game/$gameId/player/$playerId': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
+  '/api/v1/games/$gameId/auth/sign-in/anonymously': typeof ApiV1GamesGameIdAuthSignInAnonymouslyRoute
+  '/api/v1/games/$gameId/auth/sign-in/email': typeof ApiV1GamesGameIdAuthSignInEmailRoute
+  '/api/v1/games/$gameId/auth/sign-up/email': typeof ApiV1GamesGameIdAuthSignUpEmailRoute
+  '/api/v1/games/$gameId/players/$playerId/reset-password': typeof ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute
+  '/api/v1/games/$gameId/players/$playerId/send-verification-email': typeof ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute
+  '/api/v1/games/$gameId/players/$playerId': typeof ApiV1GamesGameIdPlayersPlayerIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
@@ -253,22 +253,22 @@ export interface FileRoutesByTo {
   '/': typeof LayoutAuthedIndexRoute
   '/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
   '/organizations/$organizationId': typeof LayoutAuthedOrganizationsOrganizationIdRoute
-  '/api/game/$gameId/logo': typeof ApiGameGameIdLogoRoute
-  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
+  '/api/games/$gameId/logo': typeof ApiGamesGameIdLogoRoute
+  '/api/organizations/$organizationId/logo': typeof ApiOrganizationsOrganizationIdLogoRoute
   '/games': typeof LayoutAuthedGamesIndexRoute
   '/organizations': typeof LayoutAuthedOrganizationsIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
   '/games/$gameId': typeof LayoutAuthedGamesGameIdIndexRoute
   '/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
-  '/api/organization/$organizationId/user/$userId/avatar': typeof ApiOrganizationOrganizationIdUserUserIdAvatarRoute
+  '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
+  '/api/v1/games/$gameId/sessions/revoke': typeof ApiV1GamesGameIdSessionsRevokeRoute
   '/games/$gameId/players': typeof LayoutAuthedGamesGameIdPlayersIndexRoute
-  '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
-  '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
-  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
-  '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
-  '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
-  '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
-  '/api/v1/game/$gameId/player/$playerId': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
+  '/api/v1/games/$gameId/auth/sign-in/anonymously': typeof ApiV1GamesGameIdAuthSignInAnonymouslyRoute
+  '/api/v1/games/$gameId/auth/sign-in/email': typeof ApiV1GamesGameIdAuthSignInEmailRoute
+  '/api/v1/games/$gameId/auth/sign-up/email': typeof ApiV1GamesGameIdAuthSignUpEmailRoute
+  '/api/v1/games/$gameId/players/$playerId/reset-password': typeof ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute
+  '/api/v1/games/$gameId/players/$playerId/send-verification-email': typeof ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute
+  '/api/v1/games/$gameId/players/$playerId': typeof ApiV1GamesGameIdPlayersPlayerIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -287,22 +287,22 @@ export interface FileRoutesById {
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
   '/_auth/invitation/$invitationId/accept': typeof AuthInvitationInvitationIdAcceptRoute
   '/_layout/_authed/organizations/$organizationId': typeof LayoutAuthedOrganizationsOrganizationIdRoute
-  '/api/game/$gameId/logo': typeof ApiGameGameIdLogoRoute
-  '/api/organization/$organizationId/logo': typeof ApiOrganizationOrganizationIdLogoRoute
+  '/api/games/$gameId/logo': typeof ApiGamesGameIdLogoRoute
+  '/api/organizations/$organizationId/logo': typeof ApiOrganizationsOrganizationIdLogoRoute
   '/_layout/_authed/games/': typeof LayoutAuthedGamesIndexRoute
   '/_layout/_authed/organizations/': typeof LayoutAuthedOrganizationsIndexRoute
   '/_layout/_authed/players/': typeof LayoutAuthedPlayersIndexRoute
   '/_layout/_authed/games/$gameId/': typeof LayoutAuthedGamesGameIdIndexRoute
   '/_layout/_authed/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
-  '/api/organization/$organizationId/user/$userId/avatar': typeof ApiOrganizationOrganizationIdUserUserIdAvatarRoute
+  '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
+  '/api/v1/games/$gameId/sessions/revoke': typeof ApiV1GamesGameIdSessionsRevokeRoute
   '/_layout/_authed/games/$gameId/players/': typeof LayoutAuthedGamesGameIdPlayersIndexRoute
-  '/api/v1/game/$gameId/player/$playerId/reset-password': typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
-  '/api/v1/game/$gameId/player/$playerId/send-verification-email': typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
-  '/api/v1/game/$gameId/player/session/revoke': typeof ApiV1GameGameIdPlayerSessionRevokeRoute
-  '/api/v1/game/$gameId/player/sign-in/anonymously': typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
-  '/api/v1/game/$gameId/player/sign-in/email': typeof ApiV1GameGameIdPlayerSignInEmailRoute
-  '/api/v1/game/$gameId/player/sign-up/email': typeof ApiV1GameGameIdPlayerSignUpEmailRoute
-  '/api/v1/game/$gameId/player/$playerId/': typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
+  '/api/v1/games/$gameId/auth/sign-in/anonymously': typeof ApiV1GamesGameIdAuthSignInAnonymouslyRoute
+  '/api/v1/games/$gameId/auth/sign-in/email': typeof ApiV1GamesGameIdAuthSignInEmailRoute
+  '/api/v1/games/$gameId/auth/sign-up/email': typeof ApiV1GamesGameIdAuthSignUpEmailRoute
+  '/api/v1/games/$gameId/players/$playerId/reset-password': typeof ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute
+  '/api/v1/games/$gameId/players/$playerId/send-verification-email': typeof ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute
+  '/api/v1/games/$gameId/players/$playerId/': typeof ApiV1GamesGameIdPlayersPlayerIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -319,22 +319,22 @@ export interface FileRouteTypes {
     | '/'
     | '/invitation/$invitationId/accept'
     | '/organizations/$organizationId'
-    | '/api/game/$gameId/logo'
-    | '/api/organization/$organizationId/logo'
+    | '/api/games/$gameId/logo'
+    | '/api/organizations/$organizationId/logo'
     | '/games'
     | '/organizations'
     | '/players'
     | '/games/$gameId'
     | '/games/$gameId/players/$playerId'
-    | '/api/organization/$organizationId/user/$userId/avatar'
+    | '/api/organizations/$organizationId/users/$userId/avatar'
+    | '/api/v1/games/$gameId/sessions/revoke'
     | '/games/$gameId/players'
-    | '/api/v1/game/$gameId/player/$playerId/reset-password'
-    | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-    | '/api/v1/game/$gameId/player/session/revoke'
-    | '/api/v1/game/$gameId/player/sign-in/anonymously'
-    | '/api/v1/game/$gameId/player/sign-in/email'
-    | '/api/v1/game/$gameId/player/sign-up/email'
-    | '/api/v1/game/$gameId/player/$playerId'
+    | '/api/v1/games/$gameId/auth/sign-in/anonymously'
+    | '/api/v1/games/$gameId/auth/sign-in/email'
+    | '/api/v1/games/$gameId/auth/sign-up/email'
+    | '/api/v1/games/$gameId/players/$playerId/reset-password'
+    | '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+    | '/api/v1/games/$gameId/players/$playerId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -349,22 +349,22 @@ export interface FileRouteTypes {
     | '/'
     | '/invitation/$invitationId/accept'
     | '/organizations/$organizationId'
-    | '/api/game/$gameId/logo'
-    | '/api/organization/$organizationId/logo'
+    | '/api/games/$gameId/logo'
+    | '/api/organizations/$organizationId/logo'
     | '/games'
     | '/organizations'
     | '/players'
     | '/games/$gameId'
     | '/games/$gameId/players/$playerId'
-    | '/api/organization/$organizationId/user/$userId/avatar'
+    | '/api/organizations/$organizationId/users/$userId/avatar'
+    | '/api/v1/games/$gameId/sessions/revoke'
     | '/games/$gameId/players'
-    | '/api/v1/game/$gameId/player/$playerId/reset-password'
-    | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-    | '/api/v1/game/$gameId/player/session/revoke'
-    | '/api/v1/game/$gameId/player/sign-in/anonymously'
-    | '/api/v1/game/$gameId/player/sign-in/email'
-    | '/api/v1/game/$gameId/player/sign-up/email'
-    | '/api/v1/game/$gameId/player/$playerId'
+    | '/api/v1/games/$gameId/auth/sign-in/anonymously'
+    | '/api/v1/games/$gameId/auth/sign-in/email'
+    | '/api/v1/games/$gameId/auth/sign-up/email'
+    | '/api/v1/games/$gameId/players/$playerId/reset-password'
+    | '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+    | '/api/v1/games/$gameId/players/$playerId'
   id:
     | '__root__'
     | '/_auth'
@@ -382,22 +382,22 @@ export interface FileRouteTypes {
     | '/_layout/_authed/'
     | '/_auth/invitation/$invitationId/accept'
     | '/_layout/_authed/organizations/$organizationId'
-    | '/api/game/$gameId/logo'
-    | '/api/organization/$organizationId/logo'
+    | '/api/games/$gameId/logo'
+    | '/api/organizations/$organizationId/logo'
     | '/_layout/_authed/games/'
     | '/_layout/_authed/organizations/'
     | '/_layout/_authed/players/'
     | '/_layout/_authed/games/$gameId/'
     | '/_layout/_authed/games/$gameId/players/$playerId'
-    | '/api/organization/$organizationId/user/$userId/avatar'
+    | '/api/organizations/$organizationId/users/$userId/avatar'
+    | '/api/v1/games/$gameId/sessions/revoke'
     | '/_layout/_authed/games/$gameId/players/'
-    | '/api/v1/game/$gameId/player/$playerId/reset-password'
-    | '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-    | '/api/v1/game/$gameId/player/session/revoke'
-    | '/api/v1/game/$gameId/player/sign-in/anonymously'
-    | '/api/v1/game/$gameId/player/sign-in/email'
-    | '/api/v1/game/$gameId/player/sign-up/email'
-    | '/api/v1/game/$gameId/player/$playerId/'
+    | '/api/v1/games/$gameId/auth/sign-in/anonymously'
+    | '/api/v1/games/$gameId/auth/sign-in/email'
+    | '/api/v1/games/$gameId/auth/sign-up/email'
+    | '/api/v1/games/$gameId/players/$playerId/reset-password'
+    | '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+    | '/api/v1/games/$gameId/players/$playerId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -406,16 +406,16 @@ export interface RootRouteChildren {
   ApiHealthRoute: typeof ApiHealthRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiUserAvatarRoute: typeof ApiUserAvatarRoute
-  ApiGameGameIdLogoRoute: typeof ApiGameGameIdLogoRoute
-  ApiOrganizationOrganizationIdLogoRoute: typeof ApiOrganizationOrganizationIdLogoRoute
-  ApiOrganizationOrganizationIdUserUserIdAvatarRoute: typeof ApiOrganizationOrganizationIdUserUserIdAvatarRoute
-  ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute: typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute
-  ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute: typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute
-  ApiV1GameGameIdPlayerSessionRevokeRoute: typeof ApiV1GameGameIdPlayerSessionRevokeRoute
-  ApiV1GameGameIdPlayerSignInAnonymouslyRoute: typeof ApiV1GameGameIdPlayerSignInAnonymouslyRoute
-  ApiV1GameGameIdPlayerSignInEmailRoute: typeof ApiV1GameGameIdPlayerSignInEmailRoute
-  ApiV1GameGameIdPlayerSignUpEmailRoute: typeof ApiV1GameGameIdPlayerSignUpEmailRoute
-  ApiV1GameGameIdPlayerPlayerIdIndexRoute: typeof ApiV1GameGameIdPlayerPlayerIdIndexRoute
+  ApiGamesGameIdLogoRoute: typeof ApiGamesGameIdLogoRoute
+  ApiOrganizationsOrganizationIdLogoRoute: typeof ApiOrganizationsOrganizationIdLogoRoute
+  ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute: typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
+  ApiV1GamesGameIdSessionsRevokeRoute: typeof ApiV1GamesGameIdSessionsRevokeRoute
+  ApiV1GamesGameIdAuthSignInAnonymouslyRoute: typeof ApiV1GamesGameIdAuthSignInAnonymouslyRoute
+  ApiV1GamesGameIdAuthSignInEmailRoute: typeof ApiV1GamesGameIdAuthSignInEmailRoute
+  ApiV1GamesGameIdAuthSignUpEmailRoute: typeof ApiV1GamesGameIdAuthSignUpEmailRoute
+  ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute: typeof ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute
+  ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute: typeof ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute
+  ApiV1GamesGameIdPlayersPlayerIdIndexRoute: typeof ApiV1GamesGameIdPlayersPlayerIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -532,18 +532,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedGamesIndexRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
-    '/api/organization/$organizationId/logo': {
-      id: '/api/organization/$organizationId/logo'
-      path: '/api/organization/$organizationId/logo'
-      fullPath: '/api/organization/$organizationId/logo'
-      preLoaderRoute: typeof ApiOrganizationOrganizationIdLogoRouteImport
+    '/api/organizations/$organizationId/logo': {
+      id: '/api/organizations/$organizationId/logo'
+      path: '/api/organizations/$organizationId/logo'
+      fullPath: '/api/organizations/$organizationId/logo'
+      preLoaderRoute: typeof ApiOrganizationsOrganizationIdLogoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/game/$gameId/logo': {
-      id: '/api/game/$gameId/logo'
-      path: '/api/game/$gameId/logo'
-      fullPath: '/api/game/$gameId/logo'
-      preLoaderRoute: typeof ApiGameGameIdLogoRouteImport
+    '/api/games/$gameId/logo': {
+      id: '/api/games/$gameId/logo'
+      path: '/api/games/$gameId/logo'
+      fullPath: '/api/games/$gameId/logo'
+      preLoaderRoute: typeof ApiGamesGameIdLogoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/_authed/organizations/$organizationId': {
@@ -574,11 +574,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedGamesGameIdPlayersIndexRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
-    '/api/organization/$organizationId/user/$userId/avatar': {
-      id: '/api/organization/$organizationId/user/$userId/avatar'
-      path: '/api/organization/$organizationId/user/$userId/avatar'
-      fullPath: '/api/organization/$organizationId/user/$userId/avatar'
-      preLoaderRoute: typeof ApiOrganizationOrganizationIdUserUserIdAvatarRouteImport
+    '/api/v1/games/$gameId/sessions/revoke': {
+      id: '/api/v1/games/$gameId/sessions/revoke'
+      path: '/api/v1/games/$gameId/sessions/revoke'
+      fullPath: '/api/v1/games/$gameId/sessions/revoke'
+      preLoaderRoute: typeof ApiV1GamesGameIdSessionsRevokeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/organizations/$organizationId/users/$userId/avatar': {
+      id: '/api/organizations/$organizationId/users/$userId/avatar'
+      path: '/api/organizations/$organizationId/users/$userId/avatar'
+      fullPath: '/api/organizations/$organizationId/users/$userId/avatar'
+      preLoaderRoute: typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout/_authed/games/$gameId/players/$playerId': {
@@ -588,53 +595,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAuthedGamesGameIdPlayersPlayerIdRouteImport
       parentRoute: typeof LayoutAuthedRoute
     }
-    '/api/v1/game/$gameId/player/$playerId/': {
-      id: '/api/v1/game/$gameId/player/$playerId/'
-      path: '/api/v1/game/$gameId/player/$playerId'
-      fullPath: '/api/v1/game/$gameId/player/$playerId'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerPlayerIdIndexRouteImport
+    '/api/v1/games/$gameId/players/$playerId/': {
+      id: '/api/v1/games/$gameId/players/$playerId/'
+      path: '/api/v1/games/$gameId/players/$playerId'
+      fullPath: '/api/v1/games/$gameId/players/$playerId'
+      preLoaderRoute: typeof ApiV1GamesGameIdPlayersPlayerIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/game/$gameId/player/sign-up/email': {
-      id: '/api/v1/game/$gameId/player/sign-up/email'
-      path: '/api/v1/game/$gameId/player/sign-up/email'
-      fullPath: '/api/v1/game/$gameId/player/sign-up/email'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerSignUpEmailRouteImport
+    '/api/v1/games/$gameId/players/$playerId/send-verification-email': {
+      id: '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+      path: '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+      fullPath: '/api/v1/games/$gameId/players/$playerId/send-verification-email'
+      preLoaderRoute: typeof ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/game/$gameId/player/sign-in/email': {
-      id: '/api/v1/game/$gameId/player/sign-in/email'
-      path: '/api/v1/game/$gameId/player/sign-in/email'
-      fullPath: '/api/v1/game/$gameId/player/sign-in/email'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerSignInEmailRouteImport
+    '/api/v1/games/$gameId/players/$playerId/reset-password': {
+      id: '/api/v1/games/$gameId/players/$playerId/reset-password'
+      path: '/api/v1/games/$gameId/players/$playerId/reset-password'
+      fullPath: '/api/v1/games/$gameId/players/$playerId/reset-password'
+      preLoaderRoute: typeof ApiV1GamesGameIdPlayersPlayerIdResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/game/$gameId/player/sign-in/anonymously': {
-      id: '/api/v1/game/$gameId/player/sign-in/anonymously'
-      path: '/api/v1/game/$gameId/player/sign-in/anonymously'
-      fullPath: '/api/v1/game/$gameId/player/sign-in/anonymously'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerSignInAnonymouslyRouteImport
+    '/api/v1/games/$gameId/auth/sign-up/email': {
+      id: '/api/v1/games/$gameId/auth/sign-up/email'
+      path: '/api/v1/games/$gameId/auth/sign-up/email'
+      fullPath: '/api/v1/games/$gameId/auth/sign-up/email'
+      preLoaderRoute: typeof ApiV1GamesGameIdAuthSignUpEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/game/$gameId/player/session/revoke': {
-      id: '/api/v1/game/$gameId/player/session/revoke'
-      path: '/api/v1/game/$gameId/player/session/revoke'
-      fullPath: '/api/v1/game/$gameId/player/session/revoke'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerSessionRevokeRouteImport
+    '/api/v1/games/$gameId/auth/sign-in/email': {
+      id: '/api/v1/games/$gameId/auth/sign-in/email'
+      path: '/api/v1/games/$gameId/auth/sign-in/email'
+      fullPath: '/api/v1/games/$gameId/auth/sign-in/email'
+      preLoaderRoute: typeof ApiV1GamesGameIdAuthSignInEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/v1/game/$gameId/player/$playerId/send-verification-email': {
-      id: '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-      path: '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-      fullPath: '/api/v1/game/$gameId/player/$playerId/send-verification-email'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/v1/game/$gameId/player/$playerId/reset-password': {
-      id: '/api/v1/game/$gameId/player/$playerId/reset-password'
-      path: '/api/v1/game/$gameId/player/$playerId/reset-password'
-      fullPath: '/api/v1/game/$gameId/player/$playerId/reset-password'
-      preLoaderRoute: typeof ApiV1GameGameIdPlayerPlayerIdResetPasswordRouteImport
+    '/api/v1/games/$gameId/auth/sign-in/anonymously': {
+      id: '/api/v1/games/$gameId/auth/sign-in/anonymously'
+      path: '/api/v1/games/$gameId/auth/sign-in/anonymously'
+      fullPath: '/api/v1/games/$gameId/auth/sign-in/anonymously'
+      preLoaderRoute: typeof ApiV1GamesGameIdAuthSignInAnonymouslyRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -708,23 +708,22 @@ const rootRouteChildren: RootRouteChildren = {
   ApiHealthRoute: ApiHealthRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiUserAvatarRoute: ApiUserAvatarRoute,
-  ApiGameGameIdLogoRoute: ApiGameGameIdLogoRoute,
-  ApiOrganizationOrganizationIdLogoRoute:
-    ApiOrganizationOrganizationIdLogoRoute,
-  ApiOrganizationOrganizationIdUserUserIdAvatarRoute:
-    ApiOrganizationOrganizationIdUserUserIdAvatarRoute,
-  ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute:
-    ApiV1GameGameIdPlayerPlayerIdResetPasswordRoute,
-  ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute:
-    ApiV1GameGameIdPlayerPlayerIdSendVerificationEmailRoute,
-  ApiV1GameGameIdPlayerSessionRevokeRoute:
-    ApiV1GameGameIdPlayerSessionRevokeRoute,
-  ApiV1GameGameIdPlayerSignInAnonymouslyRoute:
-    ApiV1GameGameIdPlayerSignInAnonymouslyRoute,
-  ApiV1GameGameIdPlayerSignInEmailRoute: ApiV1GameGameIdPlayerSignInEmailRoute,
-  ApiV1GameGameIdPlayerSignUpEmailRoute: ApiV1GameGameIdPlayerSignUpEmailRoute,
-  ApiV1GameGameIdPlayerPlayerIdIndexRoute:
-    ApiV1GameGameIdPlayerPlayerIdIndexRoute,
+  ApiGamesGameIdLogoRoute: ApiGamesGameIdLogoRoute,
+  ApiOrganizationsOrganizationIdLogoRoute:
+    ApiOrganizationsOrganizationIdLogoRoute,
+  ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute:
+    ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute,
+  ApiV1GamesGameIdSessionsRevokeRoute: ApiV1GamesGameIdSessionsRevokeRoute,
+  ApiV1GamesGameIdAuthSignInAnonymouslyRoute:
+    ApiV1GamesGameIdAuthSignInAnonymouslyRoute,
+  ApiV1GamesGameIdAuthSignInEmailRoute: ApiV1GamesGameIdAuthSignInEmailRoute,
+  ApiV1GamesGameIdAuthSignUpEmailRoute: ApiV1GamesGameIdAuthSignUpEmailRoute,
+  ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute:
+    ApiV1GamesGameIdPlayersPlayerIdResetPasswordRoute,
+  ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute:
+    ApiV1GamesGameIdPlayersPlayerIdSendVerificationEmailRoute,
+  ApiV1GamesGameIdPlayersPlayerIdIndexRoute:
+    ApiV1GamesGameIdPlayersPlayerIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
