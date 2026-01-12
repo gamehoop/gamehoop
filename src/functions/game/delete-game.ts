@@ -23,5 +23,5 @@ export const deleteGame = createServerFn({
       throw notFound();
     }
 
-    await gameStore.deleteMany({ where: { id: gameId } });
+    await gameStore.delete({ where: { id: gameId } });
   });

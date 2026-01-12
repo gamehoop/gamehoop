@@ -127,12 +127,12 @@ describe('BaseStore', () => {
     });
   });
 
-  describe('updateOne', () => {
+  describe('update', () => {
     it('should update a game by id', async () => {
       const game = await createMockGame();
 
       const updatedName = faker.lorem.words();
-      await gameStore.updateOne({
+      await gameStore.update({
         where: { id: game.id },
         data: { name: updatedName, updatedBy: user.id },
       });
@@ -146,12 +146,12 @@ describe('BaseStore', () => {
     });
   });
 
-  describe('updateOneOrThrow', () => {
+  describe('updateOrThrow', () => {
     it('should update a game by id', async () => {
       const game = await createMockGame();
 
       const updatedName = faker.lorem.words();
-      const updatedGame = await gameStore.updateOneOrThrow({
+      const updatedGame = await gameStore.updateOrThrow({
         where: { id: game.id },
         data: { name: updatedName, updatedBy: user.id },
       });
@@ -165,7 +165,7 @@ describe('BaseStore', () => {
 
     it('should throw an error if the game does not exist', async () => {
       await expect(
-        gameStore.updateOneOrThrow({
+        gameStore.updateOrThrow({
           where: { id: faker.string.uuid() },
           data: { name: faker.lorem.words(), updatedBy: user.id },
         }),
@@ -173,12 +173,12 @@ describe('BaseStore', () => {
     });
   });
 
-  describe('deleteMany', () => {
+  describe('delete', () => {
     it('should delete games by id', async () => {
       const game1 = await createMockGame();
       const game2 = await createMockGame();
 
-      await gameStore.deleteMany({
+      await gameStore.delete({
         where: { id: game1.id },
       });
 
@@ -193,7 +193,7 @@ describe('BaseStore', () => {
       const game1 = await createMockGame();
       const game2 = await createMockGame();
 
-      await gameStore.deleteMany({
+      await gameStore.delete({
         where: { createdBy: game1.createdBy },
       });
 

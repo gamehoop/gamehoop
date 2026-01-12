@@ -18,5 +18,5 @@ export const deletePlayer = createServerFn({ method: HttpMethod.Post })
       throw notFound();
     }
 
-    await playerStore.deleteMany({ where: { id: playerId } });
+    await playerStore.delete({ where: { id: playerId } });
   });

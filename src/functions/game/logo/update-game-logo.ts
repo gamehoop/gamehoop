@@ -48,7 +48,7 @@ export const updateGameLogo = createServerFn({
     });
 
     const image = `${getObjectUrl(key)}?uploadedAt=${Date.now()}`;
-    await gameStore.updateOne({
+    await gameStore.update({
       where: { id: gameId },
       data: {
         logo: image,

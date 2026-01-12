@@ -47,18 +47,12 @@ export abstract class BaseStore<T> {
     return result;
   }
 
-  async deleteMany(args: DeleteManyArgs<T> = {}): Promise<void> {
+  async delete(args: DeleteManyArgs<T> = {}): Promise<void> {
     let query = db.deleteFrom(this.tableName);
     await this.applyWhere(query, args.where).execute();
   }
 
-  async updateMany(args: UpdateManyArgs<T> = { data: {} }): Promise<void> {
-    let query = db.updateTable(this.tableName);
-
-    await this.applyWhere(query, args.where).set(args.data).execute();
-  }
-
-  async updateOne(
+  async update(
     args: UpdateOneArgs<T> = { data: {} },
   ): Promise<UpdateOneResult<T>> {
     let query = db.updateTable(this.tableName);
@@ -69,10 +63,10 @@ export abstract class BaseStore<T> {
       .executeTakeFirst() as Selectable<T>;
   }
 
-  async updateOneOrThrow(
+  async updateOrThrow(
     args: UpdateOneArgs<T> = { data: {} },
   ): Promise<Selectable<T>> {
-    const result = await this.updateOne(args);
+    const result = await this.update(args);
     if (!result) {
       throw new Error('Record not found');
     }

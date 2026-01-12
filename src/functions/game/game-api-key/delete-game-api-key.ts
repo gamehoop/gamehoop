@@ -25,5 +25,5 @@ export const deleteGameApiKey = createServerFn({
       throw notFound();
     }
 
-    await gameApiKeyStore.deleteMany({ where: { id: gameApiKeyId, gameId } });
+    await gameApiKeyStore.delete({ where: { id: gameApiKeyId, gameId } });
   });

@@ -26,7 +26,7 @@ export const deleteGameLogo = createServerFn({ method: HttpMethod.Post })
       `organizations/${game.organizationId}/game/${gameId}/logo`,
     );
     await deleteObject(key);
-    await gameStore.updateOne({
+    await gameStore.update({
       where: { id: gameId },
       data: {
         logo: null,

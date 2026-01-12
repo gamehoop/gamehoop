@@ -28,7 +28,7 @@ export const updateGame = createServerFn({
       throw notFound();
     }
 
-    return gameStore.updateOneOrThrow({
+    return gameStore.updateOrThrow({
       where: { id: gameId },
       data: {
         ...values,

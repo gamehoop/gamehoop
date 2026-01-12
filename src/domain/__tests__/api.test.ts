@@ -7,7 +7,7 @@ describe('verifyApiToken', () => {
   it('should throw unauthorized if no api token is provided', async () => {
     const request = new Request(faker.internet.url());
     await expect(
-      verifyApiToken(request, { gameId: faker.string.uuid() }),
+      verifyApiToken({ request, gameId: faker.string.uuid() }),
     ).rejects.toThrow(
       expect.objectContaining({ status: HttpStatus.Unauthorized }),
     );

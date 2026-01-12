@@ -29,7 +29,7 @@ export function createPlayerAuth(
     sessionExpiresInDays: 7,
   },
 ) {
-  return betterAuth({
+  const auth = betterAuth({
     database: {
       db,
       // The better auth tables use snake_case
@@ -129,4 +129,6 @@ export function createPlayerAuth(
       enabled: false,
     },
   });
+
+  return auth.api;
 }

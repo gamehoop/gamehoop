@@ -1,16 +1,18 @@
-import { Game, Player, PlayerSession } from '@/db/types';
+import { Game, Player } from '@/db/types';
 import { gameApiKeyStore } from '@/stores/game-api-key-store';
 import { gameStore } from '@/stores/game-store';
-import { playerSessionStore } from '@/stores/player-session-store';
 import { playerStore } from '@/stores/player-store';
 import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
-import { hashApiKey } from './game-api-key';
+import { hashApiKey } from '../game-api-key';
 
-export async function verifyApiToken(
-  request: Request,
-  { gameId }: { gameId: string },
-) {
+export async function verifyApiToken({
+  request,
+  gameId,
+}: {
+  request: Request;
+  gameId: string;
+}) {
   const token = getBearerToken(request);
   if (!token) {
     throw unauthorized({ error: 'Unauthorized' });
@@ -60,16 +62,44 @@ export async function parseJson<S extends z.ZodObject>(
   }
 }
 
-export async function withGameAccess(
+export async function apiHandler(
+  request: Request,
+  handler: (request: Request) => Promise<Response>,
+) {
+  try {
+    return await handler(request);
+  } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
+    return serverError();
+  }
+}
+
+export async function gameApiHandler(
+  { request, gameId }: { request: Request; gameId: string },
+  handler: ({ game }: { game: Game }) => Promise<Response>,
+) {
+  return apiHandler(request, async () => {
+    const game = await gameStore.findOne({ where: { id: gameId } });
+    if (!game) {
+      return notFound();
+    }
+
+    return handler({ game });
+  });
+}
+
+export async function adminGameApiHandler(
   { request, gameId }: { request: Request; gameId: string },
   handler: ({ game }: { game: Game }) => Promise<Response>,
 ) {
   try {
-    await verifyApiToken(request, { gameId });
+    await verifyApiToken({ request, gameId });
 
     const game = await gameStore.findOne({ where: { id: gameId } });
     if (!game) {
-      throw notFound();
+      return notFound();
     }
 
     return await handler({ game });
@@ -81,7 +111,7 @@ export async function withGameAccess(
   }
 }
 
-export async function withPlayerAccess(
+export async function adminPlayerApiHandler(
   {
     request,
     gameId,
@@ -95,51 +125,39 @@ export async function withPlayerAccess(
     player: Player;
   }) => Promise<Response>,
 ) {
-  return withGameAccess({ gameId, request }, async ({ game }) => {
-    const player = await playerStore.findOne({
-      where: { id: playerId, gameId: game.id },
-    });
-
-    if (!player) {
-      throw notFound();
+  return adminGameApiHandler({ request, gameId }, async ({ game }) => {
+    const player = await playerStore.findOne({ where: { id: playerId } });
+    if (!player || player.gameId !== game.id) {
+      return unauthorized();
     }
 
     return handler({ game, player });
   });
 }
 
-export async function withPlayerSessionAccess(
-  {
-    request,
-    gameId,
-    playerId,
-  }: { request: Request; gameId: string; playerId: string },
+export async function playerApiHandler(
+  { request, gameId }: { request: Request; gameId: string },
   handler: ({
     game,
     player,
-    session,
+    token,
   }: {
     game: Game;
     player: Player;
-    session: PlayerSession;
+    token: string;
   }) => Promise<Response>,
 ) {
-  return withPlayerAccess(
-    { gameId, playerId, request },
-    async ({ game, player }) => {
-      const token = request.headers.get('X-Session-Token');
-      if (!token) {
-        throw unauthorized();
-      }
+  const token = getBearerToken(request);
+  if (!token) {
+    return unauthorized();
+  }
 
-      const session = await playerSessionStore.findOne({
-        where: { token, userId: player.id },
-      });
-      if (!session) {
-        throw unauthorized();
-      }
+  return gameApiHandler({ request, gameId }, async ({ game }) => {
+    const player = await playerStore.findOneForSession(token);
+    if (!player || player.gameId !== game.id) {
+      return unauthorized();
+    }
 
-      return handler({ game, player, session });
-    },
-  );
+    return handler({ game, player, token });
+  });
 }

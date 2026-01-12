@@ -33,5 +33,5 @@ export const revokePlayerSession = createServerFn({ method: HttpMethod.Post })
       throw notFound();
     }
 
-    await playerSessionStore.deleteMany({ where: { id: sessionId } });
+    await playerSessionStore.delete({ where: { id: sessionId } });
   });

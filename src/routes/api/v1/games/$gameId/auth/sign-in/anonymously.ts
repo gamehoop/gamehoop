@@ -1,4 +1,5 @@
-import { parseJson, withGameAccess } from '@/domain/api';
+import { gameApiHandler, parseJson } from '@/domain/api';
+import { zPlayer } from '@/domain/api/schemas';
 import { User } from '@/lib/auth';
 import { createPlayerAuth } from '@/lib/player-auth';
 import { playerSessionStore } from '@/stores/player-session-store';
@@ -13,16 +14,7 @@ const zReqBody = z.object({
 
 const zResBody = z.object({
   token: z.string(),
-  player: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.email(),
-    emailVerified: z.boolean(),
-    gameId: z.string(),
-    image: z.string().nullable(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-  }),
+  player: zPlayer,
 });
 
 export async function POST({
@@ -32,12 +24,15 @@ export async function POST({
   params: { gameId: string };
   request: Request;
 }) {
-  return withGameAccess({ gameId, request }, async ({ game }) => {
+  return gameApiHandler({ gameId, request }, async ({ game }) => {
     const { playerId } = await parseJson(request, zReqBody);
 
-    const session = await createPlayerAuth(game.id).api.signInAnonymous();
+    const playerAuth = createPlayerAuth(game.id);
+    const session = await playerAuth.signInAnonymous();
     if (!session) {
-      return serverError({ error: 'Failed to create anonymous session' });
+      return serverError({
+        error: 'Failed to create session for anonymous player',
+      });
     }
 
     const { token, user } = session;
@@ -47,13 +42,13 @@ export async function POST({
       player = await playerStore.findOneOrThrow({
         where: { id: playerId },
       });
-      await playerSessionStore.updateMany({
+      await playerSessionStore.update({
         where: { token: session.token },
         data: {
           userId: playerId,
         },
       });
-      await playerStore.deleteMany({
+      await playerStore.delete({
         where: { id: player.id },
       });
     } else {

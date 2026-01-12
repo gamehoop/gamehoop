@@ -30,17 +30,18 @@ export function apiRequest(
   options: RequestInit & {
     uri: string;
     data?: object;
-    apiKey?: string;
-    sessionToken?: string;
+    token?: string;
   },
 ): Request {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+  if (options.token) {
+    headers.Authorization = `Bearer ${options.token}`;
+  }
   return new Request(`http://localhost:3000/api/${options.uri}`, {
     method: HttpMethod.Post,
-    headers: {
-      Authorization: options?.apiKey ? `Bearer ${options.apiKey}` : '',
-      'Content-Type': 'application/json',
-      'X-Session-Token': options?.sessionToken ?? '',
-    },
+    headers,
     body: JSON.stringify(options.data ?? {}),
     ...options,
   });
@@ -67,6 +68,21 @@ export async function createTestUser(): Promise<{
   return { user, organization };
 }
 
+export async function createGame({
+  user,
+  organization,
+}: {
+  user: User;
+  organization: Organization;
+}) {
+  return gameStore.create({
+    name: faker.lorem.word(),
+    organizationId: organization.id,
+    createdBy: user.id,
+    updatedBy: user.id,
+  });
+}
+
 export async function createGameWithApiKey({
   user,
   organization,
@@ -76,13 +92,7 @@ export async function createGameWithApiKey({
   organization: Organization;
   expired?: boolean;
 }): Promise<{ game: Game; apiKey: string }> {
-  const game = await gameStore.create({
-    name: faker.lorem.word(),
-    organizationId: organization.id,
-    createdBy: user.id,
-    updatedBy: user.id,
-  });
-
+  const game = await createGame({ user, organization });
   const apiKey = generateApiKey();
   const keyHash = hashApiKey(apiKey);
 

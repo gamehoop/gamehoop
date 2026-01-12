@@ -1,24 +1,29 @@
+import { Game } from '@/db/types';
+import { Organization, User } from '@/lib/auth';
 import { HttpStatus } from '@/utils/http';
-import {
-  apiRequest,
-  createGameWithApiKey,
-  createTestUser,
-} from '@/utils/testing';
+import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { POST } from '../anonymously';
 
 describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
-  it('should create and return an anonymous player session', async () => {
-    const { user, organization } = await createTestUser();
-    const { game, apiKey } = await createGameWithApiKey({ user, organization });
+  let user: User;
+  let organization: Organization;
+  let game: Game;
+  let uri: string;
 
+  beforeEach(async () => {
+    const result = await createTestUser();
+    user = result.user;
+    organization = result.organization;
+    game = await createGame({ user, organization });
+    uri = `v1/games/${game.id}/auth/sign-in/anonymously`;
+  });
+
+  it('should create and return an anonymous player session', async () => {
     const res = await POST({
       params: { gameId: game.id },
-      request: apiRequest({
-        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
-        apiKey,
-      }),
+      request: apiRequest({ uri }),
     });
 
     expect(res.status).toBe(HttpStatus.Created);
@@ -40,29 +45,25 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
   });
 
   it('should reuse a given player identifier', async () => {
-    const { user, organization } = await createTestUser();
-    const { game, apiKey } = await createGameWithApiKey({ user, organization });
-
     let res = await POST({
       params: { gameId: game.id },
-      request: apiRequest({
-        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
-        apiKey,
-      }),
+      request: apiRequest({ uri }),
     });
+
+    expect(res.status).toBe(HttpStatus.Created);
 
     const { player } = await res.json();
 
     res = await POST({
       params: { gameId: game.id },
       request: apiRequest({
-        uri: `v1/games/${game.id}/auth/sign-in/anonymously`,
-        apiKey,
+        uri,
         data: { playerId: player.id },
       }),
     });
 
     expect(res.status).toBe(HttpStatus.Created);
+
     const body = await res.json();
     expect(body).toEqual({
       token: expect.any(String),
@@ -74,51 +75,12 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
   });
 
-  it('should require an API token', async () => {
-    const gameId = faker.string.uuid();
-
+  it('should return 404 if the game does not exist', async () => {
     const res = await POST({
-      params: { gameId },
-      request: apiRequest({
-        uri: `v1/games/${gameId}/auth/sign-in/anonymously`,
-      }),
+      params: { gameId: faker.string.uuid() },
+      request: apiRequest({ uri }),
     });
 
-    expect(res.status).toBe(HttpStatus.Unauthorized);
-  });
-
-  it('should require a valid API token', async () => {
-    const gameId = faker.string.uuid();
-
-    const res = await POST({
-      params: { gameId },
-      request: apiRequest({
-        uri: `v1/games/${gameId}/auth/sign-in/anonymously`,
-        apiKey: 'invalid',
-      }),
-    });
-
-    expect(res.status).toBe(HttpStatus.Unauthorized);
-  });
-
-  it('should require an active API token', async () => {
-    const { user, organization } = await createTestUser();
-    const { apiKey } = await createGameWithApiKey({
-      user,
-      organization,
-      expired: true,
-    });
-
-    const gameId = faker.string.uuid();
-
-    const res = await POST({
-      params: { gameId },
-      request: apiRequest({
-        uri: `v1/games/${gameId}/auth/sign-in/anonymously`,
-        apiKey,
-      }),
-    });
-
-    expect(res.status).toBe(HttpStatus.Unauthorized);
+    expect(res.status).toBe(HttpStatus.NotFound);
   });
 });
