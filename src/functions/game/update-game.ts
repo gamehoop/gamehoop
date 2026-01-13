@@ -22,6 +22,8 @@ export const updateGame = createServerFn({
             requireEmailVerification: z.boolean().optional(),
             minPasswordLength: z.int().min(8).max(128).optional(),
             sessionExpiresInDays: z.int().min(1).optional(),
+            senderName: z.string().min(1).optional(),
+            replyToEmail: z.email().optional(),
           }),
         })
         .optional(),

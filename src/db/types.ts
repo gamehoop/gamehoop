@@ -10,6 +10,8 @@ export interface GameAuthSettings {
   requireEmailVerification?: boolean;
   minPasswordLength?: number;
   sessionExpiresInDays?: number;
+  senderName?: string;
+  replyToEmail?: string;
 }
 
 export interface GameSettings {

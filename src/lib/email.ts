@@ -14,16 +14,19 @@ export function sendEmail({
   to,
   subject,
   html,
-  from = env.SMTP_SENDER,
+  from = `Gamehoop <${env.SMTP_SENDER}>`,
+  replyTo,
 }: {
   to: string;
   subject: string;
   html: string;
   from?: string;
+  replyTo?: string;
 }) {
   return transporter.sendMail({
     from,
     to,
+    replyTo,
     subject,
     html,
   });

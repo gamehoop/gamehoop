@@ -12,7 +12,7 @@ const zReqBody = z.object({
 });
 
 const zResBody = z.object({
-  token: z.string(),
+  token: z.string().nullable(),
   player: zPlayer,
 });
 

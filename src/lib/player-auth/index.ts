@@ -1,5 +1,6 @@
 import { db } from '@/db';
 import { Game } from '@/db/types';
+import { env } from '@/env/server';
 import {
   daysToSeconds,
   hoursToSeconds,
@@ -7,13 +8,12 @@ import {
 } from '@/utils/datetime';
 import { betterAuth } from 'better-auth';
 import { anonymous } from 'better-auth/plugins';
+import { logger } from '../logger';
 import {
   sendChangeEmailConfirmation,
-  sendDeleteAccountVerification,
   sendResetPassword,
   sendVerificationEmail,
-} from '../auth/emails';
-import { logger } from '../logger';
+} from './emails';
 import { createHooks } from './hooks';
 
 export function createPlayerAuth(game: Game) {
@@ -21,7 +21,15 @@ export function createPlayerAuth(game: Game) {
     requireEmailVerification: false,
     minPasswordLength: 8,
     sessionExpiresInDays: 7,
+    senderName: game.name,
   };
+
+  const fromEmail = `${options.senderName ?? game.name} via Gamehoop <${env.SMTP_SENDER}>`;
+
+  let replyToEmail: string | undefined;
+  if (options.replyToEmail) {
+    replyToEmail = `${options.senderName ?? game.name} <${options.replyToEmail}>`;
+  }
 
   const auth = betterAuth({
     database: {
@@ -43,7 +51,14 @@ export function createPlayerAuth(game: Game) {
       // The token sent to a user in the reset password flow expires after 1 hour
       resetPasswordTokenExpiresIn: hoursToSeconds(1),
       // To send the reset password email
-      sendResetPassword,
+      sendResetPassword: async ({ user, url }) => {
+        await sendResetPassword({
+          from: fromEmail,
+          replyTo: replyToEmail,
+          user,
+          url,
+        });
+      },
     },
     emailVerification: {
       // Send a verification email on sign up
@@ -51,7 +66,14 @@ export function createPlayerAuth(game: Game) {
       // Automatically sign in after the email is verified
       autoSignInAfterVerification: true,
       // To send the verification email
-      sendVerificationEmail,
+      sendVerificationEmail: async ({ user, url }) => {
+        await sendVerificationEmail({
+          from: fromEmail,
+          replyTo: replyToEmail,
+          user,
+          url,
+        });
+      },
     },
     account: {
       modelName: 'player_account',
@@ -73,13 +95,19 @@ export function createPlayerAuth(game: Game) {
         // Allow users to change their email
         enabled: true,
         // Send email to current address for users to confirm a change of address
-        sendChangeEmailConfirmation,
+        sendChangeEmailConfirmation: async ({ user, url }) => {
+          await sendChangeEmailConfirmation({
+            from: fromEmail,
+            replyTo: replyToEmail,
+            user,
+            url,
+          });
+        },
       },
       deleteUser: {
         // Allow users to delete their accounts
-        enabled: true,
-        // To send the delete verification email
-        sendDeleteAccountVerification,
+        // We do, but not through this client.
+        enabled: false,
       },
     },
     session: {

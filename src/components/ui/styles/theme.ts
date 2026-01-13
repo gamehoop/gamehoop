@@ -14,6 +14,7 @@ import {
   Modal,
   NavLink,
   Notification,
+  NumberInput,
   PasswordInput,
   Select,
   Switch,
@@ -101,6 +102,11 @@ export function createTheme(): { theme: ThemeOverride; themeColor: string } {
         },
       }),
       Input: Input.extend({
+        defaultProps: {
+          size: 'md',
+        },
+      }),
+      NumberInput: NumberInput.extend({
         defaultProps: {
           size: 'md',
         },
