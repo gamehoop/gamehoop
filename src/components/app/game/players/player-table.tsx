@@ -1,5 +1,7 @@
 import { Table } from '@/components/ui/table';
 import { Player } from '@/db/types';
+import { ActionIcon } from '@mantine/core';
+import { Copy } from 'lucide-react';
 
 export interface PlayerTableProps {
   player: Player;
@@ -9,6 +11,21 @@ export function PlayerTable({ player }: PlayerTableProps) {
   return (
     <Table variant="vertical" withTableBorder className="mt-4">
       <Table.Body>
+        <Table.Tr>
+          <Table.Th>ID</Table.Th>
+          <Table.Td className="flex justify-between">
+            <span>{player.id}</span>
+            <ActionIcon
+              variant="transparent"
+              onClick={async () => {
+                await navigator.clipboard.writeText(player.id);
+              }}
+            >
+              <Copy />
+            </ActionIcon>
+          </Table.Td>
+        </Table.Tr>
+
         <Table.Tr>
           <Table.Th>Name</Table.Th>
           <Table.Td>{player.name}</Table.Td>
