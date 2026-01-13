@@ -24,8 +24,10 @@ export function PlayerSessionsTable({
     <Table striped withTableBorder className="mt-4">
       <Table.Head>
         <Table.Tr>
-          <Table.Th className="flex flex-row gap-1 items-center">
-            Created At <ArrowDown />
+          <Table.Th>
+            <div className="flex flex-row gap-1 items-center">
+              Created At <ArrowDown />
+            </div>
           </Table.Th>
           <Table.Th>Expires At</Table.Th>
           <Table.Th>IP Address</Table.Th>

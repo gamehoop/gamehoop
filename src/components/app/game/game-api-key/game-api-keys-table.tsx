@@ -37,8 +37,10 @@ export function GameApiKeysTable({ game, gameApiKeys }: GameApiKeysTableProps) {
         <Table.Head>
           <Table.Tr>
             <Table.Th>Description</Table.Th>
-            <Table.Th className="flex flex-row gap-1 items-center">
-              Created At <ArrowDown />
+            <Table.Th>
+              <div className="flex flex-row gap-1 items-center">
+                Created At <ArrowDown />
+              </div>
             </Table.Th>
             <Table.Th>Expires At</Table.Th>
             <Table.Th>Active</Table.Th>

@@ -36,8 +36,10 @@ export function PlayersTable({ game, players }: PlayersTableProps) {
           <Table.Th>Email Verified</Table.Th>
           <Table.Th>Anonymous</Table.Th>
           <Table.Th>Last Login At</Table.Th>
-          <Table.Th className="flex flex-row gap-1 items-center">
-            Created At <ArrowDown />
+          <Table.Th>
+            <div className="flex flex-row gap-1 items-center">
+              Created At <ArrowDown />
+            </div>
           </Table.Th>
           <Table.Th>Updated At</Table.Th>
           <Table.Th></Table.Th>
