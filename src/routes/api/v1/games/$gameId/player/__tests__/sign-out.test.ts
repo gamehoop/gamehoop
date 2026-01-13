@@ -23,7 +23,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
   });
 
   it('should delete the session for a given token', async () => {
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const session = await playerAuth.signInAnonymous();
 
     expect(
@@ -59,7 +59,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
   });
 
   it('should return not found if the game does not exist', async () => {
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const session = await playerAuth.signInAnonymous();
 
     const res = await DELETE({

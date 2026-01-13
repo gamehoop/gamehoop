@@ -23,7 +23,7 @@ export const Route = createFileRoute(
             });
           }
 
-          const playerAuth = createPlayerAuth(game.id);
+          const playerAuth = createPlayerAuth(game);
           await playerAuth.sendVerificationEmail({
             body: {
               email,

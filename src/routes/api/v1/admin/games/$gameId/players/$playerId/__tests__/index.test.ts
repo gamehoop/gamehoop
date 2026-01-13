@@ -23,7 +23,7 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
   it('should return the player data', async () => {
     const { game, apiKey } = await createGameWithApiKey({ user, organization });
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
@@ -59,7 +59,7 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
   it('should return unauthorized if no apiKey is provided', async () => {
     const { game } = await createGameWithApiKey({ user, organization });
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
@@ -82,7 +82,7 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
   it('should return unauthorized if the apiKey is invalid', async () => {
     const { game } = await createGameWithApiKey({ user, organization });
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,

@@ -1,4 +1,5 @@
 import { db } from '@/db';
+import { Game } from '@/db/types';
 import {
   daysToSeconds,
   hoursToSeconds,
@@ -15,20 +16,13 @@ import {
 import { logger } from '../logger';
 import { createHooks } from './hooks';
 
-export interface PlayerAuthOptions {
-  requireEmailVerification?: boolean;
-  minPasswordLength?: number;
-  sessionExpiresInDays?: number;
-}
-
-export function createPlayerAuth(
-  gameId: string,
-  options: PlayerAuthOptions = {
+export function createPlayerAuth(game: Game) {
+  const options = game.settings?.auth ?? {
     requireEmailVerification: false,
     minPasswordLength: 8,
     sessionExpiresInDays: 7,
-  },
-) {
+  };
+
   const auth = betterAuth({
     database: {
       db,
@@ -96,7 +90,7 @@ export function createPlayerAuth(
       updateAge: daysToSeconds(1),
     },
     // Hooks to run custom logic at various points in the auth flow
-    hooks: createHooks(gameId),
+    hooks: createHooks(game.id),
     // Rate limit requests from the same IP address to prevent brute force attacks
     rateLimit: {
       // Limit to 100 requests per minute

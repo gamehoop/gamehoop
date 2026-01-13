@@ -2,6 +2,7 @@ import { Divider } from '@/components/ui/divider';
 import { Title } from '@/components/ui/title';
 import { Game, GameApiKey } from '@/db/types';
 import { GameApiKeysTable } from './game-api-key/game-api-keys-table';
+import { GameAuthenticationSettingsForm } from './game-authentication-settings-form';
 import { GameDangerZone } from './game-danger-zone';
 import { GameSettingsForm } from './game-settings-form';
 
@@ -27,6 +28,12 @@ export function GameConfiguration({
       </p>
 
       <GameSettingsForm game={game} />
+
+      <Divider />
+      <Title order={4} className="pb-4">
+        Authentication
+      </Title>
+      <GameAuthenticationSettingsForm game={game} />
 
       <Divider />
       <GameApiKeysTable game={game} gameApiKeys={gameApiKeys} />

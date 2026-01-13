@@ -27,7 +27,7 @@ export async function POST({
   return gameApiHandler({ gameId, request }, async ({ game }) => {
     const { playerId } = await parseJson(request, zReqBody);
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const session = await playerAuth.signInAnonymous();
     if (!session) {
       return serverError({

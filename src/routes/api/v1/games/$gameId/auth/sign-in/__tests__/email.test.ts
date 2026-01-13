@@ -28,7 +28,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
       name: faker.person.fullName(),
     };
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
@@ -72,7 +72,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
       name: faker.person.fullName(),
     };
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
@@ -102,7 +102,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
       name: faker.person.fullName(),
     };
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     await playerAuth.signUpEmail({
       body: {
         gameId: game.id,

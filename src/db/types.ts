@@ -6,7 +6,17 @@ import {
   Player as PlayerTable,
 } from './schema';
 
-export type Game = Selectable<GameTable>;
+export interface GameAuthSettings {
+  requireEmailVerification?: boolean;
+  minPasswordLength?: number;
+  sessionExpiresInDays?: number;
+}
+
+export interface GameSettings {
+  auth?: GameAuthSettings;
+}
+
+export type Game = Selectable<GameTable> & { settings: GameSettings | null };
 export type InsertableGame = Insertable<GameTable>;
 export type UpdateableGame = Updateable<GameTable>;
 

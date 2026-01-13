@@ -22,7 +22,7 @@ export async function POST({
       return badRequest({ error: 'A player with that email does not exist.' });
     }
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     await playerAuth.requestPasswordReset({
       body: {
         email,

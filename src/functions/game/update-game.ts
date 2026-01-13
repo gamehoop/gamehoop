@@ -16,6 +16,15 @@ export const updateGame = createServerFn({
       genre: z.string().optional(),
       platforms: z.array(z.string()).optional(),
       sdk: z.string().optional(),
+      settings: z
+        .object({
+          auth: z.object({
+            requireEmailVerification: z.boolean().optional(),
+            minPasswordLength: z.int().min(8).max(128).optional(),
+            sessionExpiresInDays: z.int().min(1).optional(),
+          }),
+        })
+        .optional(),
     }),
   )
   .handler(async ({ data: { gameId, ...values } }): Promise<Game> => {

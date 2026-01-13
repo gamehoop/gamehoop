@@ -22,7 +22,7 @@ describe('GET /api/v1/games/$gameId/player', () => {
   });
 
   it('should return the current player data', async () => {
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { token, user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
@@ -68,7 +68,7 @@ describe('GET /api/v1/games/$gameId/player', () => {
   });
 
   it('should return not found if the game does not exist', async () => {
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const session = await playerAuth.signInAnonymous();
 
     const res = await GET({

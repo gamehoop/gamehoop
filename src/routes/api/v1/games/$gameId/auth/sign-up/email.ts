@@ -26,7 +26,7 @@ export async function POST({
   return gameApiHandler({ gameId, request }, async ({ game }) => {
     const body = await parseJson(request, zReqBody);
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { token, user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,

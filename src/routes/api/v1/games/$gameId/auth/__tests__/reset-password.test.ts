@@ -25,7 +25,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
     const { user, organization } = await createTestUser();
     const game = await createGame({ user, organization });
 
-    const playerAuth = createPlayerAuth(game.id);
+    const playerAuth = createPlayerAuth(game);
     const { user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,

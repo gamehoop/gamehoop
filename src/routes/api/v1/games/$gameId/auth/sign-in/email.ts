@@ -26,7 +26,7 @@ export async function POST({
     const body = await parseJson(request, zReqBody);
 
     try {
-      const playerAuth = createPlayerAuth(game.id);
+      const playerAuth = createPlayerAuth(game);
       const { token, user: player } = await playerAuth.signInEmail({ body });
 
       const data = zResBody.parse({
