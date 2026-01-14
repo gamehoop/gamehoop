@@ -5,12 +5,6 @@ import { created } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
-const zReqBody = z.object({
-  email: z.email(),
-  password: z.string().min(8),
-  name: z.string().min(1),
-});
-
 const zResBody = z.object({
   token: z.string().nullable(),
   player: zPlayer,
@@ -24,13 +18,19 @@ export async function POST({
   request: Request;
 }): Promise<Response> {
   return gameApiHandler({ gameId, request }, async ({ game }) => {
+    const zReqBody = z.object({
+      email: z.email(),
+      password: z.string().min(game.settings?.auth?.minPasswordLength ?? 8),
+      name: z.string().min(1),
+    });
+
     const body = await parseJson(request, zReqBody);
 
     const playerAuth = createPlayerAuth(game);
     const { token, user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
-        callbackURL: `/games/${game.id}/auth/email-verified`,
+        callbackURL: `/player/email-verified`,
         ...body,
       },
     });

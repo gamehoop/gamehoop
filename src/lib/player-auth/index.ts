@@ -32,6 +32,7 @@ export function createPlayerAuth(game: Game) {
   }
 
   const auth = betterAuth({
+    basePath: `/api/player-auth/${game.id}`,
     database: {
       db,
       // The better auth tables use snake_case
@@ -152,5 +153,5 @@ export function createPlayerAuth(game: Game) {
     },
   });
 
-  return auth.api;
+  return { ...auth.api, handler: auth.handler };
 }

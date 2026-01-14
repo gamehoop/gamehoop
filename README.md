@@ -22,7 +22,7 @@ Start the database:
 
 `docker compose up -d`
 
-Apply database schema:
+Apply the database schema:
 
 `pnpm db:migrate`
 
@@ -44,7 +44,7 @@ Run the unit tests:
 
 ## Database
 
-You can use `psql` or [pgcli](https://www.pgcli.com) to query the database:
+You can use [psql](https://www.postgresql.org/docs/current/app-psql.html) or [pgcli](https://www.pgcli.com) to query the database:
 
 ```shell
 pgcli -h localhost -p 5432 -u postgres -d gamehoop
