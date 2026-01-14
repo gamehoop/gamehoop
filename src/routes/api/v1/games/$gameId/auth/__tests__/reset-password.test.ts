@@ -60,7 +60,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
     expect(mockRequestPasswordReset).toHaveBeenCalledWith({
       body: {
         email: player.email,
-        redirectTo: `/games/${game.id}/players/${player.id}/reset-password`,
+        redirectTo: `/games/${game.id}/reset-password`,
       },
     });
   });

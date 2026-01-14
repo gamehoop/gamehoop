@@ -26,7 +26,7 @@ export async function POST({
     await playerAuth.requestPasswordReset({
       body: {
         email,
-        redirectTo: `/games/${game.id}/players/${player.id}/reset-password`,
+        redirectTo: `/games/${game.id}/reset-password`,
       },
     });
 

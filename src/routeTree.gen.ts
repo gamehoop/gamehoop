@@ -21,7 +21,6 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-pa
 import { Route as LayoutAuthedIndexRouteImport } from './routes/_layout/_authed/index'
 import { Route as ApiUserAvatarRouteImport } from './routes/api/user/avatar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as LayoutPlayerEmailVerifiedRouteImport } from './routes/_layout/player/email-verified'
 import { Route as LayoutAuthedAccountRouteImport } from './routes/_layout/_authed/account'
 import { Route as LayoutAuthedPlayersIndexRouteImport } from './routes/_layout/_authed/players/index'
 import { Route as LayoutAuthedOrganizationsIndexRouteImport } from './routes/_layout/_authed/organizations/index'
@@ -32,6 +31,8 @@ import { Route as ApiGamesGameIdLogoRouteImport } from './routes/api/games/$game
 import { Route as LayoutAuthedOrganizationsOrganizationIdRouteImport } from './routes/_layout/_authed/organizations/$organizationId'
 import { Route as AuthInvitationInvitationIdAcceptRouteImport } from './routes/_auth/invitation/$invitationId/accept'
 import { Route as LayoutAuthedGamesGameIdIndexRouteImport } from './routes/_layout/_authed/games/$gameId/index'
+import { Route as AuthPlayerAuthGamesGameIdResetPasswordRouteImport } from './routes/_auth/_player-auth/games/$gameId/reset-password'
+import { Route as AuthPlayerAuthGamesGameIdEmailVerifiedRouteImport } from './routes/_auth/_player-auth/games/$gameId/email-verified'
 import { Route as ApiV1GamesGameIdPlayerIndexRouteImport } from './routes/api/v1/games/$gameId/player/index'
 import { Route as LayoutAuthedGamesGameIdPlayersIndexRouteImport } from './routes/_layout/_authed/games/$gameId/players/index'
 import { Route as ApiV1GamesGameIdPlayerSignOutRouteImport } from './routes/api/v1/games/$gameId/player/sign-out'
@@ -101,12 +102,6 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutPlayerEmailVerifiedRoute =
-  LayoutPlayerEmailVerifiedRouteImport.update({
-    id: '/player/email-verified',
-    path: '/player/email-verified',
-    getParentRoute: () => LayoutRoute,
-  } as any)
 const LayoutAuthedAccountRoute = LayoutAuthedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -163,6 +158,18 @@ const LayoutAuthedGamesGameIdIndexRoute =
     id: '/games/$gameId/',
     path: '/games/$gameId/',
     getParentRoute: () => LayoutAuthedRoute,
+  } as any)
+const AuthPlayerAuthGamesGameIdResetPasswordRoute =
+  AuthPlayerAuthGamesGameIdResetPasswordRouteImport.update({
+    id: '/_player-auth/games/$gameId/reset-password',
+    path: '/games/$gameId/reset-password',
+    getParentRoute: () => AuthRoute,
+  } as any)
+const AuthPlayerAuthGamesGameIdEmailVerifiedRoute =
+  AuthPlayerAuthGamesGameIdEmailVerifiedRouteImport.update({
+    id: '/_player-auth/games/$gameId/email-verified',
+    path: '/games/$gameId/email-verified',
+    getParentRoute: () => AuthRoute,
   } as any)
 const ApiV1GamesGameIdPlayerIndexRoute =
   ApiV1GamesGameIdPlayerIndexRouteImport.update({
@@ -239,7 +246,6 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof AuthSignUpRoute
   '/api/health': typeof ApiHealthRoute
   '/account': typeof LayoutAuthedAccountRoute
-  '/player/email-verified': typeof LayoutPlayerEmailVerifiedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
@@ -251,6 +257,8 @@ export interface FileRoutesByFullPath {
   '/games': typeof LayoutAuthedGamesIndexRoute
   '/organizations': typeof LayoutAuthedOrganizationsIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
+  '/games/$gameId/email-verified': typeof AuthPlayerAuthGamesGameIdEmailVerifiedRoute
+  '/games/$gameId/reset-password': typeof AuthPlayerAuthGamesGameIdResetPasswordRoute
   '/games/$gameId': typeof LayoutAuthedGamesGameIdIndexRoute
   '/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
   '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
@@ -272,7 +280,6 @@ export interface FileRoutesByTo {
   '/sign-up': typeof AuthSignUpRoute
   '/api/health': typeof ApiHealthRoute
   '/account': typeof LayoutAuthedAccountRoute
-  '/player/email-verified': typeof LayoutPlayerEmailVerifiedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/': typeof LayoutAuthedIndexRoute
@@ -284,6 +291,8 @@ export interface FileRoutesByTo {
   '/games': typeof LayoutAuthedGamesIndexRoute
   '/organizations': typeof LayoutAuthedOrganizationsIndexRoute
   '/players': typeof LayoutAuthedPlayersIndexRoute
+  '/games/$gameId/email-verified': typeof AuthPlayerAuthGamesGameIdEmailVerifiedRoute
+  '/games/$gameId/reset-password': typeof AuthPlayerAuthGamesGameIdResetPasswordRoute
   '/games/$gameId': typeof LayoutAuthedGamesGameIdIndexRoute
   '/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
   '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
@@ -309,7 +318,6 @@ export interface FileRoutesById {
   '/_layout/_authed': typeof LayoutAuthedRouteWithChildren
   '/api/health': typeof ApiHealthRoute
   '/_layout/_authed/account': typeof LayoutAuthedAccountRoute
-  '/_layout/player/email-verified': typeof LayoutPlayerEmailVerifiedRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/user/avatar': typeof ApiUserAvatarRoute
   '/_layout/_authed/': typeof LayoutAuthedIndexRoute
@@ -321,6 +329,8 @@ export interface FileRoutesById {
   '/_layout/_authed/games/': typeof LayoutAuthedGamesIndexRoute
   '/_layout/_authed/organizations/': typeof LayoutAuthedOrganizationsIndexRoute
   '/_layout/_authed/players/': typeof LayoutAuthedPlayersIndexRoute
+  '/_auth/_player-auth/games/$gameId/email-verified': typeof AuthPlayerAuthGamesGameIdEmailVerifiedRoute
+  '/_auth/_player-auth/games/$gameId/reset-password': typeof AuthPlayerAuthGamesGameIdResetPasswordRoute
   '/_layout/_authed/games/$gameId/': typeof LayoutAuthedGamesGameIdIndexRoute
   '/_layout/_authed/games/$gameId/players/$playerId': typeof LayoutAuthedGamesGameIdPlayersPlayerIdRoute
   '/api/organizations/$organizationId/users/$userId/avatar': typeof ApiOrganizationsOrganizationIdUsersUserIdAvatarRoute
@@ -344,7 +354,6 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/api/health'
     | '/account'
-    | '/player/email-verified'
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/'
@@ -356,6 +365,8 @@ export interface FileRouteTypes {
     | '/games'
     | '/organizations'
     | '/players'
+    | '/games/$gameId/email-verified'
+    | '/games/$gameId/reset-password'
     | '/games/$gameId'
     | '/games/$gameId/players/$playerId'
     | '/api/organizations/$organizationId/users/$userId/avatar'
@@ -377,7 +388,6 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/api/health'
     | '/account'
-    | '/player/email-verified'
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/'
@@ -389,6 +399,8 @@ export interface FileRouteTypes {
     | '/games'
     | '/organizations'
     | '/players'
+    | '/games/$gameId/email-verified'
+    | '/games/$gameId/reset-password'
     | '/games/$gameId'
     | '/games/$gameId/players/$playerId'
     | '/api/organizations/$organizationId/users/$userId/avatar'
@@ -413,7 +425,6 @@ export interface FileRouteTypes {
     | '/_layout/_authed'
     | '/api/health'
     | '/_layout/_authed/account'
-    | '/_layout/player/email-verified'
     | '/api/auth/$'
     | '/api/user/avatar'
     | '/_layout/_authed/'
@@ -425,6 +436,8 @@ export interface FileRouteTypes {
     | '/_layout/_authed/games/'
     | '/_layout/_authed/organizations/'
     | '/_layout/_authed/players/'
+    | '/_auth/_player-auth/games/$gameId/email-verified'
+    | '/_auth/_player-auth/games/$gameId/reset-password'
     | '/_layout/_authed/games/$gameId/'
     | '/_layout/_authed/games/$gameId/players/$playerId'
     | '/api/organizations/$organizationId/users/$userId/avatar'
@@ -545,13 +558,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_layout/player/email-verified': {
-      id: '/_layout/player/email-verified'
-      path: '/player/email-verified'
-      fullPath: '/player/email-verified'
-      preLoaderRoute: typeof LayoutPlayerEmailVerifiedRouteImport
-      parentRoute: typeof LayoutRoute
-    }
     '/_layout/_authed/account': {
       id: '/_layout/_authed/account'
       path: '/account'
@@ -621,6 +627,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/games/$gameId'
       preLoaderRoute: typeof LayoutAuthedGamesGameIdIndexRouteImport
       parentRoute: typeof LayoutAuthedRoute
+    }
+    '/_auth/_player-auth/games/$gameId/reset-password': {
+      id: '/_auth/_player-auth/games/$gameId/reset-password'
+      path: '/games/$gameId/reset-password'
+      fullPath: '/games/$gameId/reset-password'
+      preLoaderRoute: typeof AuthPlayerAuthGamesGameIdResetPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/_player-auth/games/$gameId/email-verified': {
+      id: '/_auth/_player-auth/games/$gameId/email-verified'
+      path: '/games/$gameId/email-verified'
+      fullPath: '/games/$gameId/email-verified'
+      preLoaderRoute: typeof AuthPlayerAuthGamesGameIdEmailVerifiedRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/api/v1/games/$gameId/player/': {
       id: '/api/v1/games/$gameId/player/'
@@ -709,6 +729,8 @@ interface AuthRouteChildren {
   AuthSignOutRoute: typeof AuthSignOutRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
   AuthInvitationInvitationIdAcceptRoute: typeof AuthInvitationInvitationIdAcceptRoute
+  AuthPlayerAuthGamesGameIdEmailVerifiedRoute: typeof AuthPlayerAuthGamesGameIdEmailVerifiedRoute
+  AuthPlayerAuthGamesGameIdResetPasswordRoute: typeof AuthPlayerAuthGamesGameIdResetPasswordRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
@@ -718,6 +740,10 @@ const AuthRouteChildren: AuthRouteChildren = {
   AuthSignOutRoute: AuthSignOutRoute,
   AuthSignUpRoute: AuthSignUpRoute,
   AuthInvitationInvitationIdAcceptRoute: AuthInvitationInvitationIdAcceptRoute,
+  AuthPlayerAuthGamesGameIdEmailVerifiedRoute:
+    AuthPlayerAuthGamesGameIdEmailVerifiedRoute,
+  AuthPlayerAuthGamesGameIdResetPasswordRoute:
+    AuthPlayerAuthGamesGameIdResetPasswordRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -755,12 +781,10 @@ const LayoutAuthedRouteWithChildren = LayoutAuthedRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutAuthedRoute: typeof LayoutAuthedRouteWithChildren
-  LayoutPlayerEmailVerifiedRoute: typeof LayoutPlayerEmailVerifiedRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAuthedRoute: LayoutAuthedRouteWithChildren,
-  LayoutPlayerEmailVerifiedRoute: LayoutPlayerEmailVerifiedRoute,
 }
 
 const LayoutRouteWithChildren =

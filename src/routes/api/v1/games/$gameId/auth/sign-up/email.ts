@@ -30,7 +30,7 @@ export async function POST({
     const { token, user: player } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
-        callbackURL: `/player/email-verified`,
+        callbackURL: `/games/${game.id}/email-verified?email=${encodeURIComponent(body.email)}`,
         ...body,
       },
     });
