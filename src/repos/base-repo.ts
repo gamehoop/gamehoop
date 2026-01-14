@@ -2,7 +2,7 @@ import { db } from '@/db';
 import { DB } from '@/db/schema';
 import { ColumnType, Insertable, Selectable, sql, Updateable } from 'kysely';
 
-export abstract class BaseStore<T> {
+export abstract class BaseRepo<T> {
   private tableName: keyof DB;
 
   constructor(tableName: keyof DB) {

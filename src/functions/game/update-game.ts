@@ -1,5 +1,5 @@
 import { Game } from '@/db/types';
-import { gameStore } from '@/stores/game-store';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -31,7 +31,7 @@ export const updateGame = createServerFn({
   )
   .handler(async ({ data: { gameId, ...values } }): Promise<Game> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -39,7 +39,7 @@ export const updateGame = createServerFn({
       throw notFound();
     }
 
-    return gameStore.updateOrThrow({
+    return gameRepo.updateOrThrow({
       where: { id: gameId },
       data: {
         ...values,

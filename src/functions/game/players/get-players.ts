@@ -1,5 +1,5 @@
 import { Game, Player } from '@/db/types';
-import { playerStore } from '@/stores/player-store';
+import { playerRepo } from '@/repos/player-repo';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
@@ -16,7 +16,7 @@ export const getPlayers = createServerFn()
         throw notFound();
       }
 
-      const players = await playerStore.findMany({
+      const players = await playerRepo.findMany({
         where: { gameId: game.id },
       });
 

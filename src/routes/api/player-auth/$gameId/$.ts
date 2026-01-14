@@ -1,5 +1,5 @@
-import { createPlayerAuth } from '@/lib/player-auth';
-import { gameStore } from '@/stores/game-store';
+import { createPlayerAuth } from '@/libs/player-auth';
+import { gameRepo } from '@/repos/game-repo';
 import { createFileRoute, notFound } from '@tanstack/react-router';
 
 async function playerAuthRequestHandler({
@@ -9,7 +9,7 @@ async function playerAuthRequestHandler({
   params: { gameId: string };
   request: Request;
 }) {
-  const game = await gameStore.findOne({ where: { id: gameId } });
+  const game = await gameRepo.findOne({ where: { id: gameId } });
   if (!game) {
     throw notFound();
   }

@@ -1,4 +1,4 @@
-import { auth, Invitation, Member } from '@/lib/auth';
+import { auth, Invitation, Member } from '@/libs/auth';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { acceptInvitation } from '../accept-invitation';

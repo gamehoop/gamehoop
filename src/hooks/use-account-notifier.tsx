@@ -1,5 +1,5 @@
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { User } from '@/lib/auth';
+import { User } from '@/libs/auth';
 import { useLocation } from '@tanstack/react-router';
 import { Mail } from 'lucide-react';
 import { useEffect } from 'react';

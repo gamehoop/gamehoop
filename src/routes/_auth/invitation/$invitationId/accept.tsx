@@ -1,5 +1,5 @@
 import { acceptInvitation } from '@/functions/auth/accept-invitation';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import z from 'zod';
 

@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth';
+import { auth } from '@/libs/auth';
 import { HttpMethod } from '@/utils/http';
 import { redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';

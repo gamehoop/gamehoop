@@ -1,7 +1,7 @@
 import { Game } from '@/db/types';
-import { Organization, User } from '@/lib/auth';
-import { createPlayerAuth } from '@/lib/player-auth';
-import { playerSessionStore } from '@/stores/player-session-store';
+import { Organization, User } from '@/libs/auth';
+import { createPlayerAuth } from '@/libs/player-auth';
+import { playerSessionRepo } from '@/repos/player-session-repo';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
@@ -27,7 +27,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
     const session = await playerAuth.signInAnonymous();
 
     expect(
-      await playerSessionStore.findOne({ where: { token: session?.token } }),
+      await playerSessionRepo.findOne({ where: { token: session?.token } }),
     ).toBeDefined();
 
     const res = await DELETE({
@@ -41,7 +41,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
     expect(res.status).toEqual(HttpStatus.NoContent);
 
     expect(
-      await playerSessionStore.findOne({ where: { token: session?.token } }),
+      await playerSessionRepo.findOne({ where: { token: session?.token } }),
     ).not.toBeDefined();
   });
 

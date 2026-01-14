@@ -1,5 +1,5 @@
-import type { auth } from '@/lib/auth';
-import { logger } from '@/lib/logger';
+import type { auth } from '@/libs/auth';
+import { logger } from '@/libs/logger';
 import { HttpStatus } from '@/utils/http';
 import {
   inferAdditionalFields,

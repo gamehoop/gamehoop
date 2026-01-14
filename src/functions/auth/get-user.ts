@@ -1,4 +1,4 @@
-import { auth, User } from '@/lib/auth';
+import { auth, User } from '@/libs/auth';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 

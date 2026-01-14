@@ -1,6 +1,6 @@
 import { Game, Player, PlayerSession } from '@/db/types';
-import { playerSessionStore } from '@/stores/player-session-store';
-import { playerStore } from '@/stores/player-store';
+import { playerRepo } from '@/repos/player-repo';
+import { playerSessionRepo } from '@/repos/player-session-repo';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
@@ -17,7 +17,7 @@ export const getPlayer = createServerFn()
         throw notFound();
       }
 
-      const player = await playerStore.findOne({
+      const player = await playerRepo.findOne({
         where: { id: playerId },
       });
 
@@ -25,7 +25,7 @@ export const getPlayer = createServerFn()
         throw notFound();
       }
 
-      const sessions = await playerSessionStore.findMany({
+      const sessions = await playerSessionRepo.findMany({
         where: { userId: player.id },
       });
 

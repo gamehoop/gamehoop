@@ -1,5 +1,5 @@
 import { Game } from '@/db/types';
-import { Organization, Role, User } from '@/lib/auth';
+import { Organization, Role, User } from '@/libs/auth';
 import { createContext } from 'react';
 
 export interface SessionContextProps {

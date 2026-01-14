@@ -1,7 +1,7 @@
 import { Scope } from '@/domain/game-api-key';
-import { auth, Session } from '@/lib/auth';
-import { gameApiKeyStore } from '@/stores/game-api-key-store';
-import { gameStore } from '@/stores/game-store';
+import { auth, Session } from '@/libs/auth';
+import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameRepo } from '@/repos/game-repo';
 import { createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
@@ -18,9 +18,9 @@ describe('create-game-api-key serverFn', () => {
       user,
     } as Session);
 
-    const createApiKeySpy = vi.spyOn(gameApiKeyStore, 'create');
+    const createApiKeySpy = vi.spyOn(gameApiKeyRepo, 'create');
 
-    const game = await gameStore.create({
+    const game = await gameRepo.create({
       name: faker.lorem.word(),
       organizationId: organization.id,
       createdBy: user.id,

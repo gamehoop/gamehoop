@@ -1,9 +1,9 @@
 import { db } from '@/db';
 import { Game } from '@/db/schema';
 import { Selectable } from 'kysely';
-import { BaseStore } from './base-store';
+import { BaseRepo } from './base-repo';
 
-export class GameStore extends BaseStore<Game> {
+export class GameRepo extends BaseRepo<Game> {
   constructor() {
     super('game');
   }
@@ -28,4 +28,4 @@ export class GameStore extends BaseStore<Game> {
   }
 }
 
-export const gameStore = new GameStore();
+export const gameRepo = new GameRepo();

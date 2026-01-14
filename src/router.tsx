@@ -1,9 +1,9 @@
 import { nprogress } from '@/components/ui/nprogress';
+import { logError } from '@/libs/logger';
+import { initSentry } from '@/libs/sentry';
 import { createRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { SomethingWentWrong } from './components/app/sww';
-import { logError } from './lib/logger';
-import { initSentry } from './lib/sentry';
 import * as TanstackQuery from './queries';
 import { routeTree } from './routeTree.gen';
 

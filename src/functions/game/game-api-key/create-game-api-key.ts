@@ -1,8 +1,8 @@
 import { GameApiKey } from '@/db/types';
 import { generateApiKey, hashApiKey } from '@/domain/game-api-key';
 import { getUser } from '@/functions/auth/get-user';
-import { gameApiKeyStore } from '@/stores/game-api-key-store';
-import { gameStore } from '@/stores/game-store';
+import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -33,7 +33,7 @@ export const createGameApiKey = createServerFn({
       data: { gameId, scopes, expiresAt, description },
     }): Promise<GameApiKey & { apiKey: string }> => {
       const user = await getUser();
-      const game = await gameStore.findOneForUser({
+      const game = await gameRepo.findOneForUser({
         userId: user.id,
         where: { id: gameId },
       });
@@ -44,7 +44,7 @@ export const createGameApiKey = createServerFn({
       const apiKey = generateApiKey();
       const keyHash = hashApiKey(apiKey);
 
-      const gameApiKey = await gameApiKeyStore.create({
+      const gameApiKey = await gameApiKeyRepo.create({
         gameId: game.id,
         keyHash,
         scopes,

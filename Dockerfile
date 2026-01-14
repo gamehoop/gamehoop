@@ -49,7 +49,7 @@ COPY --from=build /app/scripts/entrypoint.sh .
 # Needed to run the database migrations on startup
 COPY --from=build /app/.config ./.config
 COPY --from=build /app/src/db ./src/db
-COPY --from=build /app/src/lib/logger.ts ./src/lib/logger.ts
+COPY --from=build /app/src/libs/logger.ts ./src/libs/logger.ts
 
 # Create a non-root user to run as
 RUN chmod +x entrypoint.sh && \

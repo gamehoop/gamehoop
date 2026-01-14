@@ -1,5 +1,5 @@
 import { getUser } from '@/functions/auth/get-user';
-import { auth } from '@/lib/auth';
+import { auth } from '@/libs/auth';
 import { HttpMethod } from '@/utils/http';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';

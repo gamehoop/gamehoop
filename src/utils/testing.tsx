@@ -2,10 +2,10 @@ import { UIProvider } from '@/components/ui';
 import { db } from '@/db';
 import { Game } from '@/db/types';
 import { generateApiKey, hashApiKey, Scope } from '@/domain/game-api-key';
-import { auth, Organization, User } from '@/lib/auth';
+import { auth, Organization, User } from '@/libs/auth';
+import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameRepo } from '@/repos/game-repo';
 import { getRouter } from '@/router';
-import { gameApiKeyStore } from '@/stores/game-api-key-store';
-import { gameStore } from '@/stores/game-store';
 import { theme } from '@/styles/theme';
 import { faker } from '@faker-js/faker';
 import { ModalsProvider } from '@mantine/modals';
@@ -75,7 +75,7 @@ export async function createGame({
   user: User;
   organization: Organization;
 }) {
-  return gameStore.create({
+  return gameRepo.create({
     name: faker.lorem.word(),
     organizationId: organization.id,
     createdBy: user.id,
@@ -96,7 +96,7 @@ export async function createGameWithApiKey({
   const apiKey = generateApiKey();
   const keyHash = hashApiKey(apiKey);
 
-  await gameApiKeyStore.create({
+  await gameApiKeyRepo.create({
     gameId: game.id,
     keyHash,
     scopes: [Scope.All],

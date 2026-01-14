@@ -1,5 +1,5 @@
-import { buildKey, deleteObject } from '@/lib/s3';
-import { gameStore } from '@/stores/game-store';
+import { buildKey, deleteObject } from '@/libs/s3';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -14,7 +14,7 @@ export const deleteGameLogo = createServerFn({ method: HttpMethod.Post })
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -26,7 +26,7 @@ export const deleteGameLogo = createServerFn({ method: HttpMethod.Post })
       `organizations/${game.organizationId}/game/${gameId}/logo`,
     );
     await deleteObject(key);
-    await gameStore.update({
+    await gameRepo.update({
       where: { id: gameId },
       data: {
         logo: null,

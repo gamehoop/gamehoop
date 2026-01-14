@@ -1,7 +1,7 @@
 import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
-import { Member, Organization } from '@/lib/auth';
-import { authClient } from '@/lib/auth/client';
+import { Member, Organization } from '@/libs/auth';
+import { authClient } from '@/libs/auth/client';
 
 export interface UseRemoveMemberModalProps {
   organization: Organization;

@@ -1,4 +1,4 @@
-import { gameStore } from '@/stores/game-store';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -15,7 +15,7 @@ export const deleteGame = createServerFn({
   )
   .handler(async ({ data: { gameId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -23,5 +23,5 @@ export const deleteGame = createServerFn({
       throw notFound();
     }
 
-    await gameStore.delete({ where: { id: gameId } });
+    await gameRepo.delete({ where: { id: gameId } });
   });

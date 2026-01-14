@@ -2,7 +2,7 @@ import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confir
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Select } from '@/components/ui/select';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { updateUser } from '@/lib/auth/client';
+import { updateUser } from '@/libs/auth/client';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { Gamepad2 } from 'lucide-react';

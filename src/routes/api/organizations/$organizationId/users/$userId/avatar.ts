@@ -1,5 +1,5 @@
-import { auth } from '@/lib/auth';
-import { getUserObject } from '@/lib/s3';
+import { auth } from '@/libs/auth';
+import { getUserObject } from '@/libs/s3';
 import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { getRequestHeaders } from '@tanstack/react-start/server';

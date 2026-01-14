@@ -1,6 +1,6 @@
 import { env } from '@/env/client';
-import { auth } from '@/lib/auth';
-import { logger } from '@/lib/logger';
+import { auth } from '@/libs/auth';
+import { logger } from '@/libs/logger';
 import { correlationHeader } from '@/middlewares/request-id-middleware';
 import { createMiddleware } from '@tanstack/react-start';
 

@@ -1,6 +1,6 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
-import { createPlayerAuth } from '@/lib/player-auth';
+import { createPlayerAuth } from '@/libs/player-auth';
 import { created } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';

@@ -1,8 +1,8 @@
 import { Game, Player } from '@/db/types';
-import { logError } from '@/lib/logger';
-import { gameApiKeyStore } from '@/stores/game-api-key-store';
-import { gameStore } from '@/stores/game-store';
-import { playerStore } from '@/stores/player-store';
+import { logError } from '@/libs/logger';
+import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameRepo } from '@/repos/game-repo';
+import { playerRepo } from '@/repos/player-repo';
 import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
 import { hashApiKey } from '../game-api-key';
@@ -19,7 +19,7 @@ export async function verifyApiToken({
     throw unauthorized({ error: 'Unauthorized' });
   }
 
-  const apiKeys = await gameApiKeyStore.findForGame(gameId);
+  const apiKeys = await gameApiKeyRepo.findForGame(gameId);
   const apiKey = apiKeys.find(
     ({ active, keyHash }) => active && keyHash === hashApiKey(token),
   );
@@ -83,7 +83,7 @@ export async function gameApiHandler(
   handler: ({ game }: { game: Game }) => Promise<Response>,
 ) {
   return apiHandler(request, async () => {
-    const game = await gameStore.findOne({ where: { id: gameId } });
+    const game = await gameRepo.findOne({ where: { id: gameId } });
     if (!game) {
       return notFound();
     }
@@ -99,7 +99,7 @@ export async function adminGameApiHandler(
   try {
     await verifyApiToken({ request, gameId });
 
-    const game = await gameStore.findOne({ where: { id: gameId } });
+    const game = await gameRepo.findOne({ where: { id: gameId } });
     if (!game) {
       return notFound();
     }
@@ -128,7 +128,7 @@ export async function adminPlayerApiHandler(
   }) => Promise<Response>,
 ) {
   return adminGameApiHandler({ request, gameId }, async ({ game }) => {
-    const player = await playerStore.findOne({ where: { id: playerId } });
+    const player = await playerRepo.findOne({ where: { id: playerId } });
     if (!player || player.gameId !== game.id) {
       return unauthorized();
     }
@@ -155,7 +155,7 @@ export async function playerApiHandler(
   }
 
   return gameApiHandler({ request, gameId }, async ({ game }) => {
-    const player = await playerStore.findOneForSession(token);
+    const player = await playerRepo.findOneForSession(token);
     if (!player || player.gameId !== game.id) {
       return unauthorized();
     }

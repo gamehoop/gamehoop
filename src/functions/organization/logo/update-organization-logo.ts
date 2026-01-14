@@ -1,5 +1,5 @@
-import { auth } from '@/lib/auth';
-import { buildKey, getObjectUrl, putObject } from '@/lib/s3';
+import { auth } from '@/libs/auth';
+import { buildKey, getObjectUrl, putObject } from '@/libs/s3';
 import { HttpMethod } from '@/utils/http';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';

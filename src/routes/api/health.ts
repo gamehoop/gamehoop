@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import { env } from '@/env/client';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { HttpStatus } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { sql } from 'kysely';

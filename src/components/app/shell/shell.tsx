@@ -1,6 +1,6 @@
 import { AppShell } from '@/components/ui/app-shell';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { updateUser } from '@/lib/auth/client';
+import { updateUser } from '@/libs/auth/client';
 import { useDisclosure } from '@mantine/hooks';
 import { useRouter } from '@tanstack/react-router';
 import { PropsWithChildren } from 'react';

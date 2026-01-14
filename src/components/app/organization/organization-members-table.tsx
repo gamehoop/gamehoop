@@ -6,7 +6,7 @@ import { Table } from '@/components/ui/table';
 import { Title } from '@/components/ui/title';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { useUserRole } from '@/hooks/use-user-role';
-import { Member, Organization } from '@/lib/auth';
+import { Member, Organization } from '@/libs/auth';
 import { capitalize } from '@/utils/string';
 import {
   ArrowDownAZ,

@@ -1,5 +1,5 @@
-import { buildKey, getObjectUrl, putObject } from '@/lib/s3';
-import { gameStore } from '@/stores/game-store';
+import { buildKey, getObjectUrl, putObject } from '@/libs/s3';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -27,7 +27,7 @@ export const updateGameLogo = createServerFn({
   })
   .handler(async ({ data: { gameId, logo } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -48,7 +48,7 @@ export const updateGameLogo = createServerFn({
     });
 
     const image = `${getObjectUrl(key)}?uploadedAt=${Date.now()}`;
-    await gameStore.update({
+    await gameRepo.update({
       where: { id: gameId },
       data: {
         logo: image,

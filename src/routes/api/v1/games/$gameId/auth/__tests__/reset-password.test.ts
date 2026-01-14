@@ -1,6 +1,6 @@
 import { Game } from '@/db/types';
-import { Organization, User } from '@/lib/auth';
-import { createPlayerAuth } from '@/lib/player-auth';
+import { Organization, User } from '@/libs/auth';
+import { createPlayerAuth } from '@/libs/player-auth';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
@@ -38,7 +38,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
 
     const mockRequestPasswordReset = vi.fn().mockResolvedValue({});
     vi.spyOn(
-      await import('@/lib/player-auth'),
+      await import('@/libs/player-auth'),
       'createPlayerAuth',
     ).mockReturnValueOnce({
       requestPasswordReset: mockRequestPasswordReset,

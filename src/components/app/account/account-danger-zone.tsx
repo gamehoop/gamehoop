@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confirm-model';
 import { Title } from '@/components/ui/title';
-import { deleteUser } from '@/lib/auth/client';
+import { deleteUser } from '@/libs/auth/client';
 import { Trash2 } from 'lucide-react';
 
 export function AccountDangerZone() {

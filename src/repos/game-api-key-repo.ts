@@ -1,9 +1,9 @@
 import { db } from '@/db';
 import { GameApiKey } from '@/db/schema';
 import { Selectable } from 'kysely';
-import { BaseStore } from './base-store';
+import { BaseRepo } from './base-repo';
 
-export class GameApiKeyStore extends BaseStore<GameApiKey> {
+export class GameApiKeyRepo extends BaseRepo<GameApiKey> {
   constructor() {
     super('gameApiKey');
   }
@@ -34,4 +34,4 @@ export class GameApiKeyStore extends BaseStore<GameApiKey> {
   }
 }
 
-export const gameApiKeyStore = new GameApiKeyStore();
+export const gameApiKeyRepo = new GameApiKeyRepo();

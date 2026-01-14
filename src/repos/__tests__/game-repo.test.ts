@@ -1,12 +1,12 @@
 import { db } from '@/db';
 import { Game } from '@/db/types';
-import { Organization, User } from '@/lib/auth';
+import { Organization, User } from '@/libs/auth';
 import { createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { gameStore } from '../game-store';
+import { gameRepo } from '../game-repo';
 
-describe('BaseStore', () => {
+describe('GameRepo', () => {
   let user: User;
   let organization: Organization;
 
@@ -33,11 +33,12 @@ describe('BaseStore', () => {
         updatedBy: user.id,
       };
 
-      const game = await gameStore.create(values);
+      const game = await gameRepo.create(values);
       expect(game).toEqual({
         ...values,
-        id: expect.any(Number),
+        id: expect.any(String),
         logo: null,
+        settings: null,
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
       });
@@ -54,7 +55,7 @@ describe('BaseStore', () => {
     it('should find a game by id', async () => {
       const game = await createMockGame();
 
-      const foundGame = await gameStore.findOne({
+      const foundGame = await gameRepo.findOne({
         where: { id: game.id },
       });
       expect(foundGame).toEqual(game);
@@ -64,14 +65,14 @@ describe('BaseStore', () => {
       const game = await createMockGame();
       await createMockGame();
 
-      const foundGame = await gameStore.findOne({
+      const foundGame = await gameRepo.findOne({
         where: { platforms: game.platforms, createdBy: game.createdBy },
       });
       expect(foundGame).toEqual(game);
     });
 
     it('should return undefined if the game does not exist', async () => {
-      const foundGame = await gameStore.findOne({
+      const foundGame = await gameRepo.findOne({
         where: { id: faker.string.uuid() },
       });
       expect(foundGame).toBeUndefined();
@@ -82,7 +83,7 @@ describe('BaseStore', () => {
     it('should find a game by id', async () => {
       const game = await createMockGame();
 
-      const foundGame = await gameStore.findOneOrThrow({
+      const foundGame = await gameRepo.findOneOrThrow({
         where: { id: game.id },
       });
       expect(foundGame).toEqual(game);
@@ -92,7 +93,7 @@ describe('BaseStore', () => {
       const game = await createMockGame();
       await createMockGame();
 
-      const foundGame = await gameStore.findOneOrThrow({
+      const foundGame = await gameRepo.findOneOrThrow({
         where: { platforms: game.platforms, createdBy: game.createdBy },
       });
       expect(foundGame).toEqual(game);
@@ -100,7 +101,7 @@ describe('BaseStore', () => {
 
     it('should throw an error if the game does not exist', async () => {
       await expect(
-        gameStore.findOneOrThrow({
+        gameRepo.findOneOrThrow({
           where: { id: faker.string.uuid() },
         }),
       ).rejects.toThrowError('No record found');
@@ -112,7 +113,7 @@ describe('BaseStore', () => {
       const game1 = await createMockGame();
       const game2 = await createMockGame();
 
-      const foundGames = await gameStore.findMany({
+      const foundGames = await gameRepo.findMany({
         where: { createdBy: game1.createdBy },
       });
       expect(foundGames).toEqual(expect.arrayContaining([game1, game2]));
@@ -120,7 +121,7 @@ describe('BaseStore', () => {
     });
 
     it('should return an empty array if no games match the criteria', async () => {
-      const foundGames = await gameStore.findMany({
+      const foundGames = await gameRepo.findMany({
         where: { createdBy: faker.string.uuid() },
       });
       expect(foundGames).toEqual([]);
@@ -132,11 +133,11 @@ describe('BaseStore', () => {
       const game = await createMockGame();
 
       const updatedName = faker.lorem.words();
-      await gameStore.update({
+      await gameRepo.update({
         where: { id: game.id },
         data: { name: updatedName, updatedBy: user.id },
       });
-      const updatedGame = await gameStore.findOne({ where: { id: game.id } });
+      const updatedGame = await gameRepo.findOne({ where: { id: game.id } });
 
       expect(updatedGame).toEqual({
         ...game,
@@ -151,7 +152,7 @@ describe('BaseStore', () => {
       const game = await createMockGame();
 
       const updatedName = faker.lorem.words();
-      const updatedGame = await gameStore.updateOrThrow({
+      const updatedGame = await gameRepo.updateOrThrow({
         where: { id: game.id },
         data: { name: updatedName, updatedBy: user.id },
       });
@@ -165,7 +166,7 @@ describe('BaseStore', () => {
 
     it('should throw an error if the game does not exist', async () => {
       await expect(
-        gameStore.updateOrThrow({
+        gameRepo.updateOrThrow({
           where: { id: faker.string.uuid() },
           data: { name: faker.lorem.words(), updatedBy: user.id },
         }),
@@ -178,12 +179,12 @@ describe('BaseStore', () => {
       const game1 = await createMockGame();
       const game2 = await createMockGame();
 
-      await gameStore.delete({
+      await gameRepo.delete({
         where: { id: game1.id },
       });
 
-      const foundGame1 = await gameStore.findOne({ where: { id: game1.id } });
-      const foundGame2 = await gameStore.findOne({ where: { id: game2.id } });
+      const foundGame1 = await gameRepo.findOne({ where: { id: game1.id } });
+      const foundGame2 = await gameRepo.findOne({ where: { id: game2.id } });
 
       expect(foundGame1).toBeUndefined();
       expect(foundGame2).toEqual(game2);
@@ -193,12 +194,12 @@ describe('BaseStore', () => {
       const game1 = await createMockGame();
       const game2 = await createMockGame();
 
-      await gameStore.delete({
+      await gameRepo.delete({
         where: { createdBy: game1.createdBy },
       });
 
-      const foundGame1 = await gameStore.findOne({ where: { id: game1.id } });
-      const foundGame2 = await gameStore.findOne({ where: { id: game2.id } });
+      const foundGame1 = await gameRepo.findOne({ where: { id: game1.id } });
+      const foundGame2 = await gameRepo.findOne({ where: { id: game2.id } });
 
       expect(foundGame1).toBeUndefined();
       expect(foundGame2).toBeUndefined();
@@ -206,7 +207,7 @@ describe('BaseStore', () => {
   });
 
   function createMockGame(): Promise<Game> {
-    return gameStore.create({
+    return gameRepo.create({
       name: faker.lorem.words(),
       genre: faker.helpers.arrayElement([
         'action',

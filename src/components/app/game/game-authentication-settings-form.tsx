@@ -5,7 +5,7 @@ import { Switch } from '@/components/ui/switch';
 import { TextInput } from '@/components/ui/text-input';
 import { Game } from '@/db/types';
 import { updateGame } from '@/functions/game/update-game';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { Save } from 'lucide-react';

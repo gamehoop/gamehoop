@@ -1,6 +1,6 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
-import { createPlayerAuth } from '@/lib/player-auth';
-import { playerStore } from '@/stores/player-store';
+import { createPlayerAuth } from '@/libs/player-auth';
+import { playerRepo } from '@/repos/player-repo';
 import { badRequest, ok } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
         return gameApiHandler({ gameId, request }, async ({ game }) => {
           const { email } = await parseJson(request, zReqBody);
 
-          const player = await playerStore.findOne({ where: { email } });
+          const player = await playerRepo.findOne({ where: { email } });
           if (!player) {
             return badRequest({
               error: 'A player with that email does not exist.',

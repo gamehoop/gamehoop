@@ -1,5 +1,5 @@
 import { playerApiHandler } from '@/domain/api';
-import { playerSessionStore } from '@/stores/player-session-store';
+import { playerSessionRepo } from '@/repos/player-session-repo';
 import { noContent } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -11,7 +11,7 @@ export async function DELETE({
   request: Request;
 }) {
   return playerApiHandler({ gameId, request }, async ({ token }) => {
-    await playerSessionStore.delete({
+    await playerSessionRepo.delete({
       where: { token },
     });
     return noContent();

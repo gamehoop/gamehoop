@@ -7,7 +7,7 @@ import { TextInput } from '@/components/ui/text-input';
 import { Game } from '@/db/types';
 import { Scope, scopeOptions } from '@/domain/game-api-key';
 import { createGameApiKey } from '@/functions/game/game-api-key/create-game-api-key';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';

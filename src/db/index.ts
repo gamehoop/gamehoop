@@ -1,6 +1,6 @@
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
-import { logger } from '../lib/logger';
+import { logger } from '../libs/logger';
 import { DB } from './schema';
 
 // https://node-postgres.com/apis/pool

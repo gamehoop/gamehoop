@@ -15,7 +15,7 @@ import { deleteGameLogo } from '@/functions/game/logo/delete-game-logo';
 import { updateGameLogo } from '@/functions/game/logo/update-game-logo';
 import { updateGame } from '@/functions/game/update-game';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { Copy, Gamepad2, Save } from 'lucide-react';

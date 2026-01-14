@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth';
+import { auth } from '@/libs/auth';
 import { createFileRoute } from '@tanstack/react-router';
 
 // Let better-auth handle the authentication API requests

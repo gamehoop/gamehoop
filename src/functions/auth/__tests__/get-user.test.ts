@@ -1,4 +1,4 @@
-import { auth, Session } from '@/lib/auth';
+import { auth, Session } from '@/libs/auth';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { getUser } from '../get-user';

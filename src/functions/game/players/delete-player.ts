@@ -1,5 +1,5 @@
-import { gameStore } from '@/stores/game-store';
-import { playerStore } from '@/stores/player-store';
+import { gameRepo } from '@/repos/game-repo';
+import { playerRepo } from '@/repos/player-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -10,7 +10,7 @@ export const deletePlayer = createServerFn({ method: HttpMethod.Post })
   .inputValidator(z.object({ gameId: z.string(), playerId: z.string() }))
   .handler(async ({ data: { gameId, playerId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -18,5 +18,5 @@ export const deletePlayer = createServerFn({ method: HttpMethod.Post })
       throw notFound();
     }
 
-    await playerStore.delete({ where: { id: playerId } });
+    await playerRepo.delete({ where: { id: playerId } });
   });

@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth';
+import { auth } from '@/libs/auth';
 import { HttpStatus } from '@/utils/http';
 import { redirect } from '@tanstack/react-router';
 import { describe, expect, it, vi } from 'vitest';

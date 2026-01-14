@@ -1,6 +1,6 @@
 import { getUser } from '@/functions/auth/get-user';
-import { gameApiKeyStore } from '@/stores/game-api-key-store';
-import { gameStore } from '@/stores/game-store';
+import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpMethod } from '@/utils/http';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -17,7 +17,7 @@ export const deleteGameApiKey = createServerFn({
   )
   .handler(async ({ data: { gameApiKeyId, gameId } }): Promise<void> => {
     const user = await getUser();
-    const game = await gameStore.findOneForUser({
+    const game = await gameRepo.findOneForUser({
       userId: user.id,
       where: { id: gameId },
     });
@@ -25,5 +25,5 @@ export const deleteGameApiKey = createServerFn({
       throw notFound();
     }
 
-    await gameApiKeyStore.delete({ where: { id: gameApiKeyId, gameId } });
+    await gameApiKeyRepo.delete({ where: { id: gameApiKeyId, gameId } });
   });

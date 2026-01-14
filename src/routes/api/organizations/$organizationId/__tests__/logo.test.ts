@@ -1,12 +1,12 @@
 import { SessionContextProps } from '@/contexts/session-context';
 import { getSessionContext } from '@/functions/auth/get-session-context';
-import { buildKey, getObject } from '@/lib/s3';
+import { buildKey, getObject } from '@/libs/s3';
 import { HttpStatus } from '@/utils/http';
 import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET } from '../logo';
 
-vi.mock('@/lib/s3', { spy: true });
+vi.mock('@/libs/s3', { spy: true });
 vi.mock('@/functions/auth/get-session-context');
 
 describe('GET /api/organizations/$organizationId/logo', () => {

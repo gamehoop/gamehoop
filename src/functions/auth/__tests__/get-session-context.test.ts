@@ -1,6 +1,6 @@
 import { Game } from '@/db/types';
-import { auth, Member, Organization, Session } from '@/lib/auth';
-import { gameStore } from '@/stores/game-store';
+import { auth, Member, Organization, Session } from '@/libs/auth';
+import { gameRepo } from '@/repos/game-repo';
 import { faker } from '@faker-js/faker';
 import { describe, expect, it, vi } from 'vitest';
 import { getSessionContext } from '../get-session-context';
@@ -35,7 +35,7 @@ describe('get-session-context serverFn', () => {
     const mockGames = [{ id: faker.string.uuid() }] as Game[];
 
     const findManyGamesSpy = vi
-      .spyOn(gameStore, 'findMany')
+      .spyOn(gameRepo, 'findMany')
       .mockResolvedValue(mockGames);
 
     const context = await getSessionContext();
@@ -110,7 +110,7 @@ describe('get-session-context serverFn', () => {
       { id: mockUser.settings.activeGameId },
     ] as Game[];
 
-    vi.spyOn(gameStore, 'findMany').mockResolvedValue(mockGames);
+    vi.spyOn(gameRepo, 'findMany').mockResolvedValue(mockGames);
 
     const context = await getSessionContext();
     expect(context).toEqual({

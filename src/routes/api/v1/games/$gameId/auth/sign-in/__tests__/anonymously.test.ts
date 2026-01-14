@@ -1,5 +1,5 @@
 import { Game } from '@/db/types';
-import { Organization, User } from '@/lib/auth';
+import { Organization, User } from '@/libs/auth';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';

@@ -1,5 +1,5 @@
 import { getUser } from '@/functions/auth/get-user';
-import { getUserObject } from '@/lib/s3';
+import { getUserObject } from '@/libs/s3';
 import { HttpStatus, notFound } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 

@@ -1,9 +1,9 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
-import { User } from '@/lib/auth';
-import { createPlayerAuth } from '@/lib/player-auth';
-import { playerSessionStore } from '@/stores/player-session-store';
-import { playerStore } from '@/stores/player-store';
+import { User } from '@/libs/auth';
+import { createPlayerAuth } from '@/libs/player-auth';
+import { playerRepo } from '@/repos/player-repo';
+import { playerSessionRepo } from '@/repos/player-session-repo';
 import { created, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
@@ -39,20 +39,20 @@ export async function POST({
 
     let player: User;
     if (playerId) {
-      player = await playerStore.findOneOrThrow({
+      player = await playerRepo.findOneOrThrow({
         where: { id: playerId },
       });
-      await playerSessionStore.update({
+      await playerSessionRepo.update({
         where: { token: session.token },
         data: {
           userId: playerId,
         },
       });
-      await playerStore.delete({
+      await playerRepo.delete({
         where: { id: player.id },
       });
     } else {
-      player = await playerStore.findOneOrThrow({
+      player = await playerRepo.findOneOrThrow({
         where: { id: user.id },
       });
     }

@@ -6,8 +6,8 @@ import {
   sendInvitationEmail,
   sendResetPassword,
   sendVerificationEmail,
-} from '@/lib/auth/emails';
-import { logger } from '@/lib/logger';
+} from '@/libs/auth/emails';
+import { logger } from '@/libs/logger';
 import {
   daysToSeconds,
   hoursToSeconds,

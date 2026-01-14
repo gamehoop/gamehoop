@@ -5,7 +5,7 @@ import { ModalsProvider } from '@/components/ui/modals';
 import { NavigationProgress } from '@/components/ui/nprogress';
 import { env } from '@/env/client';
 import { getSessionContext } from '@/functions/auth/get-session-context';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { theme, themeColor } from '@/styles/theme';
 import { isUnauthorizedResponse } from '@/utils/http';
 import { seo } from '@/utils/seo';

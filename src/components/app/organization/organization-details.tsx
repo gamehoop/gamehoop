@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Divider } from '@/components/ui/divider';
 import { Title } from '@/components/ui/title';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { FullOrganization } from '@/lib/auth';
+import { FullOrganization } from '@/libs/auth';
 import { DoorOpen } from 'lucide-react';
 import { OrganizationMembersTable } from './organization-members-table';
 import { OrganizationSettingsForm } from './organization-settings-form';

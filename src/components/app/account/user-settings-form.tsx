@@ -7,7 +7,7 @@ import { deleteUserAvatar } from '@/functions/user/avatar/delete-user-avatar';
 import { updateUserAvatar } from '@/functions/user/avatar/update-user-avatar';
 import { updateUser } from '@/functions/user/update-user';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { useForm } from '@tanstack/react-form';
 import { useRouter } from '@tanstack/react-router';
 import { AtSign, CircleUserRound, Save } from 'lucide-react';

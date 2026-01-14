@@ -3,7 +3,7 @@ import { useColorScheme } from '@/components/ui/hooks/use-color-scheme';
 import { Menu } from '@/components/ui/menu';
 import { NavLink } from '@/components/ui/nav-link';
 import { useSessionContext } from '@/hooks/use-session-context';
-import { updateUser } from '@/lib/auth/client';
+import { updateUser } from '@/libs/auth/client';
 import { Link, useRouter } from '@tanstack/react-router';
 import {
   Book,

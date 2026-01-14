@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Title } from '@/components/ui/title';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { ErrorComponentProps, useRouter } from '@tanstack/react-router';
 import { RefreshCw } from 'lucide-react';
 

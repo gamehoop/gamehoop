@@ -1,11 +1,11 @@
-import { auth, Session } from '@/lib/auth';
-import { getUserObject } from '@/lib/s3';
+import { auth, Session } from '@/libs/auth';
+import { getUserObject } from '@/libs/s3';
 import { HttpStatus } from '@/utils/http';
 import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { GET } from '../avatar';
 
-vi.mock('@/lib/s3', { spy: true });
+vi.mock('@/libs/s3', { spy: true });
 
 describe('GET /api/user/avatar', () => {
   const mockUser = { id: faker.string.uuid() };

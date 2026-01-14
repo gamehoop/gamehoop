@@ -1,6 +1,6 @@
 import { getUser } from '@/functions/auth/get-user';
 import { updateUser } from '@/functions/user/update-user';
-import { buildUserKey, getObjectUrl, putObject } from '@/lib/s3';
+import { buildUserKey, getObjectUrl, putObject } from '@/libs/s3';
 import { HttpMethod } from '@/utils/http';
 import { createServerFn } from '@tanstack/react-start';
 

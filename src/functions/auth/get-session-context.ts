@@ -1,8 +1,8 @@
 import { SessionContextProps } from '@/contexts/session-context';
 import { Game } from '@/db/types';
 import { getUser } from '@/functions/auth/get-user';
-import { auth, Member, Organization, User } from '@/lib/auth';
-import { gameStore } from '@/stores/game-store';
+import { auth, Member, Organization, User } from '@/libs/auth';
+import { gameRepo } from '@/repos/game-repo';
 import { createServerFn } from '@tanstack/react-start';
 import { getRequestHeaders } from '@tanstack/react-start/server';
 
@@ -17,7 +17,7 @@ export const getSessionContext = createServerFn().handler(
 
     const [userMembership, activeOrganizationGames] = await Promise.all([
       getUserMembership(user, activeOrganization),
-      gameStore.findMany({ where: { organizationId: activeOrganization.id } }),
+      gameRepo.findMany({ where: { organizationId: activeOrganization.id } }),
     ]);
 
     const activeGame = findActiveGame(user, activeOrganizationGames);

@@ -1,4 +1,4 @@
-import { gameStore } from '@/stores/game-store';
+import { gameRepo } from '@/repos/game-repo';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
@@ -15,7 +15,7 @@ export const getPublicGameDetails = createServerFn()
     async ({
       data: { gameId },
     }): Promise<z.infer<typeof zPublicGameDetails>> => {
-      const game = await gameStore.findOne({
+      const game = await gameRepo.findOne({
         where: { id: gameId },
       });
       if (!game) {

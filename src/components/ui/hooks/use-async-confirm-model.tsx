@@ -1,5 +1,5 @@
 import { modals } from '@/components/ui/modals';
-import { logError } from '@/lib/logger';
+import { logError } from '@/libs/logger';
 import { useRouter } from '@tanstack/react-router';
 import { PropsWithChildren, ReactNode, useId } from 'react';
 import { UISize } from '..';
