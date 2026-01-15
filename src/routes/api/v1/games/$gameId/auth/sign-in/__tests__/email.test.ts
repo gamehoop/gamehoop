@@ -48,6 +48,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
+    expect(res.headers.has('set-cookie')).toBe(true);
 
     const body = await res.json();
     expect(body).toEqual({

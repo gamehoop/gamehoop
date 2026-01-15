@@ -10,6 +10,7 @@ import z from 'zod';
 
 const zReqBody = z.object({
   playerId: z.string().optional(),
+  name: z.string().min(1).optional(),
 });
 
 const zResBody = z.object({
@@ -25,7 +26,7 @@ export async function POST({
   request: Request;
 }) {
   return gameApiHandler({ gameId, request }, async ({ game }) => {
-    const { playerId } = await parseJson(request, zReqBody);
+    const { playerId, name } = await parseJson(request, zReqBody);
 
     const playerAuth = createPlayerAuth(game);
     const { headers, response: session } = await playerAuth.signInAnonymous({
@@ -38,7 +39,7 @@ export async function POST({
       });
     }
 
-    const { token, user } = session;
+    const { token, user: newPlayer } = session;
 
     let player: User;
     if (playerId) {
@@ -52,11 +53,20 @@ export async function POST({
         },
       });
       await playerRepo.delete({
-        where: { id: player.id },
+        where: { id: newPlayer.id },
       });
     } else {
       player = await playerRepo.findOneOrThrow({
-        where: { id: user.id },
+        where: { id: newPlayer.id },
+      });
+    }
+
+    if (name && player.name !== name) {
+      player = await playerRepo.updateOrThrow({
+        where: { id: player.id },
+        data: {
+          name,
+        },
       });
     }
 

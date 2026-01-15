@@ -27,6 +27,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
+    expect(res.headers.has('set-cookie')).toBe(true);
 
     const body = await res.json();
     expect(body).toEqual({
@@ -71,6 +72,28 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
         id: player.id,
         email: player.email,
         name: player.name,
+      }),
+    });
+  });
+
+  it('should use a given player name', async () => {
+    const name = faker.person.fullName();
+
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({
+        uri,
+        data: { name },
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Created);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      token: expect.any(String),
+      player: expect.objectContaining({
+        name,
       }),
     });
   });
