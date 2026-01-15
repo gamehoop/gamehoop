@@ -27,7 +27,7 @@ export const Route = createFileRoute(
           await playerAuth.sendVerificationEmail({
             body: {
               email,
-              callbackURL: `/games/${game.id}/email-verified?email=${encodeURIComponent(email)}`,
+              callbackURL: `/games/${game.id}/email-verified`,
             },
           });
 

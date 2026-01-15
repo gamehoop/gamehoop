@@ -28,7 +28,10 @@ export async function POST({
     const { playerId } = await parseJson(request, zReqBody);
 
     const playerAuth = createPlayerAuth(game);
-    const session = await playerAuth.signInAnonymous();
+    const { headers, response: session } = await playerAuth.signInAnonymous({
+      returnHeaders: true,
+    });
+
     if (!session) {
       return serverError({
         error: 'Failed to create session for anonymous player',
@@ -66,7 +69,7 @@ export async function POST({
       },
     });
 
-    return created(data);
+    return created(data, { headers });
   });
 }
 

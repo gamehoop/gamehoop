@@ -27,7 +27,10 @@ export async function POST({
 
     try {
       const playerAuth = createPlayerAuth(game);
-      const { token, user: player } = await playerAuth.signInEmail({ body });
+      const {
+        headers,
+        response: { token, user: player },
+      } = await playerAuth.signInEmail({ body, returnHeaders: true });
 
       const data = zResBody.parse({
         token,
@@ -37,7 +40,7 @@ export async function POST({
           updatedAt: player.updatedAt.toISOString(),
         },
       });
-      return created(data);
+      return created(data, { headers });
     } catch {
       return unauthorized();
     }

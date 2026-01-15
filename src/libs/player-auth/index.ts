@@ -135,6 +135,9 @@ export function createPlayerAuth(game: Game) {
       },
     },
     plugins: [anonymous()],
+    advanced: {
+      cookiePrefix: 'gamehoop',
+    },
     logger: {
       log: (level, message, ...args) => {
         if (level === 'error') {

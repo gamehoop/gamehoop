@@ -27,12 +27,16 @@ export async function POST({
     const body = await parseJson(request, zReqBody);
 
     const playerAuth = createPlayerAuth(game);
-    const { token, user: player } = await playerAuth.signUpEmail({
+    const {
+      headers,
+      response: { token, user: player },
+    } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
-        callbackURL: `/games/${game.id}/email-verified?email=${encodeURIComponent(body.email)}`,
+        callbackURL: `/games/${game.id}/email-verified`,
         ...body,
       },
+      returnHeaders: true,
     });
 
     const data = zResBody.parse({
@@ -44,7 +48,7 @@ export async function POST({
       },
     });
 
-    return created(data);
+    return created(data, { headers });
   });
 }
 
