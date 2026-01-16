@@ -8,13 +8,21 @@ export class GameApiKeyRepo extends BaseRepo<GameApiKey> {
     super('gameApiKey');
   }
 
-  async findForGame(gameId: string): Promise<Selectable<GameApiKey>[]> {
+  async findOneForGame({
+    gameId,
+    keyHash,
+  }: {
+    gameId: string;
+    keyHash: string;
+  }): Promise<Selectable<GameApiKey> | undefined> {
     return db
       .selectFrom('gameApiKey')
       .selectAll('gameApiKey')
       .innerJoin('game', 'game.id', 'gameApiKey.gameId')
       .where('game.id', '=', gameId)
-      .execute();
+      .where('gameApiKey.active', '=', true)
+      .where('gameApiKey.keyHash', '=', keyHash)
+      .executeTakeFirst();
   }
 
   async findManyForUserAndGame(

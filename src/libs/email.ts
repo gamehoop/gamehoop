@@ -3,7 +3,7 @@ import { createTransport } from 'nodemailer';
 
 const transporter = createTransport({
   host: env.SMTP_SERVER,
-  port: Number(env.SMTP_PORT),
+  port: env.SMTP_PORT,
   auth: {
     user: env.SMTP_USERNAME,
     pass: env.SMTP_PASSWORD,

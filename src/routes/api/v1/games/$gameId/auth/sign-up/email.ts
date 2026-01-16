@@ -1,8 +1,9 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { created } from '@/utils/http';
+import { created, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { APIError } from 'better-auth';
 import z from 'zod';
 
 const zResBody = z.object({
@@ -18,37 +19,48 @@ export async function POST({
   request: Request;
 }): Promise<Response> {
   return gameApiHandler({ gameId, request }, async ({ game }) => {
+    const minPasswordLength = game.settings?.auth?.minPasswordLength ?? 8;
     const zReqBody = z.object({
       email: z.email(),
-      password: z.string().min(game.settings?.auth?.minPasswordLength ?? 8),
+      password: z.string().min(minPasswordLength),
       name: z.string().min(1),
     });
-
     const body = await parseJson(request, zReqBody);
 
-    const playerAuth = createPlayerAuth(game);
-    const {
-      headers,
-      response: { token, user: player },
-    } = await playerAuth.signUpEmail({
-      body: {
-        gameId: game.id,
-        callbackURL: `/games/${game.id}/email-verified`,
-        ...body,
-      },
-      returnHeaders: true,
-    });
+    try {
+      const playerAuth = createPlayerAuth(game);
+      const {
+        headers,
+        response: { token, user: player },
+      } = await playerAuth.signUpEmail({
+        body: {
+          gameId: game.id,
+          callbackURL: `/games/${game.id}/email-verified`,
+          ...body,
+        },
+        returnHeaders: true,
+      });
 
-    const data = zResBody.parse({
-      token,
-      player: {
-        ...player,
-        createdAt: player.createdAt.toISOString(),
-        updatedAt: player.updatedAt.toISOString(),
-      },
-    });
+      const data = zResBody.parse({
+        token,
+        player: {
+          ...player,
+          createdAt: player.createdAt.toISOString(),
+          updatedAt: player.updatedAt.toISOString(),
+        },
+      });
 
-    return created(data, { headers });
+      return created(data, { headers });
+    } catch (error) {
+      if (error instanceof APIError) {
+        return Response.json(
+          { error: error.message },
+          { status: error.statusCode },
+        );
+      }
+
+      return serverError();
+    }
   });
 }
 

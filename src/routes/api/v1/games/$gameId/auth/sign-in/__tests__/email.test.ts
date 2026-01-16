@@ -48,7 +48,8 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
-    expect(res.headers.has('set-cookie')).toBe(true);
+    expect(res.headers.get('Set-Cookie')).contains('session_token');
+    expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
     expect(body).toEqual({
@@ -124,12 +125,17 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Unauthorized);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      error: 'Invalid email or password',
+    });
   });
 
   it('should validate the email and password', async () => {
     const playerDetails = {
       email: 'invalid',
-      password: 'short',
+      password: '',
     };
 
     const res = await POST({
@@ -151,7 +157,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
         }),
         expect.objectContaining({
           path: ['password'],
-          message: 'Too small: expected string to have >=8 characters',
+          message: 'Too small: expected string to have >=1 characters',
         }),
       ],
     });
@@ -170,5 +176,14 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.NotFound);
+  });
+
+  it('should return bad request if body is invalid json', async () => {
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({ uri, body: '' }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
   });
 });

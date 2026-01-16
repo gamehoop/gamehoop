@@ -39,7 +39,7 @@ export async function sendChangeEmailConfirmation({
   await sendEmail({
     to: user.email,
     subject: 'Approve your email change',
-    html: `Click the link to approve the change: <a href="${url}">Approve Email</a>`,
+    html: `Click the link to approve the change: <a href="${url}">Approve Change</a>`,
   });
 }
 

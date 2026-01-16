@@ -3,11 +3,12 @@ import { zPlayer } from '@/domain/api/schemas';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { created, unauthorized } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { APIError } from 'better-auth';
 import z from 'zod';
 
 const zReqBody = z.object({
   email: z.email(),
-  password: z.string().min(8),
+  password: z.string().min(1),
 });
 
 const zResBody = z.object({
@@ -40,8 +41,16 @@ export async function POST({
           updatedAt: player.updatedAt.toISOString(),
         },
       });
+
       return created(data, { headers });
-    } catch {
+    } catch (error) {
+      if (error instanceof APIError) {
+        return Response.json(
+          { error: error.message },
+          { status: error.statusCode },
+        );
+      }
+
       return unauthorized();
     }
   });

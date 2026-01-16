@@ -4,6 +4,8 @@ import { ok, unauthorized } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
+const zReqBody = z.object({ newEmail: z.email() });
+
 export async function POST({
   params: { gameId },
   request,
@@ -16,10 +18,7 @@ export async function POST({
       return unauthorized();
     }
 
-    const { newEmail } = await parseJson(
-      request,
-      z.object({ newEmail: z.email() }),
-    );
+    const { newEmail } = await parseJson(request, zReqBody);
 
     const playerAuth = createPlayerAuth(game);
     await playerAuth.changeEmail({

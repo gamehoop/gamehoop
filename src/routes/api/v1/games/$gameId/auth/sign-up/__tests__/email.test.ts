@@ -1,5 +1,6 @@
 import { Game } from '@/db/types';
 import { Organization, User } from '@/libs/auth';
+import { gameRepo } from '@/repos/game-repo';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
@@ -36,7 +37,8 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
-    expect(res.headers.has('set-cookie')).toBe(true);
+    expect(res.headers.get('Set-Cookie')).contains('session_token');
+    expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
     expect(body.token).toEqual(expect.any(String));
@@ -112,6 +114,68 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     });
   });
 
+  it('should validate the password using the configured min length', async () => {
+    const minPasswordLength = 10;
+
+    await gameRepo.update({
+      where: { id: game.id },
+      data: { settings: { auth: { minPasswordLength } } },
+    });
+
+    const playerDetails = {
+      email: faker.internet.email().toLowerCase(),
+      name: faker.person.fullName(),
+      password: 'short',
+    };
+
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({
+        uri,
+        data: playerDetails,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      error: [
+        expect.objectContaining({
+          path: ['password'],
+          message: `Too small: expected string to have >=${minPasswordLength} characters`,
+        }),
+      ],
+    });
+  });
+
+  it('should return a null token if email verification required', async () => {
+    await gameRepo.update({
+      where: { id: game.id },
+      data: { settings: { auth: { requireEmailVerification: true } } },
+    });
+
+    const playerDetails = {
+      email: faker.internet.email().toLowerCase(),
+      name: faker.person.fullName(),
+      password: faker.internet.password(),
+    };
+
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({
+        uri,
+        data: playerDetails,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Created);
+    expect(res.headers.get('Set-Cookie')).toBeNull();
+
+    const { token } = await res.json();
+    expect(token).toBeNull();
+  });
+
   it('should return 404 if the game does not exist', async () => {
     const playerDetails = {
       name: faker.person.fullName(),
@@ -128,5 +192,14 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.NotFound);
+  });
+
+  it('should return bad request if body is invalid json', async () => {
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({ uri, body: '' }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
   });
 });

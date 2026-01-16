@@ -42,6 +42,7 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
+    expect(res.headers.get('Content-Type')).toEqual('application/json');
 
     const body = await res.json();
     expect(body).toEqual({
@@ -97,6 +98,62 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
       request: apiRequest({
         uri: `v1/games/${game.id}/players/${player.id}`,
         token: 'invalid',
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Unauthorized);
+  });
+
+  it('should return unauthorized if the apiKey is expired', async () => {
+    const { game, apiKey } = await createGameWithApiKey({
+      user,
+      organization,
+      expired: true,
+    });
+
+    const playerAuth = createPlayerAuth(game);
+    const { user: player } = await playerAuth.signUpEmail({
+      body: {
+        gameId: game.id,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    });
+
+    const res = await GET({
+      params: { gameId: game.id, playerId: player.id },
+      request: apiRequest({
+        uri: `v1/games/${game.id}/players/${player.id}`,
+        token: apiKey,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Unauthorized);
+  });
+
+  it('should return unauthorized if the apiKey is inactive', async () => {
+    const { game, apiKey } = await createGameWithApiKey({
+      user,
+      organization,
+      active: false,
+    });
+
+    const playerAuth = createPlayerAuth(game);
+    const { user: player } = await playerAuth.signUpEmail({
+      body: {
+        gameId: game.id,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    });
+
+    const res = await GET({
+      params: { gameId: game.id, playerId: player.id },
+      request: apiRequest({
+        uri: `v1/games/${game.id}/players/${player.id}`,
+        token: apiKey,
       }),
     });
 

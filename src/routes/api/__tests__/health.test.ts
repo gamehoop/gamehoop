@@ -11,10 +11,12 @@ vi.mock('kysely', async (importOriginal) => {
   };
 });
 
-describe('/api/v1/health', () => {
+describe('/api/health', () => {
   it('should return a service healthcheck', async () => {
     const res = await GET();
     expect(res.status).toBe(HttpStatus.Ok);
+    expect(res.headers.get('Content-Type')).toEqual('application/json');
+
     const body = await res.json();
     expect(body).toEqual({
       commit: '',

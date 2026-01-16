@@ -16,15 +16,15 @@ export async function verifyApiToken({
 }) {
   const token = getBearerToken(request);
   if (!token) {
-    throw unauthorized({ error: 'Unauthorized' });
+    throw unauthorized();
   }
 
-  const apiKeys = await gameApiKeyRepo.findForGame(gameId);
-  const apiKey = apiKeys.find(
-    ({ active, keyHash }) => active && keyHash === hashApiKey(token),
-  );
+  const apiKey = await gameApiKeyRepo.findOneForGame({
+    gameId,
+    keyHash: hashApiKey(token),
+  });
   if (!apiKey) {
-    throw unauthorized({ error: 'Unauthorized' });
+    throw unauthorized();
   }
 
   if (apiKey.expiresAt && apiKey.expiresAt < new Date()) {
@@ -73,6 +73,7 @@ export async function apiHandler(
     if (error instanceof Response) {
       return error;
     }
+
     logError(error);
     return serverError();
   }
@@ -92,7 +93,7 @@ export async function gameApiHandler(
   });
 }
 
-export async function adminGameApiHandler(
+export async function adminApiHandler(
   { request, gameId }: { request: Request; gameId: string },
   handler: ({ game }: { game: Game }) => Promise<Response>,
 ) {
@@ -109,6 +110,8 @@ export async function adminGameApiHandler(
     if (error instanceof Response) {
       return error;
     }
+
+    logError(error);
     return serverError();
   }
 }
@@ -127,7 +130,7 @@ export async function adminPlayerApiHandler(
     player: Player;
   }) => Promise<Response>,
 ) {
-  return adminGameApiHandler({ request, gameId }, async ({ game }) => {
+  return adminApiHandler({ request, gameId }, async ({ game }) => {
     const player = await playerRepo.findOne({ where: { id: playerId } });
     if (!player || player.gameId !== game.id) {
       return unauthorized();

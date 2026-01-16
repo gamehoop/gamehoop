@@ -39,6 +39,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
     });
 
     expect(res.status).toEqual(HttpStatus.NoContent);
+    expect(res.headers.get('Content-Type')).toBeNull();
 
     expect(
       await playerSessionRepo.findOne({ where: { token: session?.token } }),

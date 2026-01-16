@@ -128,6 +128,19 @@ describe('GameRepo', () => {
     });
   });
 
+  describe('count', () => {
+    it('should count all rows in the table', async () => {
+      const game = await createMockGame();
+      await createMockGame();
+      await createMockGame();
+
+      const foundGames = await gameRepo.count({
+        where: { createdBy: game.createdBy },
+      });
+      expect(foundGames).toEqual(3);
+    });
+  });
+
   describe('update', () => {
     it('should update a game by id', async () => {
       const game = await createMockGame();

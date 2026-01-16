@@ -1,6 +1,7 @@
 import { Game } from '@/db/types';
 import { Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
+import { playerRepo } from '@/repos/player-repo';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
@@ -41,6 +42,7 @@ describe('GET /api/v1/games/$gameId/player', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
+    expect(res.headers.get('Content-Type')).toEqual('application/json');
 
     const body = await res.json();
     expect(body).toEqual({
@@ -108,6 +110,8 @@ describe('DELETE /api/v1/games/$gameId/player', () => {
       },
     });
 
+    const startCount = await playerRepo.count();
+
     let res = await DELETE({
       params: { gameId: game.id },
       request: apiRequest({
@@ -117,6 +121,10 @@ describe('DELETE /api/v1/games/$gameId/player', () => {
     });
 
     expect(res.status).toBe(HttpStatus.NoContent);
+    expect(res.headers.get('Content-Type')).toBeNull();
+
+    const endCount = await playerRepo.count();
+    expect(endCount).toBe(startCount - 1);
 
     res = await GET({
       params: { gameId: game.id },

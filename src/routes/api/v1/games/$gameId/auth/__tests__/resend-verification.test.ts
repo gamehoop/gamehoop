@@ -5,9 +5,9 @@ import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { POST } from '../reset-password';
+import { POST } from '../resend-verification';
 
-describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
+describe('POST /api/v1/games/$gameId/auth/resend-verification', () => {
   let user: User;
   let organization: Organization;
   let game: Game;
@@ -18,10 +18,10 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
     user = result.user;
     organization = result.organization;
     game = await createGame({ user, organization });
-    uri = `v1/games/${game.id}/auth/reset-password`;
+    uri = `v1/games/${game.id}/auth/resend-verification`;
   });
 
-  it('should send a reset password email', async () => {
+  it('should trigger a verification email', async () => {
     const { user, organization } = await createTestUser();
     const game = await createGame({ user, organization });
 
@@ -36,12 +36,12 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
       },
     });
 
-    const mockRequestPasswordReset = vi.fn().mockResolvedValue({});
+    const mockSendVerificationEmail = vi.fn().mockResolvedValue({});
     vi.spyOn(
       await import('@/libs/player-auth'),
       'createPlayerAuth',
     ).mockReturnValueOnce({
-      requestPasswordReset: mockRequestPasswordReset,
+      sendVerificationEmail: mockSendVerificationEmail,
     } as any);
 
     const res = await POST({
@@ -57,11 +57,11 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
     expect(res.status).toBe(HttpStatus.Ok);
     expect(res.headers.get('Content-Type')).toBe('application/json');
 
-    expect(mockRequestPasswordReset).toHaveBeenCalledTimes(1);
-    expect(mockRequestPasswordReset).toHaveBeenCalledWith({
+    expect(mockSendVerificationEmail).toHaveBeenCalledTimes(1);
+    expect(mockSendVerificationEmail).toHaveBeenCalledWith({
       body: {
         email: player.email,
-        redirectTo: `/games/${game.id}/reset-password`,
+        callbackURL: `/games/${game.id}/email-verified`,
       },
     });
   });
@@ -72,7 +72,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
       request: apiRequest({
         uri,
         data: {
-          email: faker.string.uuid(),
+          email: faker.internet.email(),
         },
       }),
     });
@@ -87,12 +87,16 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
         uri,
         data: {
           email: faker.internet.email(),
-          password: faker.internet.password(),
         },
       }),
     });
 
     expect(res.status).toBe(HttpStatus.BadRequest);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      error: 'A player with that email does not exist.',
+    });
   });
 
   it('should return bad request if body is invalid json', async () => {

@@ -47,6 +47,19 @@ export abstract class BaseRepo<T> {
     return result;
   }
 
+  async count(args?: { where?: WhereInput<T> }): Promise<number> {
+    let query = db
+      .selectFrom(this.tableName)
+      .select((b) => b.fn.countAll().as('count'));
+
+    if (args?.where) {
+      query = this.applyWhere(query, args.where);
+    }
+
+    const result = await query.executeTakeFirstOrThrow();
+    return Number(result.count);
+  }
+
   async delete(args: DeleteManyArgs<T> = {}): Promise<void> {
     let query = db.deleteFrom(this.tableName);
     await this.applyWhere(query, args.where).execute();

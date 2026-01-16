@@ -1,5 +1,6 @@
 import { Game } from '@/db/types';
 import { Organization, User } from '@/libs/auth';
+import { playerRepo } from '@/repos/player-repo';
 import { HttpStatus } from '@/utils/http';
 import { apiRequest, createGame, createTestUser } from '@/utils/testing';
 import { faker } from '@faker-js/faker';
@@ -27,7 +28,8 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
-    expect(res.headers.has('set-cookie')).toBe(true);
+    expect(res.headers.get('Set-Cookie')).contains('session_token');
+    expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
     expect(body).toEqual({
@@ -46,6 +48,8 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
   });
 
   it('should reuse a given player identifier', async () => {
+    const startCount = await playerRepo.count();
+
     let res = await POST({
       params: { gameId: game.id },
       request: apiRequest({ uri }),
@@ -74,6 +78,9 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
         name: player.name,
       }),
     });
+
+    const endCount = await playerRepo.count();
+    expect(endCount).toEqual(startCount + 1);
   });
 
   it('should use a given player name', async () => {
@@ -89,13 +96,8 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
 
     expect(res.status).toBe(HttpStatus.Created);
 
-    const body = await res.json();
-    expect(body).toEqual({
-      token: expect.any(String),
-      player: expect.objectContaining({
-        name,
-      }),
-    });
+    const { player } = await res.json();
+    expect(player.name).toEqual(name);
   });
 
   it('should return 404 if the game does not exist', async () => {
@@ -105,5 +107,14 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     expect(res.status).toBe(HttpStatus.NotFound);
+  });
+
+  it('should return bad request if body is invalid json', async () => {
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({ uri, body: '' }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
   });
 });
