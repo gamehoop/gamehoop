@@ -1,6 +1,6 @@
-import { gameApiHandler, parseJson } from '@/domain/api';
+import { Player } from '@/db/types';
+import { gameApiHandler, parseJson, parseSessionToken } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
-import { User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerRepo } from '@/repos/player-repo';
 import { playerSessionRepo } from '@/repos/player-session-repo';
@@ -28,8 +28,9 @@ export async function POST({
   return gameApiHandler({ gameId, request }, async ({ game }) => {
     const { playerId, name } = await parseJson(request, zReqBody);
 
-    const playerAuth = createPlayerAuth(game);
-    const { headers, response: session } = await playerAuth.signInAnonymous({
+    const { headers, response: session } = await createPlayerAuth(
+      game,
+    ).signInAnonymous({
       returnHeaders: true,
     });
 
@@ -39,9 +40,9 @@ export async function POST({
       });
     }
 
-    const { token, user: newPlayer } = session;
+    const { user: newPlayer } = session;
 
-    let player: User;
+    let player: Player;
     if (playerId) {
       player = await playerRepo.findOneOrThrow({
         where: { id: playerId },
@@ -71,15 +72,11 @@ export async function POST({
     }
 
     const data = zResBody.parse({
-      token,
-      player: {
-        ...player,
-        createdAt: player.createdAt.toISOString(),
-        updatedAt: player.updatedAt.toISOString(),
-      },
+      token: parseSessionToken(headers),
+      player,
     });
 
-    return created(data, { headers });
+    return created(data);
   });
 }
 

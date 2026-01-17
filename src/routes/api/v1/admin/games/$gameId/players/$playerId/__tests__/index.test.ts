@@ -52,6 +52,7 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
       emailVerified: false,
       image: null,
       gameId: game.id,
+      isAnonymous: false,
       createdAt: player.createdAt.toISOString(),
       updatedAt: player.updatedAt.toISOString(),
     });

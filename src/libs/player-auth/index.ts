@@ -107,8 +107,7 @@ export function createPlayerAuth(game: Game) {
       },
       deleteUser: {
         // Allow users to delete their accounts
-        // We do, but not through this client.
-        enabled: false,
+        enabled: true,
       },
     },
     session: {

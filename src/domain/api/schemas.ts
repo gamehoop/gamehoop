@@ -7,6 +7,11 @@ export const zPlayer = z.object({
   emailVerified: z.boolean(),
   gameId: z.string(),
   image: z.string().nullable(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  isAnonymous: z.boolean(),
+  createdAt: z.date().transform((date) => date.toISOString()),
+  updatedAt: z.date().transform((date) => date.toISOString()),
+  lastLoginAt: z
+    .date()
+    .nullable()
+    .transform((date) => date?.toISOString()),
 });

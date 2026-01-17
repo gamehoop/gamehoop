@@ -25,8 +25,7 @@ describe('POST /api/v1/games/$gameId/auth/resend-verification', () => {
     const { user, organization } = await createTestUser();
     const game = await createGame({ user, organization });
 
-    const playerAuth = createPlayerAuth(game);
-    const { user: player } = await playerAuth.signUpEmail({
+    const { user: player } = await createPlayerAuth(game).signUpEmail({
       body: {
         gameId: game.id,
         callbackURL: '',

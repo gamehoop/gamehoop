@@ -1,4 +1,5 @@
 import { Game } from '@/db/types';
+import { parseSessionToken } from '@/domain/api';
 import { Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerRepo } from '@/repos/player-repo';
@@ -24,14 +25,20 @@ describe('GET /api/v1/games/$gameId/player', () => {
 
   it('should return the current player data', async () => {
     const playerAuth = createPlayerAuth(game);
-    const { token, user: player } = await playerAuth.signUpEmail({
+    const {
+      headers,
+      response: { user: player },
+    } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
         name: faker.person.fullName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
       },
+      returnHeaders: true,
     });
+
+    const token = parseSessionToken(headers);
 
     const res = await GET({
       params: { gameId: game.id },
@@ -51,6 +58,7 @@ describe('GET /api/v1/games/$gameId/player', () => {
       email: player.email,
       emailVerified: false,
       image: null,
+      isAnonymous: false,
       gameId: game.id,
       createdAt: player.createdAt.toISOString(),
       updatedAt: player.updatedAt.toISOString(),
@@ -101,14 +109,17 @@ describe('DELETE /api/v1/games/$gameId/player', () => {
 
   it('should delete the current player', async () => {
     const playerAuth = createPlayerAuth(game);
-    const { token } = await playerAuth.signUpEmail({
+    const { headers } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
         name: faker.person.fullName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
       },
+      returnHeaders: true,
     });
+
+    const token = parseSessionToken(headers);
 
     const startCount = await playerRepo.count();
 

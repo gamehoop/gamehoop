@@ -1,7 +1,9 @@
 import { playerApiHandler } from '@/domain/api';
-import { playerSessionRepo } from '@/repos/player-session-repo';
-import { noContent } from '@/utils/http';
+import { logError } from '@/libs/logger';
+import { createPlayerAuth } from '@/libs/player-auth';
+import { noContent, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { APIError } from 'better-auth';
 
 export async function DELETE({
   params: { gameId },
@@ -10,11 +12,23 @@ export async function DELETE({
   params: { gameId: string };
   request: Request;
 }) {
-  return playerApiHandler({ gameId, request }, async ({ token }) => {
-    await playerSessionRepo.delete({
-      where: { token },
-    });
-    return noContent();
+  return playerApiHandler({ gameId, request }, async ({ game, headers }) => {
+    try {
+      await createPlayerAuth(game).signOut({
+        headers,
+      });
+      return noContent();
+    } catch (error) {
+      if (error instanceof APIError) {
+        return Response.json(
+          { error: error.message },
+          { status: error.statusCode },
+        );
+      }
+
+      logError(error);
+      return serverError();
+    }
   });
 }
 

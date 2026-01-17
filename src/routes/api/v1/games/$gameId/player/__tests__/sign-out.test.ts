@@ -1,4 +1,5 @@
 import { Game } from '@/db/types';
+import { parseSessionToken } from '@/domain/api';
 import { Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerSessionRepo } from '@/repos/player-session-repo';
@@ -24,7 +25,9 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
 
   it('should delete the session for a given token', async () => {
     const playerAuth = createPlayerAuth(game);
-    const session = await playerAuth.signInAnonymous();
+    const { headers, response: session } = await playerAuth.signInAnonymous({
+      returnHeaders: true,
+    });
 
     expect(
       await playerSessionRepo.findOne({ where: { token: session?.token } }),
@@ -34,7 +37,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
       params: { gameId: game.id },
       request: apiRequest({
         uri,
-        token: session?.token,
+        token: parseSessionToken(headers) ?? '',
       }),
     });
 

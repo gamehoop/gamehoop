@@ -13,8 +13,7 @@ async function playerAuthRequestHandler({
   if (!game) {
     throw notFound();
   }
-  const playerAuth = createPlayerAuth(game);
-  return playerAuth.handler(request);
+  return createPlayerAuth(game).handler(request);
 }
 
 export const Route = createFileRoute('/api/player-auth/$gameId/$')({

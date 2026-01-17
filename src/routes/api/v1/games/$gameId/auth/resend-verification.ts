@@ -1,8 +1,10 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
+import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerRepo } from '@/repos/player-repo';
-import { badRequest, ok } from '@/utils/http';
+import { badRequest, ok, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { APIError } from 'better-auth';
 import z from 'zod';
 
 const zReqBody = z.object({ email: z.email() });
@@ -24,15 +26,26 @@ export async function POST({
       });
     }
 
-    const playerAuth = createPlayerAuth(game);
-    await playerAuth.sendVerificationEmail({
-      body: {
-        email,
-        callbackURL: `/games/${game.id}/email-verified`,
-      },
-    });
+    try {
+      await createPlayerAuth(game).sendVerificationEmail({
+        body: {
+          email,
+          callbackURL: `/games/${game.id}/email-verified`,
+        },
+      });
 
-    return ok();
+      return ok();
+    } catch (error) {
+      if (error instanceof APIError) {
+        return Response.json(
+          { error: error.message },
+          { status: error.statusCode },
+        );
+      }
+
+      logError(error);
+      return serverError();
+    }
   });
 }
 

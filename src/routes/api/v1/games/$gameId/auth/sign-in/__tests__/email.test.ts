@@ -48,7 +48,6 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Created);
-    expect(res.headers.get('Set-Cookie')).contains('session_token');
     expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
@@ -62,6 +61,7 @@ describe('POST /api/v1/game/$gameId/auth/sign-in/email', () => {
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         image: null,
+        isAnonymous: false,
         gameId: game.id,
       },
     });

@@ -1,11 +1,14 @@
 import { Game, Player } from '@/db/types';
 import { logError } from '@/libs/logger';
+import { createPlayerAuth } from '@/libs/player-auth';
 import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
 import { gameRepo } from '@/repos/game-repo';
 import { playerRepo } from '@/repos/player-repo';
 import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
 import { hashApiKey } from '../game-api-key';
+
+const sessionTokenKey = `gamehoop.session_token`;
 
 export async function verifyApiToken({
   request,
@@ -61,6 +64,13 @@ export async function parseJson<S extends z.ZodObject>(
     }
     throw badRequest({ error: message });
   }
+}
+
+export function parseSessionToken(headers: Headers): string | null {
+  const match = headers
+    .get('Set-Cookie')
+    ?.match(/gamehoop\.session_token=([^;]+)/);
+  return match?.[1] ?? null;
 }
 
 export async function apiHandler(
@@ -145,10 +155,12 @@ export async function playerApiHandler(
   handler: ({
     game,
     player,
+    headers,
     token,
   }: {
     game: Game;
     player: Player;
+    headers: HeadersInit;
     token: string;
   }) => Promise<Response>,
 ) {
@@ -157,12 +169,18 @@ export async function playerApiHandler(
     return unauthorized();
   }
 
+  const headers: HeadersInit = {
+    Cookie: `${sessionTokenKey}=${token}`,
+  };
+
   return gameApiHandler({ request, gameId }, async ({ game }) => {
-    const player = await playerRepo.findOneForSession(token);
+    const session = await createPlayerAuth(game).getSession({ headers });
+
+    const player = session?.user as Player;
     if (!player || player.gameId !== game.id) {
       return unauthorized();
     }
 
-    return handler({ game, player, token });
+    return handler({ game, player, headers, token });
   });
 }

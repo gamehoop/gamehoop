@@ -1,7 +1,9 @@
 import { parseJson, playerApiHandler } from '@/domain/api';
+import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { ok, unauthorized } from '@/utils/http';
+import { ok, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
+import { APIError } from 'better-auth';
 import z from 'zod';
 
 const zReqBody = z.object({ newEmail: z.email() });
@@ -13,23 +15,30 @@ export async function POST({
   params: { gameId: string };
   request: Request;
 }) {
-  return playerApiHandler({ gameId, request }, async ({ game }) => {
-    if (!request.headers.get('Cookie')) {
-      return unauthorized();
-    }
-
+  return playerApiHandler({ gameId, request }, async ({ game, headers }) => {
     const { newEmail } = await parseJson(request, zReqBody);
 
-    const playerAuth = createPlayerAuth(game);
-    await playerAuth.changeEmail({
-      body: {
-        newEmail,
-        callbackURL: `/games/${game.id}/change-email-requested`,
-      },
-      headers: request.headers,
-    });
+    try {
+      await createPlayerAuth(game).changeEmail({
+        body: {
+          newEmail,
+          callbackURL: `/games/${game.id}/change-email-requested`,
+        },
+        headers,
+      });
 
-    return ok();
+      return ok();
+    } catch (error) {
+      if (error instanceof APIError) {
+        return Response.json(
+          { error: error.message },
+          { status: error.statusCode },
+        );
+      }
+
+      logError(error);
+      return serverError();
+    }
   });
 }
 

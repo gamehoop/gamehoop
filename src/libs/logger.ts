@@ -44,6 +44,6 @@ export function logError(error: unknown) {
   if (error instanceof Error) {
     logger.error({ err: error }, error.message);
   } else {
-    logger.error({ error }, 'Unknown error');
+    logger.error({ err: error }, 'Unknown error');
   }
 }

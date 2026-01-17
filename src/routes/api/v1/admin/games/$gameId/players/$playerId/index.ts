@@ -13,11 +13,7 @@ export async function GET({
   return adminPlayerApiHandler(
     { gameId, playerId, request },
     async ({ player }) => {
-      const data = zPlayer.parse({
-        ...player,
-        createdAt: player.createdAt.toISOString(),
-        updatedAt: player.updatedAt.toISOString(),
-      });
+      const data = zPlayer.parse(player);
       return ok(data);
     },
   );

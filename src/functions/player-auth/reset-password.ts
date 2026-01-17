@@ -14,6 +14,7 @@ export const resetPassword = createServerFn({ method: HttpMethod.Post })
   )
   .handler(async ({ data: { gameId, newPassword, token } }): Promise<void> => {
     const game = await gameRepo.findOneOrThrow({ where: { id: gameId } });
-    const playerAuth = createPlayerAuth(game);
-    await playerAuth.resetPassword({ body: { token, newPassword } });
+    await createPlayerAuth(game).resetPassword({
+      body: { token, newPassword },
+    });
   });

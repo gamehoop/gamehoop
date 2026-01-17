@@ -1,5 +1,6 @@
-import { gameApiHandler, parseJson } from '@/domain/api';
+import { gameApiHandler, parseJson, parseSessionToken } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
+import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { created, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
@@ -28,11 +29,10 @@ export async function POST({
     const body = await parseJson(request, zReqBody);
 
     try {
-      const playerAuth = createPlayerAuth(game);
       const {
         headers,
-        response: { token, user: player },
-      } = await playerAuth.signUpEmail({
+        response: { user: player },
+      } = await createPlayerAuth(game).signUpEmail({
         body: {
           gameId: game.id,
           callbackURL: `/games/${game.id}/email-verified`,
@@ -42,15 +42,11 @@ export async function POST({
       });
 
       const data = zResBody.parse({
-        token,
-        player: {
-          ...player,
-          createdAt: player.createdAt.toISOString(),
-          updatedAt: player.updatedAt.toISOString(),
-        },
+        token: parseSessionToken(headers),
+        player,
       });
 
-      return created(data, { headers });
+      return created(data);
     } catch (error) {
       if (error instanceof APIError) {
         return Response.json(
@@ -59,6 +55,7 @@ export async function POST({
         );
       }
 
+      logError(error);
       return serverError();
     }
   });

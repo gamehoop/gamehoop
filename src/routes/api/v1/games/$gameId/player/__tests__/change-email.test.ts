@@ -1,4 +1,5 @@
 import { Game } from '@/db/types';
+import { parseSessionToken } from '@/domain/api';
 import { Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { HttpStatus } from '@/utils/http';
@@ -26,7 +27,7 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
     const game = await createGame({ user, organization });
 
     const playerAuth = createPlayerAuth(game);
-    const { token } = await playerAuth.signUpEmail({
+    const { headers, response: session } = await playerAuth.signUpEmail({
       body: {
         gameId: game.id,
         callbackURL: '',
@@ -34,6 +35,7 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
         email: faker.internet.email(),
         password: faker.internet.password(),
       },
+      returnHeaders: true,
     });
 
     const newEmail = faker.internet.email();
@@ -42,21 +44,16 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
     vi.spyOn(
       await import('@/libs/player-auth'),
       'createPlayerAuth',
-    ).mockReturnValueOnce({
+    ).mockReturnValue({
       changeEmail: mockChangeEmail,
+      getSession: vi.fn().mockResolvedValue(session),
     } as any);
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      Cookie: `better-auth.session_token=${token}`,
-    };
 
     const res = await POST({
       params: { gameId: game.id },
       request: apiRequest({
         uri,
-        headers,
+        token: parseSessionToken(headers) ?? '',
         data: {
           newEmail,
         },
@@ -72,7 +69,9 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
         newEmail,
         callbackURL: `/games/${game.id}/change-email-requested`,
       },
-      headers: new Headers(headers),
+      headers: {
+        Cookie: `gamehoop.session_token=${parseSessionToken(headers)}`,
+      },
     });
   });
 
@@ -85,10 +84,7 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
       params: { gameId: faker.string.uuid() },
       request: apiRequest({
         uri,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Cookie: `better-auth.session_token=${token}`,
-        },
+        token,
         data: {
           newEmail: faker.internet.email(),
         },
@@ -100,35 +96,20 @@ describe('POST /api/v1/games/$gameId/player/change-email', () => {
 
   it('should return bad request if body is invalid json', async () => {
     const playerAuth = createPlayerAuth(game);
-    const session = await playerAuth.signInAnonymous();
-    const token = session?.token ?? '';
+    const { headers } = await playerAuth.signInAnonymous({
+      returnHeaders: true,
+    });
+    const token = parseSessionToken(headers);
 
     const res = await POST({
       params: { gameId: game.id },
       request: apiRequest({
         uri,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Cookie: `better-auth.session_token=${token}`,
-        },
+        token: token ?? '',
         body: '',
       }),
     });
 
     expect(res.status).toBe(HttpStatus.BadRequest);
-  });
-
-  it('should return unauthorized if the Cookie header is missing', async () => {
-    const res = await POST({
-      params: { gameId: game.id },
-      request: apiRequest({
-        uri,
-        data: {
-          newEmail: faker.internet.email(),
-        },
-      }),
-    });
-
-    expect(res.status).toBe(HttpStatus.Unauthorized);
   });
 });
