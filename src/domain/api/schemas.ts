@@ -15,3 +15,13 @@ export const zPlayer = z.object({
     .nullable()
     .transform((date) => date?.toISOString()),
 });
+
+export const zPage = <S extends z.ZodTypeAny>(schema: S) =>
+  z.object({
+    data: z.array(schema),
+    total: z.int().nonnegative(),
+    page: z.int().positive(),
+    pageSize: z.int().positive(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  });

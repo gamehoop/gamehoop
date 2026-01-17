@@ -66,6 +66,24 @@ export async function parseJson<S extends z.ZodObject>(
   }
 }
 
+export function parseParams<S extends z.ZodObject>(
+  request: Request,
+  schema: S,
+): z.infer<S> {
+  try {
+    const url = new URL(request.url);
+    return schema.parse(Object.fromEntries(url.searchParams));
+  } catch (error) {
+    let message: string | z.core.$ZodIssue[] = 'Unknown error';
+    if (error instanceof ZodError) {
+      message = error.issues;
+    } else if (error instanceof Error) {
+      message = error.message;
+    }
+    throw badRequest({ error: message });
+  }
+}
+
 export function parseSessionToken(headers: Headers): string | null {
   const match = headers
     .get('Set-Cookie')
