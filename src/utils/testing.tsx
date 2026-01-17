@@ -3,6 +3,7 @@ import { db } from '@/db';
 import { Game } from '@/db/types';
 import { generateApiKey, hashApiKey, Scope } from '@/domain/game-api-key';
 import { auth, Organization, User } from '@/libs/auth';
+import { createPlayerAuth } from '@/libs/player-auth';
 import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
 import { gameRepo } from '@/repos/game-repo';
 import { getRouter } from '@/router';
@@ -109,4 +110,26 @@ export async function createGameWithApiKey({
   });
 
   return { game, apiKey };
+}
+
+export async function createPlayers({
+  game,
+  n = 3,
+}: {
+  game: Game;
+  n: number;
+}) {
+  const players = [];
+  for (let i = 0; i < n; i++) {
+    const { user } = await createPlayerAuth(game).signUpEmail({
+      body: {
+        gameId: game.id,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    });
+    players.push(user);
+  }
+  return players;
 }
