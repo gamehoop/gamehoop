@@ -28,6 +28,7 @@ export const {
   useSession,
   getSession,
   requestPasswordReset,
+  sendVerificationEmail,
   deleteUser,
   updateUser,
   organization,

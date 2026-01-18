@@ -15,7 +15,7 @@ export function useNotifications() {
       icon,
     }: {
       title?: string;
-      message: string;
+      message: string | ReactNode;
       id?: string;
       autoClose?: number | false;
       icon?: ReactNode;

@@ -1,8 +1,10 @@
+import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { User } from '@/libs/auth';
+import { sendVerificationEmail } from '@/libs/auth/client';
 import { useLocation } from '@tanstack/react-router';
 import { Mail } from 'lucide-react';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export interface UseAccountNotifierProps {
   user?: User;
@@ -11,6 +13,14 @@ export interface UseAccountNotifierProps {
 export function useAccountNotifier({ user }: UseAccountNotifierProps) {
   const notify = useNotifications();
   const location = useLocation();
+
+  const onResendVerificationEmail = useCallback(async () => {
+    if (!user) {
+      return;
+    }
+
+    await sendVerificationEmail({ email: user.email });
+  }, [user]);
 
   useEffect(() => {
     if (location.search.error) {
@@ -23,7 +33,20 @@ export function useAccountNotifier({ user }: UseAccountNotifierProps) {
     if (user && !user.emailVerified) {
       notify.warning({
         title: 'Verify your email address',
-        message: 'Please check your inbox and verify your email address.',
+        message: (
+          <div className="flex">
+            <div className="w-4/5">
+              Please check your inbox and verify your email address.
+            </div>
+            <Button
+              variant="subtle"
+              size="xs"
+              onClick={onResendVerificationEmail}
+            >
+              Resend
+            </Button>
+          </div>
+        ),
         id: 'verify-email-notification',
         autoClose: false,
         icon: <Mail />,
@@ -54,5 +77,5 @@ export function useAccountNotifier({ user }: UseAccountNotifierProps) {
         message: 'Your account has been permanently deleted.',
       });
     }
-  }, [user, notify, location]);
+  }, [user, notify, location, onResendVerificationEmail]);
 }

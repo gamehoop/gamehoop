@@ -1,1 +1,1 @@
-export { Notifications } from '@mantine/notifications';
+export { notifications, Notifications } from '@mantine/notifications';
