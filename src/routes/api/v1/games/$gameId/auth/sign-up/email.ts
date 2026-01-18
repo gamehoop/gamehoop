@@ -1,8 +1,7 @@
 import { gameApiHandler, parseJson, parseSessionToken } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
-import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { created, serverError } from '@/utils/http';
+import { created } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { APIError } from 'better-auth';
 import z from 'zod';
@@ -55,8 +54,7 @@ export async function POST({
         );
       }
 
-      logError(error);
-      return serverError();
+      throw error;
     }
   });
 }

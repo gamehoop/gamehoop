@@ -1,7 +1,6 @@
 import { playerApiHandler } from '@/domain/api';
-import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { noContent, serverError } from '@/utils/http';
+import { noContent } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { APIError } from 'better-auth';
 
@@ -26,8 +25,7 @@ export async function DELETE({
         );
       }
 
-      logError(error);
-      return serverError();
+      throw error;
     }
   });
 }

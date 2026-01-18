@@ -1,7 +1,6 @@
 import { parseJson, playerApiHandler } from '@/domain/api';
-import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { ok, serverError } from '@/utils/http';
+import { ok } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { APIError } from 'better-auth';
 import z from 'zod';
@@ -36,8 +35,7 @@ export async function POST({
         );
       }
 
-      logError(error);
-      return serverError();
+      throw error;
     }
   });
 }

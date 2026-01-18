@@ -68,11 +68,19 @@ export function createPlayerAuth(game: Game) {
       autoSignInAfterVerification: true,
       // To send the verification email
       sendVerificationEmail: async ({ user, url }) => {
+        let link = new URL(url);
+        if (url.includes('change-email-requested')) {
+          link.searchParams.set(
+            'callbackURL',
+            `/games/${game.id}/email-verified`,
+          );
+        }
+
         await sendVerificationEmail({
           from: fromEmail,
           replyTo: replyToEmail,
           user,
-          url,
+          url: link.toString(),
         });
       },
     },
@@ -96,10 +104,11 @@ export function createPlayerAuth(game: Game) {
         // Allow users to change their email
         enabled: true,
         // Send email to current address for users to confirm a change of address
-        sendChangeEmailConfirmation: async ({ user, url }) => {
+        sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
           await sendChangeEmailConfirmation({
             from: fromEmail,
             replyTo: replyToEmail,
+            newEmail,
             user,
             url,
           });

@@ -31,15 +31,17 @@ export async function sendVerificationEmail({
 
 export async function sendChangeEmailConfirmation({
   user,
+  newEmail,
   url,
 }: {
   user: { email: string };
+  newEmail: string;
   url: string;
 }): Promise<void> {
   await sendEmail({
     to: user.email,
     subject: 'Approve your email change',
-    html: `Click the link to approve the change: <a href="${url}">Approve Change</a>`,
+    html: `Click the link to approve changing your email to ${newEmail}: <a href="${url}">Approve Change</a>`,
   });
 }
 

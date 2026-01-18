@@ -56,12 +56,18 @@ export async function parseJson<S extends z.ZodObject>(
   try {
     return schema.parse(await request.json());
   } catch (error) {
-    let message: string | z.core.$ZodIssue[] = 'Unknown error';
+    let message: string | Array<{ path: PropertyKey[]; message: string }> =
+      'Unknown error';
+
     if (error instanceof ZodError) {
-      message = error.issues;
+      message = error.issues.map((issue) => ({
+        path: issue.path,
+        message: issue.message,
+      }));
     } else if (error instanceof Error) {
       message = error.message;
     }
+
     throw badRequest({ error: message });
   }
 }
@@ -74,12 +80,18 @@ export function parseParams<S extends z.ZodObject>(
     const url = new URL(request.url);
     return schema.parse(Object.fromEntries(url.searchParams));
   } catch (error) {
-    let message: string | z.core.$ZodIssue[] = 'Unknown error';
+    let message: string | Array<{ path: PropertyKey[]; message: string }> =
+      'Unknown error';
+
     if (error instanceof ZodError) {
-      message = error.issues;
+      message = error.issues.map((issue) => ({
+        path: issue.path,
+        message: issue.message,
+      }));
     } else if (error instanceof Error) {
       message = error.message;
     }
+
     throw badRequest({ error: message });
   }
 }

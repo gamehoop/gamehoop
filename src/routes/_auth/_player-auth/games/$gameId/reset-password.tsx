@@ -32,6 +32,7 @@ export const Route = createFileRoute(
 function PlayerResetPassword() {
   const { token } = Route.useSearch();
   const { game } = Route.useLoaderData();
+  const [hasReset, setHasReset] = useState(false);
 
   const [alertProps, setAlertProps] = useState<AlertProps>();
 
@@ -65,6 +66,7 @@ function PlayerResetPassword() {
           status: 'success',
           title: 'Password reset successful',
         });
+        setHasReset(true);
       } catch (error) {
         setAlertProps({
           status: 'error',
@@ -134,7 +136,7 @@ function PlayerResetPassword() {
             {([canSubmit, isSubmitting]) => (
               <Button
                 onClick={() => form.handleSubmit()}
-                disabled={!canSubmit || isSubmitting}
+                disabled={!canSubmit || isSubmitting || hasReset}
                 loading={isSubmitting}
                 fullWidth
               >

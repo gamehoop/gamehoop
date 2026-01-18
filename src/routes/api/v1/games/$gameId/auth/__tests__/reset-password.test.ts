@@ -79,7 +79,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
     expect(res.status).toBe(HttpStatus.NotFound);
   });
 
-  it('should return bad request if the player does not exist', async () => {
+  it('should return unprocessable entity if the player does not exist', async () => {
     const res = await POST({
       params: { gameId: game.id },
       request: apiRequest({
@@ -91,7 +91,7 @@ describe('POST /api/v1/games/$gameId/auth/reset-password', () => {
       }),
     });
 
-    expect(res.status).toBe(HttpStatus.BadRequest);
+    expect(res.status).toBe(HttpStatus.UnprocessableEntity);
   });
 
   it('should return bad request if body is invalid json', async () => {

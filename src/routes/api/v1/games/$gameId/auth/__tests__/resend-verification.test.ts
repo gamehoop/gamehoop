@@ -79,22 +79,24 @@ describe('POST /api/v1/games/$gameId/auth/resend-verification', () => {
     expect(res.status).toBe(HttpStatus.NotFound);
   });
 
-  it('should return bad request if the player does not exist', async () => {
+  it('should return unprocessable entity if the email does not exist', async () => {
+    const email = faker.internet.email();
+
     const res = await POST({
       params: { gameId: game.id },
       request: apiRequest({
         uri,
         data: {
-          email: faker.internet.email(),
+          email,
         },
       }),
     });
 
-    expect(res.status).toBe(HttpStatus.BadRequest);
+    expect(res.status).toBe(HttpStatus.UnprocessableEntity);
 
     const body = await res.json();
     expect(body).toEqual({
-      error: 'A player with that email does not exist.',
+      error: `A player with email ${email} does not exist.`,
     });
   });
 

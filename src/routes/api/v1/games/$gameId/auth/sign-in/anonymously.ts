@@ -4,7 +4,7 @@ import { zPlayer } from '@/domain/api/schemas';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerRepo } from '@/repos/player-repo';
 import { playerSessionRepo } from '@/repos/player-session-repo';
-import { created, serverError } from '@/utils/http';
+import { created, notFound, serverError } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import z from 'zod';
 
@@ -44,9 +44,14 @@ export async function POST({
 
     let player: Player;
     if (playerId) {
-      player = await playerRepo.findOneOrThrow({
+      const existingPlayer = await playerRepo.findOne({
         where: { id: playerId },
       });
+      if (!existingPlayer) {
+        return notFound();
+      }
+      player = existingPlayer;
+
       await playerSessionRepo.update({
         where: { token: session.token },
         data: {

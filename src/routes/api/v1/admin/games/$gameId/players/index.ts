@@ -8,7 +8,9 @@ import z from 'zod';
 const zReqParams = z.object({
   page: z.coerce.number().int().positive().default(1),
   pageSize: z.coerce.number().int().positive().default(20),
-  sortBy: z.enum(['createdAt', 'lastLoginAt']).default('createdAt'),
+  sortBy: z
+    .enum(['createdAt', 'lastLoginAt', 'name', 'email'])
+    .default('createdAt'),
   sortDir: z.enum(['asc', 'desc']).default('desc'),
   name: z.string().optional(),
   email: z.string().optional(),

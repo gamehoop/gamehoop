@@ -1,8 +1,7 @@
 import { playerApiHandler } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
-import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
-import { noContent, ok, serverError } from '@/utils/http';
+import { noContent, ok } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { APIError } from 'better-auth';
 
@@ -41,8 +40,7 @@ export async function DELETE({
         );
       }
 
-      logError(error);
-      return serverError();
+      throw error;
     }
   });
 }

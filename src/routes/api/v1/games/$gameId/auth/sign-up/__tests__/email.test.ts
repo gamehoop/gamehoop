@@ -54,7 +54,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     });
   });
 
-  it('should validate the player details', async () => {
+  it('should require email, password, and name', async () => {
     const playerDetails = {};
 
     const res = await POST({
@@ -81,6 +81,34 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
         expect.objectContaining({
           path: ['name'],
           message: 'Invalid input: expected string, received undefined',
+        }),
+      ],
+    });
+  });
+
+  it('should require a valid email', async () => {
+    const playerDetails = {
+      email: 'invalid',
+      name: faker.person.fullName(),
+      password: faker.internet.password(),
+    };
+
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({
+        uri,
+        data: playerDetails,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      error: [
+        expect.objectContaining({
+          path: ['email'],
+          message: 'Invalid email address',
         }),
       ],
     });
@@ -175,7 +203,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(token).toBeNull();
   });
 
-  it('should return 404 if the game does not exist', async () => {
+  it('should return not found if the game does not exist', async () => {
     const playerDetails = {
       name: faker.person.fullName(),
       email: faker.internet.email().toLowerCase(),

@@ -43,11 +43,13 @@ export async function sendVerificationEmail({
 export async function sendChangeEmailConfirmation({
   from,
   replyTo,
+  newEmail,
   user,
   url,
 }: {
   from: string;
   replyTo?: string;
+  newEmail: string;
   user: { email: string };
   url: string;
 }): Promise<void> {
@@ -56,6 +58,6 @@ export async function sendChangeEmailConfirmation({
     to: user.email,
     replyTo,
     subject: 'Approve your email change',
-    html: `Click the link to approve the change: <a href="${url}">Approve Change</a>`,
+    html: `Click the link to approve changing your email to ${newEmail}: <a href="${url}">Approve Change</a>`,
   });
 }

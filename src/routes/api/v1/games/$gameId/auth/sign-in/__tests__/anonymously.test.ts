@@ -49,8 +49,6 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
   });
 
   it('should reuse a given player identifier', async () => {
-    const startCount = await playerRepo.count();
-
     let res = await POST({
       params: { gameId: game.id },
       request: apiRequest({ uri }),
@@ -59,6 +57,8 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     expect(res.status).toBe(HttpStatus.Created);
 
     const { player } = await res.json();
+
+    const startCount = await playerRepo.count();
 
     res = await POST({
       params: { gameId: game.id },
@@ -81,7 +81,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     const endCount = await playerRepo.count();
-    expect(endCount).toEqual(startCount + 1);
+    expect(endCount).toEqual(startCount);
   });
 
   it('should use a given player name', async () => {
@@ -101,7 +101,36 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     expect(player.name).toEqual(name);
   });
 
-  it('should return 404 if the game does not exist', async () => {
+  it('should validate the name', async () => {
+    const res = await POST({
+      params: { gameId: game.id },
+      request: apiRequest({
+        uri,
+        data: { name: '' },
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.BadRequest);
+    expect(await res.json()).toEqual({
+      error: [
+        {
+          path: ['name'],
+          message: 'Too small: expected string to have >=1 characters',
+        },
+      ],
+    });
+  });
+
+  it('should return not found if the player does not exist', async () => {
+    const res = await POST({
+      params: { gameId: faker.string.uuid() },
+      request: apiRequest({ uri, data: { playerId: faker.string.uuid() } }),
+    });
+
+    expect(res.status).toBe(HttpStatus.NotFound);
+  });
+
+  it('should return not found if the game does not exist', async () => {
     const res = await POST({
       params: { gameId: faker.string.uuid() },
       request: apiRequest({ uri }),

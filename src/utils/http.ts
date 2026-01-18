@@ -8,6 +8,7 @@ export enum HttpStatus {
   Forbidden = 403,
   NotFound = 404,
   Conflict = 409,
+  UnprocessableEntity = 422,
   TooManyRequests = 429,
   ServerError = 500,
 }
@@ -47,6 +48,9 @@ export const notFound = (body: object = {}, init?: ResponseInit) =>
 
 export const conflict = (body: object = {}, init?: ResponseInit) =>
   Response.json(body, { ...init, status: HttpStatus.Conflict });
+
+export const unprocessableEntity = (body: object = {}, init?: ResponseInit) =>
+  Response.json(body, { ...init, status: HttpStatus.UnprocessableEntity });
 
 export const serverError = (body: object = {}, init?: ResponseInit) =>
   Response.json(body, { ...init, status: HttpStatus.ServerError });

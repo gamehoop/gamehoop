@@ -1,8 +1,7 @@
 import { gameApiHandler, parseJson } from '@/domain/api';
-import { logError } from '@/libs/logger';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { playerRepo } from '@/repos/player-repo';
-import { badRequest, ok, serverError } from '@/utils/http';
+import { ok, unprocessableEntity } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 import { APIError } from 'better-auth';
 import z from 'zod';
@@ -21,7 +20,9 @@ export async function POST({
 
     const player = await playerRepo.findOne({ where: { email } });
     if (!player) {
-      return badRequest({ error: 'A player with that email does not exist.' });
+      return unprocessableEntity({
+        error: `A player with email ${email} does not exist.`,
+      });
     }
 
     try {
@@ -41,8 +42,7 @@ export async function POST({
         );
       }
 
-      logError(error);
-      return serverError();
+      throw error;
     }
   });
 }
