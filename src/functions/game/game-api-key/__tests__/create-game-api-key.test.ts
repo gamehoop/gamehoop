@@ -34,7 +34,7 @@ describe('create-game-api-key serverFn', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toStrictEqual({
       apiKey: expect.any(String),
       gameId: game.id,
       scopes: [Scope.All],
@@ -48,7 +48,7 @@ describe('create-game-api-key serverFn', () => {
       active: true,
     });
 
-    expect(result.apiKey).not.toEqual(result.keyHash);
+    expect(result.apiKey).not.toStrictEqual(result.keyHash);
 
     expect(createApiKeySpy).toHaveBeenCalledTimes(1);
   });

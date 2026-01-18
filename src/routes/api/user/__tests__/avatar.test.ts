@@ -26,11 +26,11 @@ describe('GET /api/user/avatar', () => {
 
     const res = await GET();
 
-    expect(res.status).toEqual(HttpStatus.Ok);
+    expect(res.status).toStrictEqual(HttpStatus.Ok);
 
     const arrayBuffer = await res.arrayBuffer();
     const responseData = new Uint8Array(arrayBuffer);
-    expect(responseData).toEqual(mockLogoData);
+    expect(responseData).toStrictEqual(mockLogoData);
 
     expect(getUserObject).toHaveBeenCalledWith({
       key: 'avatar',
@@ -43,6 +43,6 @@ describe('GET /api/user/avatar', () => {
 
     const res = await GET();
 
-    expect(res.status).toEqual(HttpStatus.NotFound);
+    expect(res.status).toStrictEqual(HttpStatus.NotFound);
   });
 });

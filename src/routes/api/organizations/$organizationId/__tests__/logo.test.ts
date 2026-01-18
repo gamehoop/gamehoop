@@ -33,11 +33,11 @@ describe('GET /api/organizations/$organizationId/logo', () => {
       params: { organizationId },
     });
 
-    expect(res.status).toEqual(HttpStatus.Ok);
+    expect(res.status).toStrictEqual(HttpStatus.Ok);
 
     const arrayBuffer = await res.arrayBuffer();
     const responseData = new Uint8Array(arrayBuffer);
-    expect(responseData).toEqual(mockLogoData);
+    expect(responseData).toStrictEqual(mockLogoData);
 
     expect(getObject).toHaveBeenCalledWith(
       buildKey(`organizations/${organizationId}/logo`),
@@ -55,7 +55,7 @@ describe('GET /api/organizations/$organizationId/logo', () => {
       params: { organizationId },
     });
 
-    expect(res.status).toEqual(HttpStatus.NotFound);
+    expect(res.status).toStrictEqual(HttpStatus.NotFound);
   });
 
   it('should return 404 when the logo does not exist', async () => {
@@ -65,6 +65,6 @@ describe('GET /api/organizations/$organizationId/logo', () => {
       params: { organizationId: faker.string.uuid() },
     });
 
-    expect(res.status).toEqual(HttpStatus.NotFound);
+    expect(res.status).toStrictEqual(HttpStatus.NotFound);
   });
 });

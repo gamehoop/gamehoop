@@ -39,7 +39,7 @@ describe('get-session-context serverFn', () => {
       .mockResolvedValue(mockGames);
 
     const context = await getSessionContext();
-    expect(context).toEqual({
+    expect(context).toStrictEqual({
       user: {
         ...mockUser,
         role: 'member',
@@ -113,7 +113,7 @@ describe('get-session-context serverFn', () => {
     vi.spyOn(gameRepo, 'findMany').mockResolvedValue(mockGames);
 
     const context = await getSessionContext();
-    expect(context).toEqual({
+    expect(context).toStrictEqual({
       user: {
         ...mockUser,
         role: 'member',

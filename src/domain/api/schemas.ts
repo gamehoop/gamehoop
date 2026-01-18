@@ -13,7 +13,7 @@ export const zPlayer = z.object({
   lastLoginAt: z
     .date()
     .nullable()
-    .transform((date) => date?.toISOString()),
+    .transform((date) => date?.toISOString() ?? null),
 });
 
 export const zPage = <S extends z.ZodTypeAny>(schema: S) =>

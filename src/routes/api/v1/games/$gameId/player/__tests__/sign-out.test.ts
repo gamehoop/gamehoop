@@ -41,7 +41,7 @@ describe('DELETE /api/v1/games/$gameId/player/sign-out', () => {
       }),
     });
 
-    expect(res.status).toEqual(HttpStatus.NoContent);
+    expect(res.status).toStrictEqual(HttpStatus.NoContent);
     expect(res.headers.get('Content-Type')).toBeNull();
 
     expect(

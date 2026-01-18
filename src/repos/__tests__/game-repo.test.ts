@@ -34,7 +34,7 @@ describe('GameRepo', () => {
       };
 
       const game = await gameRepo.create(values);
-      expect(game).toEqual({
+      expect(game).toStrictEqual({
         ...values,
         id: expect.any(String),
         logo: null,
@@ -47,7 +47,7 @@ describe('GameRepo', () => {
         .selectFrom('game')
         .select((b) => b.fn.countAll().as('count'))
         .executeTakeFirstOrThrow();
-      expect(Number(countAfter)).toEqual(Number(countBefore) + 1);
+      expect(Number(countAfter)).toStrictEqual(Number(countBefore) + 1);
     });
   });
 
@@ -58,7 +58,7 @@ describe('GameRepo', () => {
       const foundGame = await gameRepo.findOne({
         where: { id: game.id },
       });
-      expect(foundGame).toEqual(game);
+      expect(foundGame).toStrictEqual(game);
     });
 
     it('should find a game by platforms and createdBy', async () => {
@@ -68,7 +68,7 @@ describe('GameRepo', () => {
       const foundGame = await gameRepo.findOne({
         where: { platforms: game.platforms, createdBy: game.createdBy },
       });
-      expect(foundGame).toEqual(game);
+      expect(foundGame).toStrictEqual(game);
     });
 
     it('should return undefined if the game does not exist', async () => {
@@ -86,7 +86,7 @@ describe('GameRepo', () => {
       const foundGame = await gameRepo.findOneOrThrow({
         where: { id: game.id },
       });
-      expect(foundGame).toEqual(game);
+      expect(foundGame).toStrictEqual(game);
     });
 
     it('should find a game by platforms and createdBy', async () => {
@@ -96,7 +96,7 @@ describe('GameRepo', () => {
       const foundGame = await gameRepo.findOneOrThrow({
         where: { platforms: game.platforms, createdBy: game.createdBy },
       });
-      expect(foundGame).toEqual(game);
+      expect(foundGame).toStrictEqual(game);
     });
 
     it('should throw an error if the game does not exist', async () => {
@@ -116,15 +116,15 @@ describe('GameRepo', () => {
       const foundGames = await gameRepo.findMany({
         where: { createdBy: game1.createdBy },
       });
-      expect(foundGames).toEqual(expect.arrayContaining([game1, game2]));
-      expect(foundGames.length).toEqual(2);
+      expect(foundGames).toStrictEqual(expect.arrayContaining([game1, game2]));
+      expect(foundGames.length).toStrictEqual(2);
     });
 
     it('should return an empty array if no games match the criteria', async () => {
       const foundGames = await gameRepo.findMany({
         where: { createdBy: faker.string.uuid() },
       });
-      expect(foundGames).toEqual([]);
+      expect(foundGames).toStrictEqual([]);
     });
   });
 
@@ -137,7 +137,7 @@ describe('GameRepo', () => {
       const foundGames = await gameRepo.count({
         where: { createdBy: game.createdBy },
       });
-      expect(foundGames).toEqual(3);
+      expect(foundGames).toStrictEqual(3);
     });
   });
 
@@ -152,7 +152,7 @@ describe('GameRepo', () => {
       });
       const updatedGame = await gameRepo.findOne({ where: { id: game.id } });
 
-      expect(updatedGame).toEqual({
+      expect(updatedGame).toStrictEqual({
         ...game,
         name: updatedName,
         updatedAt: expect.any(Date),
@@ -170,7 +170,7 @@ describe('GameRepo', () => {
         data: { name: updatedName, updatedBy: user.id },
       });
 
-      expect(updatedGame).toEqual({
+      expect(updatedGame).toStrictEqual({
         ...game,
         name: updatedName,
         updatedAt: expect.any(Date),
@@ -200,7 +200,7 @@ describe('GameRepo', () => {
       const foundGame2 = await gameRepo.findOne({ where: { id: game2.id } });
 
       expect(foundGame1).toBeUndefined();
-      expect(foundGame2).toEqual(game2);
+      expect(foundGame2).toStrictEqual(game2);
     });
 
     it('should delete games by createdBy', async () => {

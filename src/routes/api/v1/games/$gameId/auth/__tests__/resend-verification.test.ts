@@ -95,7 +95,7 @@ describe('POST /api/v1/games/$gameId/auth/resend-verification', () => {
     expect(res.status).toBe(HttpStatus.UnprocessableEntity);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       error: `A player with email ${email} does not exist.`,
     });
   });

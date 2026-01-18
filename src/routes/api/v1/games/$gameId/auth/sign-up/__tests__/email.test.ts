@@ -40,14 +40,15 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
-    expect(body.token).toEqual(expect.any(String));
-    expect(body.player).toEqual({
+    expect(body.token).toStrictEqual(expect.any(String));
+    expect(body.player).toStrictEqual({
       name: playerDetails.name,
       email: playerDetails.email,
       id: expect.any(String),
       emailVerified: false,
       gameId: game.id,
       image: null,
+      lastLoginAt: null,
       isAnonymous: false,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
@@ -68,7 +69,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       error: [
         expect.objectContaining({
           path: ['email'],
@@ -104,7 +105,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       error: [
         expect.objectContaining({
           path: ['email'],
@@ -132,7 +133,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       error: [
         expect.objectContaining({
           path: ['password'],
@@ -167,7 +168,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-up/email', () => {
     expect(res.status).toBe(HttpStatus.BadRequest);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       error: [
         expect.objectContaining({
           path: ['password'],

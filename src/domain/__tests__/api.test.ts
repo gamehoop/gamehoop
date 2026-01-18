@@ -24,7 +24,7 @@ describe('getBearerToken', () => {
     });
 
     const result = getBearerToken(request);
-    expect(result).toEqual(token);
+    expect(result).toStrictEqual(token);
   });
 
   it('should return null if no Authorization header is present', () => {

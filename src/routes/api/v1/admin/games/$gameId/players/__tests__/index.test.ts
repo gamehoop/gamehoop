@@ -34,10 +34,10 @@ describe('GET /api/v1/admin/games/$gameId/players', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       data: expect.arrayContaining(
         players.map((player) => zPlayer.parse(player)),
       ),
@@ -63,10 +63,10 @@ describe('GET /api/v1/admin/games/$gameId/players', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       data: [zPlayer.parse(players[2])],
       total: players.length,
       page: 1,
@@ -90,10 +90,10 @@ describe('GET /api/v1/admin/games/$gameId/players', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       data: [zPlayer.parse(players[1])],
       total: players.length,
       page: 2,
@@ -117,10 +117,10 @@ describe('GET /api/v1/admin/games/$gameId/players', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     let body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       data: players
         .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
         .map((player) => zPlayer.parse(player)),
@@ -140,10 +140,10 @@ describe('GET /api/v1/admin/games/$gameId/players', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       data: players
         .sort((a, b) => b.name.localeCompare(a.name))
         .map((player) => zPlayer.parse(player)),

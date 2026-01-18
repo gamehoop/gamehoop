@@ -31,7 +31,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     expect(res.headers.get('Content-Type')).toBe('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       token: expect.any(String),
       player: {
         name: expect.any(String),
@@ -71,7 +71,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     expect(res.status).toBe(HttpStatus.Created);
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       token: expect.any(String),
       player: expect.objectContaining({
         id: player.id,
@@ -81,7 +81,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     const endCount = await playerRepo.count();
-    expect(endCount).toEqual(startCount);
+    expect(endCount).toStrictEqual(startCount);
   });
 
   it('should use a given player name', async () => {
@@ -98,7 +98,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     expect(res.status).toBe(HttpStatus.Created);
 
     const { player } = await res.json();
-    expect(player.name).toEqual(name);
+    expect(player.name).toStrictEqual(name);
   });
 
   it('should validate the name', async () => {
@@ -111,7 +111,7 @@ describe('POST /api/v1/games/$gameId/auth/sign-in/anonymously', () => {
     });
 
     expect(res.status).toBe(HttpStatus.BadRequest);
-    expect(await res.json()).toEqual({
+    expect(await res.json()).toStrictEqual({
       error: [
         {
           path: ['name'],

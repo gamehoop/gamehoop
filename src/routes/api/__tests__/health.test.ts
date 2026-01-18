@@ -15,10 +15,10 @@ describe('/api/health', () => {
   it('should return a service healthcheck', async () => {
     const res = await GET();
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       commit: '',
       database: 'healthy',
       memoryMB: expect.any(Number),
@@ -35,6 +35,6 @@ describe('/api/health', () => {
     const res = await GET();
     expect(res.status).toBe(HttpStatus.ServerError);
     const body = await res.json();
-    expect(body.database).toEqual('unhealthy');
+    expect(body.database).toStrictEqual('unhealthy');
   });
 });

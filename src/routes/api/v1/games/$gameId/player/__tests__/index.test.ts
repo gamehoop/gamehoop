@@ -49,16 +49,17 @@ describe('GET /api/v1/games/$gameId/player', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Ok);
-    expect(res.headers.get('Content-Type')).toEqual('application/json');
+    expect(res.headers.get('Content-Type')).toStrictEqual('application/json');
 
     const body = await res.json();
-    expect(body).toEqual({
+    expect(body).toStrictEqual({
       id: player.id,
       name: player.name,
       email: player.email,
       emailVerified: false,
       image: null,
       isAnonymous: false,
+      lastLoginAt: null,
       gameId: game.id,
       createdAt: player.createdAt.toISOString(),
       updatedAt: player.updatedAt.toISOString(),
