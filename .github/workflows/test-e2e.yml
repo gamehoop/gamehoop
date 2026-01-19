@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
-        run: pnpm install --dev --frozen-lockfile --ignore-scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Install browsers
         run: pnpx playwright install --with-deps --no-shell chromium
       - name: Migrate Database
