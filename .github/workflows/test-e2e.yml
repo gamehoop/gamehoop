@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Install browsers
-        run: pnpx playwright install --with-deps --no-shell chromium
+        run: pnpx playwright install --with-deps chromium
       - name: Migrate Database
         run: pnpm db:migrate
       - name: Run tests
