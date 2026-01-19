@@ -96,6 +96,7 @@ function SignUp() {
                 placeholder="you@example.com"
                 leftSection={<AtSign />}
                 required
+                data-testid="email-input"
               />
             )}
           </form.Field>
@@ -112,6 +113,7 @@ function SignUp() {
                 placeholder="What should we call you?"
                 leftSection={<CircleUserRound />}
                 required
+                data-testid="name-input"
               />
             )}
           </form.Field>
@@ -128,6 +130,7 @@ function SignUp() {
                 placeholder="********"
                 leftSection={<Lock />}
                 required
+                data-testid="password-input"
               />
             )}
           </form.Field>
@@ -149,6 +152,7 @@ function SignUp() {
                 placeholder="********"
                 leftSection={<Lock />}
                 required
+                data-testid="password-confirmation-input"
               />
             )}
           </form.Field>

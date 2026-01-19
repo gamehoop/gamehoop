@@ -36,3 +36,9 @@ test-results
 # Editor Config
 .zed
 .vscode
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
