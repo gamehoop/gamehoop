@@ -19,7 +19,10 @@ export function useAccountNotifier({ user }: UseAccountNotifierProps) {
       return;
     }
 
-    await sendVerificationEmail({ email: user.email });
+    await sendVerificationEmail({
+      email: user.email,
+      callbackURL: '/?verified=true',
+    });
   }, [user]);
 
   useEffect(() => {
