@@ -167,7 +167,7 @@ export function UserSettingsForm() {
             required
             leftSection={<AtSign />}
             description={
-              user.emailVerified
+              user.emailVerified && field.state.value !== user.email
                 ? 'A confirmation email will be sent to your current address for approval'
                 : ''
             }
