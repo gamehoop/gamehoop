@@ -6,10 +6,11 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { Title } from '@/components/ui/title';
 import { getPublicGameDetails } from '@/functions/game/get-public-game-details';
 import { resetPassword } from '@/functions/player-auth/reset-password';
+import { themeColor } from '@/styles/theme';
 import { seo } from '@/utils/seo';
 import { useForm } from '@tanstack/react-form';
 import { createFileRoute } from '@tanstack/react-router';
-import { Lock } from 'lucide-react';
+import { Gamepad2, Lock } from 'lucide-react';
 import { useState } from 'react';
 import z from 'zod';
 
@@ -84,10 +85,19 @@ function PlayerResetPassword() {
   return (
     <Card className="w-112.5">
       <Card.Section>
-        <div className="flex justify-between items-center mb-2">
-          <Title order={2}>Reset Password</Title>
-          {game.logo && <Avatar src={`/api/games/${game.id}/logo`} />}
+        <div className="flex flex-col gap-2 mb-4 items-center">
+          <Avatar
+            src={game.logo ? `/api/games/${game.id}/logo` : ''}
+            size="lg"
+            variant="light"
+            color={themeColor}
+          >
+            <Gamepad2 />
+          </Avatar>
+          <Title order={2}>{game.name}</Title>
         </div>
+
+        <Title order={2}>Reset Password</Title>
 
         <form
           onSubmit={(e) => e.preventDefault()}
