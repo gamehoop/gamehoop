@@ -68,6 +68,18 @@ export interface GameApiKey {
   scopes: Generated<string[]>;
 }
 
+export interface GameEvent {
+  createdAt: Generated<Timestamp>;
+  deviceId: string | null;
+  gameId: string;
+  id: Generated<string>;
+  name: string;
+  playerId: string | null;
+  properties: Json | null;
+  sessionId: string | null;
+  timestamp: Timestamp;
+}
+
 export interface Invitation {
   createdAt: Generated<Timestamp>;
   email: string;
@@ -173,6 +185,7 @@ export interface DB {
   account: Account;
   game: Game;
   gameApiKey: GameApiKey;
+  gameEvent: GameEvent;
   invitation: Invitation;
   member: Member;
   organization: Organization;

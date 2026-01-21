@@ -1,6 +1,7 @@
 import { Insertable, Selectable, Updateable } from 'kysely';
 import {
   GameApiKey as GameApiKeyTable,
+  GameEvent as GameEventTable,
   Game as GameTable,
   PlayerSession as PlayerSessionTable,
   Player as PlayerTable,
@@ -25,6 +26,11 @@ export type UpdateableGame = Updateable<GameTable>;
 export type GameApiKey = Selectable<GameApiKeyTable>;
 export type InsertableGameApiKey = Insertable<GameApiKeyTable>;
 
+export type GameEvent = Selectable<GameEventTable>;
+export type InsertableGameEvent = Insertable<GameEventTable>;
+
 export type Player = Selectable<PlayerTable>;
+export type UpdatablePlayer = Updateable<PlayerTable>;
+
 export type PlayerSession = Selectable<PlayerSessionTable>;
 export type UpdateablePlayerSession = Updateable<PlayerSessionTable>;
