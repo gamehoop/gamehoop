@@ -16,6 +16,27 @@ export const zPlayer = z.object({
     .transform((date) => date?.toISOString() ?? null),
 });
 
+export const zGameEventProperty = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+  z.array(z.union([z.string(), z.number(), z.boolean()])),
+]);
+
+export const zGameEventProperties = z.record(z.string(), zGameEventProperty);
+
+export const zGameEvent = z.object({
+  id: z.string(),
+  gameId: z.string(),
+  name: z.string(),
+  playerId: z.string().nullable(),
+  properties: zGameEventProperties.optional(),
+  sessionId: z.string().nullable(),
+  deviceId: z.string().nullable(),
+  timestamp: z.date().transform((date) => date.toISOString()),
+  createdAt: z.date().transform((date) => date.toISOString()),
+});
+
 export const zPage = <S extends z.ZodTypeAny>(schema: S) =>
   z.object({
     data: z.array(schema),

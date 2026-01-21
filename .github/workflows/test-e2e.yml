@@ -50,10 +50,3 @@ jobs:
         run: pnpm db:migrate
       - name: Run tests
         run: pnpm test:e2e
-        env:
-          BETTER_AUTH_SECRET: secret
-          SMTP_SERVER: localhost
-          SMTP_PORT: 25
-          SMTP_USERNAME: smptuser
-          SMTP_PASSWORD: secret
-          SMTP_SENDER: hello@gamehoop.io

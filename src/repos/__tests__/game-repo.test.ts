@@ -128,6 +128,52 @@ describe('GameRepo', () => {
     });
   });
 
+  describe('page', () => {
+    it('should paginate multiple games', async () => {
+      const game1 = await createMockGame();
+      const game2 = await createMockGame();
+      const game3 = await createMockGame();
+
+      const { total, items } = await gameRepo.page({
+        where: { createdBy: game1.createdBy },
+      });
+
+      expect(total).toStrictEqual(3);
+      expect(items).toStrictEqual(
+        expect.arrayContaining([game3, game2, game1]),
+      );
+    });
+
+    it('supports a given pageSize', async () => {
+      const game1 = await createMockGame();
+      await createMockGame();
+      await createMockGame();
+
+      const { total, items } = await gameRepo.page({
+        pageSize: 1,
+        where: { createdBy: game1.createdBy },
+      });
+
+      expect(total).toStrictEqual(3);
+      expect(items).toStrictEqual([game1]);
+    });
+
+    it('supports a given page', async () => {
+      const game1 = await createMockGame();
+      const game2 = await createMockGame();
+      await createMockGame();
+
+      const { total, items } = await gameRepo.page({
+        page: 2,
+        pageSize: 1,
+        where: { createdBy: game1.createdBy },
+      });
+
+      expect(total).toStrictEqual(3);
+      expect(items).toStrictEqual([game2]);
+    });
+  });
+
   describe('count', () => {
     it('should count all rows in the table', async () => {
       const game = await createMockGame();

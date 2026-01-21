@@ -31,6 +31,24 @@ export abstract class BaseRepo<T> {
     return query.execute() as unknown as Selectable<T>[];
   }
 
+  async page({
+    page = 1,
+    pageSize = 20,
+    where,
+    orderBy,
+  }: PageArgs<T>): Promise<{ total: number; items: Selectable<T>[] }> {
+    const total = await this.count({ where });
+
+    const items = await this.findMany({
+      where,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy,
+    });
+
+    return { total, items };
+  }
+
   async findOne(args: FindOneArgs<T> = {}): Promise<FindOneResult<T>> {
     let query = db.selectFrom(this.tableName).selectAll();
     return this.applyWhere(
@@ -130,6 +148,13 @@ export type FindManyArgs<T> = {
   orderBy?: OrderByInput<T>;
   take?: number;
   skip?: number;
+};
+
+export type PageArgs<T> = {
+  page?: number;
+  pageSize?: number;
+  where?: WhereInput<T>;
+  orderBy?: OrderByInput<T>;
 };
 
 export type FindOneArgs<T> = {

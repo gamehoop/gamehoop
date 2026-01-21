@@ -1,10 +1,11 @@
 import { UIProvider } from '@/components/ui';
 import { db } from '@/db';
-import { Game } from '@/db/types';
+import { Game, Player } from '@/db/types';
 import { generateApiKey, hashApiKey, Scope } from '@/domain/game-api-key';
 import { auth, Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { gameApiKeyRepo } from '@/repos/game-api-key-repo';
+import { gameEventRepo } from '@/repos/game-event-repo';
 import { gameRepo } from '@/repos/game-repo';
 import { getRouter } from '@/router';
 import { theme } from '@/styles/theme';
@@ -112,24 +113,56 @@ export async function createGameWithApiKey({
   return { game, apiKey };
 }
 
+export async function createPlayer({ game }: { game: Game }) {
+  const { user: player } = await createPlayerAuth(game).signUpEmail({
+    body: {
+      gameId: game.id,
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    },
+  });
+  return player as Player;
+}
+
 export async function createPlayers({
   game,
   n = 3,
 }: {
   game: Game;
-  n: number;
+  n?: number;
 }) {
   const players = [];
   for (let i = 0; i < n; i++) {
-    const { user } = await createPlayerAuth(game).signUpEmail({
-      body: {
-        gameId: game.id,
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      },
-    });
-    players.push(user);
+    players.push(await createPlayer({ game }));
   }
   return players;
+}
+
+export async function createGameEvents({
+  game,
+  player,
+  n = 4,
+}: {
+  game: Game;
+  player?: Player;
+  n?: number;
+}) {
+  const events = [];
+  for (let i = 0; i < n; i++) {
+    const event = await gameEventRepo.create({
+      gameId: game.id,
+      playerId: player?.id,
+      name: faker.lorem.word(),
+      properties: {
+        [faker.lorem.word()]: faker.number.int({ max: 100 }),
+        [faker.lorem.word()]: faker.datatype.boolean(),
+      },
+      timestamp: faker.date.recent().toISOString(),
+      sessionId: faker.string.uuid(),
+      deviceId: faker.string.uuid(),
+    });
+    events.push(event);
+  }
+  return events;
 }

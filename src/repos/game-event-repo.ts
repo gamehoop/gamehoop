@@ -1,4 +1,4 @@
-import { GameEvent } from '@/db/types';
+import { GameEvent } from '@/db/schema';
 import { BaseRepo } from './base-repo';
 
 export class GameEventRepo extends BaseRepo<GameEvent> {
