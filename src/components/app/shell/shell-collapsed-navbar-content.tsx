@@ -7,7 +7,7 @@ import { useSessionContext } from '@/hooks/use-session-context';
 import { themeColor } from '@/styles/theme';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Cog, Home, PanelLeftOpen, Users } from 'lucide-react';
+import { Activity, Cog, Home, PanelLeftOpen, Users } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
 import { ShellCollapsedGameMenu } from './shell-collapsed-game-menu';
 
@@ -57,6 +57,28 @@ export function ShellNavbarCollapsedContent({
                 style={{
                   color: location.pathname.startsWith(
                     `/games/${activeGame?.id}/players`,
+                  )
+                    ? themeColor
+                    : undefined,
+                }}
+              />
+            </ActionIcon>
+          </Link>
+        </Tooltip>
+
+        <Tooltip label="Events" position="right" withArrow>
+          <Link
+            to={`/games/$gameId/events`}
+            params={{ gameId: activeGame?.id ?? '' }}
+            activeProps={{ style: { color: themeColor } }}
+            disabled={!activeGame}
+          >
+            <ActionIcon variant="default" size="lg" disabled={!activeGame}>
+              <Activity
+                className="text-xl"
+                style={{
+                  color: location.pathname.startsWith(
+                    `/games/${activeGame?.id}/events`,
                   )
                     ? themeColor
                     : undefined,

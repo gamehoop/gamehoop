@@ -7,7 +7,7 @@ import { env } from '@/env/client';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { Link } from '@tanstack/react-router';
 import { Image } from '@unpic/react';
-import { Cog, Home, PanelLeftClose, Users } from 'lucide-react';
+import { Activity, Cog, Home, PanelLeftClose, Users } from 'lucide-react';
 import { ShellAvatarMenu } from './shell-avatar-menu';
 import { ShellGameMenu } from './shell-game-menu';
 
@@ -44,6 +44,14 @@ export function ShellNavbarContent({
           params={{ gameId: activeGame?.id ?? '' }}
           label="Players"
           leftSection={<Users />}
+          disabled={!activeGame}
+        />
+        <NavLink
+          component={Link}
+          to={`/games/$gameId/events`}
+          params={{ gameId: activeGame?.id ?? '' }}
+          label="Events"
+          leftSection={<Activity />}
           disabled={!activeGame}
         />
         <NavLink
