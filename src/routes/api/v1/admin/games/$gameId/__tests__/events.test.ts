@@ -1,5 +1,6 @@
 import { Game } from '@/db/types';
 import { zGameEvent } from '@/domain/api/schemas';
+import { Scope } from '@/domain/game-api-key';
 import { Organization, User } from '@/libs/auth';
 import { HttpStatus } from '@/utils/http';
 import {
@@ -259,6 +260,29 @@ describe('GET /api/v1/admin/games/$gameId/events', () => {
       });
 
       expect(res.status).toBe(HttpStatus.Unauthorized);
+    });
+
+    it('should return unauthorized if the apiKey does not have the required scopes', async () => {
+      const { game, apiKey } = await createGameWithApiKey({
+        user,
+        organization,
+        scopes: [],
+      });
+
+      const res = await GET({
+        params: { gameId: game.id },
+        request: apiRequest({
+          uri,
+          token: apiKey ?? '',
+        }),
+      });
+
+      expect(res.status).toBe(HttpStatus.Unauthorized);
+
+      const body = await res.json();
+      expect(body).toEqual({
+        error: `Missing required scopes: ${Scope.ReadEvents}`,
+      });
     });
   });
 });

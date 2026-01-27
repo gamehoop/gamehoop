@@ -1,3 +1,4 @@
+import { Scope } from '@/domain/game-api-key';
 import { Organization, User } from '@/libs/auth';
 import { createPlayerAuth } from '@/libs/player-auth';
 import { HttpStatus } from '@/utils/http';
@@ -160,5 +161,38 @@ describe('GET /api/v1/admin/games/$gameId/players/$playerId', () => {
     });
 
     expect(res.status).toBe(HttpStatus.Unauthorized);
+  });
+
+  it('should return unauthorized if the apiKey does not have the required scopes', async () => {
+    const { game, apiKey } = await createGameWithApiKey({
+      user,
+      organization,
+      scopes: [],
+    });
+
+    const playerAuth = createPlayerAuth(game);
+    const { user: player } = await playerAuth.signUpEmail({
+      body: {
+        gameId: game.id,
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      },
+    });
+
+    const res = await GET({
+      params: { gameId: game.id, playerId: player.id },
+      request: apiRequest({
+        uri: `v1/games/${game.id}/players/${player.id}`,
+        token: apiKey,
+      }),
+    });
+
+    expect(res.status).toBe(HttpStatus.Unauthorized);
+
+    const body = await res.json();
+    expect(body).toEqual({
+      error: `Missing required scopes: ${Scope.ReadPlayers}`,
+    });
   });
 });

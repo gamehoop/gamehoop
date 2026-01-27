@@ -90,11 +90,13 @@ export async function createGameWithApiKey({
   organization,
   active = true,
   expired,
+  scopes = [Scope.All],
 }: {
   user: User;
   organization: Organization;
   active?: boolean;
   expired?: boolean;
+  scopes?: Scope[];
 }): Promise<{ game: Game; apiKey: string }> {
   const game = await createGame({ user, organization });
   const apiKey = generateApiKey();
@@ -104,7 +106,7 @@ export async function createGameWithApiKey({
     gameId: game.id,
     keyHash,
     active,
-    scopes: [Scope.All],
+    scopes,
     description: faker.lorem.sentence(),
     expiresAt: expired ? faker.date.past() : undefined,
     createdBy: user.id,

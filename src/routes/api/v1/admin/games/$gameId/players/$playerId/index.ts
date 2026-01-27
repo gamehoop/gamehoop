@@ -1,5 +1,6 @@
 import { adminPlayerApiHandler } from '@/domain/api';
 import { zPlayer } from '@/domain/api/schemas';
+import { Scope } from '@/domain/game-api-key';
 import { ok } from '@/utils/http';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -11,7 +12,7 @@ export async function GET({
   request: Request;
 }) {
   return adminPlayerApiHandler(
-    { gameId, playerId, request },
+    { gameId, playerId, request, scopes: [Scope.ReadPlayers] },
     async ({ player }) => {
       const data = zPlayer.parse(player);
       return ok(data);

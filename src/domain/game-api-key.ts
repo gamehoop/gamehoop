@@ -2,12 +2,32 @@ import crypto from 'crypto';
 
 export enum Scope {
   All = '*',
+  ReadEvents = 'read:events',
+  WriteEvents = 'write:events',
+  ReadPlayers = 'read:players',
+  WritePlayers = 'write:players',
 }
 
 export const scopeOptions = [
   {
     value: Scope.All,
     label: 'All',
+  },
+  {
+    value: Scope.ReadEvents,
+    label: 'Read Events',
+  },
+  {
+    value: Scope.WriteEvents,
+    label: 'Write Events',
+  },
+  {
+    value: Scope.ReadPlayers,
+    label: 'Read Players',
+  },
+  {
+    value: Scope.WritePlayers,
+    label: 'Write Players',
   },
 ];
 

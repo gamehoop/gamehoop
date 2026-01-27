@@ -6,16 +6,18 @@ import { gameRepo } from '@/repos/game-repo';
 import { playerRepo } from '@/repos/player-repo';
 import { badRequest, notFound, serverError, unauthorized } from '@/utils/http';
 import z, { ZodError } from 'zod';
-import { hashApiKey } from '../game-api-key';
+import { hashApiKey, Scope } from '../game-api-key';
 
 const sessionTokenKey = `gamehoop.session_token`;
 
 export async function verifyApiToken({
   request,
   gameId,
+  scopes,
 }: {
   request: Request;
   gameId: string;
+  scopes?: Scope[];
 }) {
   const token = getBearerToken(request);
   if (!token) {
@@ -32,6 +34,15 @@ export async function verifyApiToken({
 
   if (apiKey.expiresAt && apiKey.expiresAt < new Date()) {
     throw unauthorized({ error: 'Expired API key' });
+  }
+
+  const missingScopes =
+    scopes?.filter((scope) => !apiKey.scopes.includes(scope)) ?? [];
+  const hasAllScope = apiKey.scopes.includes(Scope.All);
+  if (missingScopes.length && !hasAllScope) {
+    throw unauthorized({
+      error: `Missing required scopes: ${missingScopes.join(', ')}`,
+    });
   }
 }
 
@@ -134,11 +145,15 @@ export async function gameApiHandler(
 }
 
 export async function adminApiHandler(
-  { request, gameId }: { request: Request; gameId: string },
+  {
+    request,
+    gameId,
+    scopes,
+  }: { request: Request; gameId: string; scopes?: Scope[] },
   handler: ({ game }: { game: Game }) => Promise<Response>,
 ) {
   try {
-    await verifyApiToken({ request, gameId });
+    await verifyApiToken({ request, gameId, scopes });
 
     const game = await gameRepo.findOne({ where: { id: gameId } });
     if (!game) {
@@ -161,7 +176,8 @@ export async function adminPlayerApiHandler(
     request,
     gameId,
     playerId,
-  }: { request: Request; gameId: string; playerId: string },
+    scopes,
+  }: { request: Request; gameId: string; playerId: string; scopes?: Scope[] },
   handler: ({
     game,
     player,
@@ -170,7 +186,7 @@ export async function adminPlayerApiHandler(
     player: Player;
   }) => Promise<Response>,
 ) {
-  return adminApiHandler({ request, gameId }, async ({ game }) => {
+  return adminApiHandler({ request, gameId, scopes }, async ({ game }) => {
     const player = await playerRepo.findOne({ where: { id: playerId } });
     if (!player || player.gameId !== game.id) {
       return unauthorized();
