@@ -7,8 +7,8 @@ import { Title } from '@/components/ui/title';
 import { Game, GameApiKey } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { ArrowDown, CirclePlus, Ellipsis, Trash2 } from 'lucide-react';
-import { useCreateGameApiKeyModal } from './create-game-api-key-modal';
-import { useDeleteGameApiKeyModal } from './delete-game-api-key-modal';
+import { useCreateGameApiKeyModal } from './use-create-game-api-key-modal';
+import { useDeleteGameApiKeyModal } from './use-delete-game-api-key-modal';
 
 export interface GameApiKeysTableProps {
   game: Game;

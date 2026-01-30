@@ -1,6 +1,6 @@
-import { useDeletePlayerModal } from '@/components/app/game/players/delete-player-modal';
 import { PlayerTable } from '@/components/app/game/players/player-table';
 import { PlayerSessionsTable } from '@/components/app/game/players/sessions/player-sessions-table';
+import { useDeletePlayerModal } from '@/components/app/game/players/use-delete-player-modal';
 import { useUpdatePlayerModal } from '@/components/app/game/players/use-update-player-modal';
 import { Button } from '@/components/ui/button';
 import { Title } from '@/components/ui/title';

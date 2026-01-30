@@ -3,7 +3,8 @@ import { Menu } from '@/components/ui/menu';
 import { Table } from '@/components/ui/table';
 import { Game, GameEvent } from '@/db/types';
 import { useRouter } from '@tanstack/react-router';
-import { ArrowDown, Ellipsis, Eye } from 'lucide-react';
+import { ArrowDown, Ellipsis, Eye, Trash2 } from 'lucide-react';
+import { useDeleteGameEventModal } from './use-delete-game-event-modal';
 
 export interface GameEventsTable {
   game: Game;
@@ -12,6 +13,7 @@ export interface GameEventsTable {
 
 export function GameEventsTable({ game, events }: GameEventsTable) {
   const router = useRouter();
+  const showDeleteGameEventModal = useDeleteGameEventModal();
 
   const onRowClick = async (event: GameEvent) => {
     await router.navigate({
@@ -74,6 +76,12 @@ export function GameEventsTable({ game, events }: GameEventsTable) {
                     onClick={() => onRowClick(event)}
                   >
                     Open
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={<Trash2 />}
+                    onClick={() => showDeleteGameEventModal(event)}
+                  >
+                    Delete
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>

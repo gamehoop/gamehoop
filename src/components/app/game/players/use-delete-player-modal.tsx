@@ -2,8 +2,10 @@ import { useOpenAsyncConfirmModal } from '@/components/ui/hooks/use-async-confir
 import { useNotifications } from '@/components/ui/hooks/use-notifications';
 import { Player } from '@/db/types';
 import { deletePlayer } from '@/functions/game/players/delete-player';
+import { useRouter } from '@tanstack/react-router';
 
 export function useDeletePlayerModal() {
+  const router = useRouter();
   const notify = useNotifications();
   const openAsyncConfirmModal = useOpenAsyncConfirmModal();
 
@@ -18,7 +20,11 @@ export function useDeletePlayerModal() {
           data: { gameId: player.gameId, playerId: player.id },
         });
       },
-      onSuccess: () => {
+      onSuccess: async () => {
+        await router.navigate({
+          to: '/games/$gameId/players',
+          params: { gameId: player.gameId },
+        });
         notify.success({
           title: 'Player Deleted',
           message: `Successfully deleted player.`,

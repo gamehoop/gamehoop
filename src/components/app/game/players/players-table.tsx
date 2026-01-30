@@ -5,7 +5,7 @@ import { Game, Player } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { useRouter } from '@tanstack/react-router';
 import { ArrowDown, Ellipsis, Eye, Trash2 } from 'lucide-react';
-import { useDeletePlayerModal } from './delete-player-modal';
+import { useDeletePlayerModal } from './use-delete-player-modal';
 
 export interface PlayersTableProps {
   game: Game;
