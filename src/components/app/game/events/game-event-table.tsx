@@ -1,13 +1,14 @@
 import { Table } from '@/components/ui/table';
-import { GameEvent } from '@/db/types';
+import { GameEvent, Player } from '@/db/types';
 import { ActionIcon } from '@mantine/core';
 import { Copy, ExternalLink } from 'lucide-react';
 
 export interface GameEventTableProps {
+  player?: Player;
   event: GameEvent;
 }
 
-export function GameEventTable({ event }: GameEventTableProps) {
+export function GameEventTable({ player, event }: GameEventTableProps) {
   return (
     <Table variant="vertical" withTableBorder className="mt-4">
       <Table.Body>
@@ -37,9 +38,9 @@ export function GameEventTable({ event }: GameEventTableProps) {
         </Table.Tr>
 
         <Table.Tr>
-          <Table.Th>Player ID</Table.Th>
+          <Table.Th>Player</Table.Th>
           <Table.Td className="flex justify-between">
-            <span>{event.playerId}</span>
+            <span>{player?.name ?? ''}</span>
             {event.playerId && (
               <ActionIcon
                 variant="transparent"

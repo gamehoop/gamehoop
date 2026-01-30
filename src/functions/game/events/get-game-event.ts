@@ -1,5 +1,6 @@
-import { Game, GameEvent } from '@/db/types';
+import { Game, GameEvent, Player } from '@/db/types';
 import { gameEventRepo } from '@/repos/game-event-repo';
+import { playerRepo } from '@/repos/player-repo';
 import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
@@ -10,7 +11,11 @@ export const getGameEvent = createServerFn()
   .handler(
     async ({
       data: { gameId, eventId },
-    }): Promise<{ game: Game; event: GameEvent }> => {
+    }): Promise<{
+      game: Game;
+      player: Player | undefined;
+      event: GameEvent;
+    }> => {
       const game = await getGame({ data: { gameId } });
       if (!game) {
         throw notFound();
@@ -23,6 +28,13 @@ export const getGameEvent = createServerFn()
         throw notFound();
       }
 
-      return { game, event };
+      let player: Player | undefined = undefined;
+      if (event.playerId) {
+        player = await playerRepo.findOne({
+          where: { id: event.playerId },
+        });
+      }
+
+      return { game, player, event };
     },
   );

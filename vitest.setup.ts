@@ -6,10 +6,12 @@ import z from 'zod';
 
 // Create a fake testing environment.
 process.env.DATABASE_URL = 'postgres://postgres:secret@localhost:5432/gamehoop';
+process.env.BETTER_AUTH_URL = 'http://localhost:3000';
 
 const mockCreateEnv = vi.hoisted(() =>
   vi.fn(() => ({
     DATABASE_URL: process.env.DATABASE_URL,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
   })),
 );
 

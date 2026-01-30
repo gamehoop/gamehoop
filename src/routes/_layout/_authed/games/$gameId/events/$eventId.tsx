@@ -20,12 +20,12 @@ export const Route = createFileRoute(
 });
 
 function Event() {
-  const { event } = Route.useLoaderData();
+  const { event, player } = Route.useLoaderData();
 
   return (
     <div>
       <Title order={2}>Event - {event.name}</Title>
-      <GameEventTable event={event} />
+      <GameEventTable player={player} event={event} />
     </div>
   );
 }
