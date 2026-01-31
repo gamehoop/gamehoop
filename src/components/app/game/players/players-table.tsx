@@ -1,23 +1,29 @@
 import { ActionIcon } from '@/components/ui/action-icon';
+import { DataTable } from '@/components/ui/data-table';
 import { Menu } from '@/components/ui/menu';
-import { Table } from '@/components/ui/table';
 import { Game, Player } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
 import { useRouter } from '@tanstack/react-router';
-import { ArrowDown, Ellipsis, Eye, Trash2 } from 'lucide-react';
+import { createColumnHelper, Row } from '@tanstack/react-table';
+import { Ellipsis, Eye, Trash2 } from 'lucide-react';
 import { useDeletePlayerModal } from './use-delete-player-modal';
 
 export interface PlayersTableProps {
   game: Game;
   players: Player[];
+  searchString?: string;
 }
 
-export function PlayersTable({ game, players }: PlayersTableProps) {
+export function PlayersTable({
+  game,
+  players,
+  searchString,
+}: PlayersTableProps) {
   const { user } = useSessionContext();
   const router = useRouter();
   const openDeletePlayerModal = useDeletePlayerModal();
 
-  const onRowClick = async (player: Player) => {
+  const onRowClick = async ({ original: player }: Row<Player>) => {
     await router.navigate({
       to: `/games/$gameId/players/$playerId`,
       params: {
@@ -27,91 +33,108 @@ export function PlayersTable({ game, players }: PlayersTableProps) {
     });
   };
 
+  const columnHelper = createColumnHelper<Player>();
+  const columnDefs = [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      filterFn: 'includesString',
+    }),
+    columnHelper.accessor('email', {
+      header: 'Email',
+      filterFn: 'includesString',
+    }),
+    columnHelper.accessor('emailVerified', {
+      header: 'Email Verified',
+      cell: ({ row }) => (row.original.emailVerified ? 'Yes' : 'No'),
+    }),
+    columnHelper.accessor('isAnonymous', {
+      header: 'Anonymous',
+      cell: ({ row }) => (row.original.isAnonymous ? 'Yes' : 'No'),
+    }),
+    columnHelper.accessor('lastLoginAt', {
+      header: 'Last Login At',
+      cell: ({ row }) => (
+        <span title={row.original.lastLoginAt?.toISOString()}>
+          {row.original.lastLoginAt?.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
+        </span>
+      ),
+    }),
+    columnHelper.accessor('createdAt', {
+      header: 'Created At',
+      cell: ({ row }) => (
+        <span title={row.original.createdAt?.toISOString()}>
+          {row.original.createdAt?.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
+        </span>
+      ),
+    }),
+    columnHelper.accessor('updatedAt', {
+      header: 'Updated At',
+      cell: ({ row }) => (
+        <span title={row.original.updatedAt?.toISOString()}>
+          {row.original.updatedAt?.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
+        </span>
+      ),
+    }),
+    columnHelper.display({
+      id: 'actions',
+      enableSorting: false,
+      cell: ({ row }) => (
+        <span
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <Menu>
+            <Menu.Target>
+              <ActionIcon variant="subtle">
+                <Ellipsis />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item leftSection={<Eye />} onClick={() => onRowClick(row)}>
+                Open
+              </Menu.Item>
+              <Menu.Item
+                leftSection={<Trash2 />}
+                onClick={() => openDeletePlayerModal(row.original)}
+                disabled={user.role === 'member'}
+              >
+                Delete
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </span>
+      ),
+    }),
+  ];
+
   return (
-    <Table striped withTableBorder highlightOnHover className="mt-4">
-      <Table.Head>
-        <Table.Tr>
-          <Table.Th>Name</Table.Th>
-          <Table.Th>Email</Table.Th>
-          <Table.Th>Email Verified</Table.Th>
-          <Table.Th>Anonymous</Table.Th>
-          <Table.Th>Last Login At</Table.Th>
-          <Table.Th>
-            <div className="flex flex-row gap-1 items-center">
-              Created At <ArrowDown />
-            </div>
-          </Table.Th>
-          <Table.Th>Updated At</Table.Th>
-          <Table.Th></Table.Th>
-        </Table.Tr>
-      </Table.Head>
-      <Table.Body>
-        {players
-          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-          .map((player) => (
-            <Table.Tr
-              key={player.id}
-              onClick={() => onRowClick(player)}
-              className="cursor-pointer"
-            >
-              <Table.Td>{player.name}</Table.Td>
-              <Table.Td>{player.email}</Table.Td>
-              <Table.Td>{player.emailVerified ? 'Yes' : 'No'}</Table.Td>
-              <Table.Td>{player.isAnonymous ? 'Yes' : 'No'}</Table.Td>
-              <Table.Td title={player.lastLoginAt?.toISOString()}>
-                {player.lastLoginAt?.toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                })}
-              </Table.Td>
-              <Table.Td title={player.createdAt.toISOString()}>
-                {player.createdAt.toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                })}
-              </Table.Td>
-              <Table.Td title={player.createdAt.toISOString()}>
-                {player.updatedAt?.toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                }) ?? ''}
-              </Table.Td>
-              <Table.Td onClick={(e) => e.stopPropagation()}>
-                <Menu>
-                  <Menu.Target>
-                    <ActionIcon variant="subtle">
-                      <Ellipsis />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item
-                      leftSection={<Eye />}
-                      onClick={() => onRowClick(player)}
-                    >
-                      Open
-                    </Menu.Item>
-                    <Menu.Item
-                      leftSection={<Trash2 />}
-                      onClick={() => openDeletePlayerModal(player)}
-                      disabled={user.role === 'member'}
-                    >
-                      Delete
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Table.Td>
-            </Table.Tr>
-          ))}
-      </Table.Body>
-    </Table>
+    <DataTable
+      data={players}
+      columns={columnDefs}
+      onRowClick={onRowClick}
+      sortBy={[{ id: 'lastLoginAt', desc: true }]}
+      globalFilter={searchString}
+      striped
+      withTableBorder
+      className="mt-4"
+    />
   );
 }

@@ -46,6 +46,7 @@ Table.Tr = function TableTr(props: TableTrProps) {
 
 export interface TableThProps extends PropsWithChildren {
   className?: string;
+  colSpan?: number;
 }
 
 Table.Th = function TableTh(props: TableThProps) {
