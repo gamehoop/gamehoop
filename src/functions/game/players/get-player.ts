@@ -1,4 +1,5 @@
-import { Game, Player, PlayerSession } from '@/db/types';
+import { Game, GameEvent, Player, PlayerSession } from '@/db/types';
+import { gameEventRepo } from '@/repos/game-event-repo';
 import { playerRepo } from '@/repos/player-repo';
 import { playerSessionRepo } from '@/repos/player-session-repo';
 import { notFound } from '@tanstack/react-router';
@@ -11,7 +12,12 @@ export const getPlayer = createServerFn()
   .handler(
     async ({
       data: { gameId, playerId },
-    }): Promise<{ game: Game; player: Player; sessions: PlayerSession[] }> => {
+    }): Promise<{
+      game: Game;
+      player: Player;
+      events: GameEvent[];
+      sessions: PlayerSession[];
+    }> => {
       const game = await getGame({ data: { gameId } });
       if (!game) {
         throw notFound();
@@ -29,6 +35,11 @@ export const getPlayer = createServerFn()
         where: { userId: player.id },
       });
 
-      return { game, player, sessions };
+      const events = await gameEventRepo.findMany({
+        where: { gameId, playerId },
+        orderBy: { timestamp: 'desc' },
+      });
+
+      return { game, player, events, sessions };
     },
   );

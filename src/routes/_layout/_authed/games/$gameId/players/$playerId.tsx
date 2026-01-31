@@ -1,3 +1,4 @@
+import { GameEventsTable } from '@/components/app/game/events/game-events-table';
 import { PlayerTable } from '@/components/app/game/players/player-table';
 import { PlayerSessionsTable } from '@/components/app/game/players/sessions/player-sessions-table';
 import { useDeletePlayerModal } from '@/components/app/game/players/use-delete-player-modal';
@@ -25,7 +26,7 @@ export const Route = createFileRoute(
 });
 
 function Player() {
-  const { game, player, sessions } = Route.useLoaderData();
+  const { game, player, events, sessions } = Route.useLoaderData();
   const showUpdatePlayerModal = useUpdatePlayerModal({ game, player });
   const showDeletePlayerModal = useDeletePlayerModal();
 
@@ -60,6 +61,11 @@ function Player() {
         Sessions ({sessions.length})
       </Title>
       <PlayerSessionsTable game={game} player={player} sessions={sessions} />
+
+      <Title order={4} className="pt-4">
+        Events ({events.length})
+      </Title>
+      <GameEventsTable game={game} events={events} />
     </>
   );
 }
