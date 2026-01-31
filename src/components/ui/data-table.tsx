@@ -1,6 +1,7 @@
 import { cn } from '@/utils/styles';
 import {
   ColumnDef,
+  ColumnFiltersState,
   ColumnSort,
   flexRender,
   getCoreRowModel,
@@ -34,6 +35,7 @@ export interface DataTableProps<T> {
   withTableBorder?: boolean;
   pageSize?: number;
   globalFilter?: string;
+  columnFilters?: ColumnFiltersState;
 }
 
 export function DataTable<T>({
@@ -46,6 +48,7 @@ export function DataTable<T>({
   globalFilter,
   sortBy = [],
   pageSize = 15,
+  columnFilters = [],
 }: DataTableProps<T>) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -67,6 +70,7 @@ export function DataTable<T>({
       pagination,
       sorting,
       globalFilter,
+      columnFilters,
     },
   });
 

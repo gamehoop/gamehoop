@@ -154,7 +154,7 @@ export function useCreateGameApiKeyModal({
                 name={field.name}
                 date={field.state.value}
                 onChange={(val) => {
-                  field.handleChange(val ?? undefined);
+                  field.handleChange((val as string | null) ?? undefined);
                 }}
                 error={field.state.meta.errors[0]?.message}
                 presets={[

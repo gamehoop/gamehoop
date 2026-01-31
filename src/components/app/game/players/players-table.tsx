@@ -3,25 +3,42 @@ import { DataTable } from '@/components/ui/data-table';
 import { Menu } from '@/components/ui/menu';
 import { Game, Player } from '@/db/types';
 import { useSessionContext } from '@/hooks/use-session-context';
+import { DatesRangeValue } from '@mantine/dates';
 import { useRouter } from '@tanstack/react-router';
 import { createColumnHelper, Row } from '@tanstack/react-table';
 import { Ellipsis, Eye, Trash2 } from 'lucide-react';
+import { useMemo } from 'react';
 import { useDeletePlayerModal } from './use-delete-player-modal';
 
 export interface PlayersTableProps {
   game: Game;
   players: Player[];
   searchString?: string;
+  dateRange?: DatesRangeValue<string>;
 }
 
 export function PlayersTable({
   game,
   players,
   searchString,
+  dateRange,
 }: PlayersTableProps) {
   const { user } = useSessionContext();
   const router = useRouter();
   const openDeletePlayerModal = useDeletePlayerModal();
+
+  const columnFilters = useMemo(() => {
+    if (!dateRange) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'createdAt',
+        value: dateRange,
+      },
+    ];
+  }, [dateRange]);
 
   const onRowClick = async ({ original: player }: Row<Player>) => {
     await router.navigate({
@@ -78,6 +95,20 @@ export function PlayersTable({
           })}
         </span>
       ),
+      filterFn: (row, _columnId, filterValue: DatesRangeValue<string>) => {
+        const createdAtTime = row.original.createdAt.getTime();
+        const [startDate, endDate] = filterValue;
+
+        const start = startDate
+          ? new Date(startDate).setHours(0, 0, 0, 0)
+          : -Infinity;
+
+        const end = endDate
+          ? new Date(endDate).setHours(23, 59, 59, 999)
+          : Infinity;
+
+        return createdAtTime >= start && createdAtTime <= end;
+      },
     }),
     columnHelper.accessor('updatedAt', {
       header: 'Updated At',
@@ -132,6 +163,7 @@ export function PlayersTable({
       onRowClick={onRowClick}
       sortBy={[{ id: 'lastLoginAt', desc: true }]}
       globalFilter={searchString}
+      columnFilters={columnFilters}
       striped
       withTableBorder
       className="mt-4"
