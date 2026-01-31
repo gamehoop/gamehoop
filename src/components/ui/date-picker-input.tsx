@@ -19,7 +19,10 @@ export interface DatePickerInputProps {
     value: string | string[] | DatesRangeValue<string> | null,
   ) => void;
   placeholder?: string;
-  presets?: Array<{ value: string | null; label: string }>;
+  presets?: Array<{
+    value: string | DatesRangeValue<string> | null;
+    label: string;
+  }>;
   name: string;
   readOnly?: boolean;
   required?: boolean;

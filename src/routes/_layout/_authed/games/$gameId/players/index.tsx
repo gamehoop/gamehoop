@@ -7,6 +7,7 @@ import { getPlayers } from '@/functions/game/players/get-players';
 import { seo } from '@/utils/seo';
 import { DatesRangeValue } from '@mantine/dates';
 import { createFileRoute } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { Calendar, Search } from 'lucide-react';
 import { useState } from 'react';
 
@@ -30,7 +31,8 @@ export const Route = createFileRoute('/_layout/_authed/games/$gameId/players/')(
 function Players() {
   const { game, players } = Route.useLoaderData();
   const [playerSearchString, setPlayerSearchString] = useState('');
-  const [dateRange, setDateRange] = useState<DatesRangeValue<string>>();
+  const [lastLoginDateRange, setLastLoginDateRange] =
+    useState<DatesRangeValue<string>>();
 
   return (
     <div>
@@ -48,14 +50,55 @@ function Players() {
           <DatePickerInput
             type="range"
             clearable
-            placeholder="Filter by creation date"
+            placeholder="Filter by last login..."
             leftSection={<Calendar />}
             name="dateFilter"
-            value={dateRange}
+            value={lastLoginDateRange}
             onChange={(value) => {
               const range = value as DatesRangeValue<string>;
-              setDateRange(range);
+              setLastLoginDateRange(range);
             }}
+            presets={[
+              {
+                value: [
+                  dayjs().format('YYYY-MM-DD'),
+                  dayjs().subtract(1, 'hour').format('YYYY-MM-DD'),
+                ],
+                label: 'Last hour',
+              },
+              {
+                value: [
+                  dayjs().format('YYYY-MM-DD'),
+                  dayjs().subtract(24, 'hour').format('YYYY-MM-DD'),
+                ],
+                label: 'Last 24 hours',
+              },
+              {
+                value: [
+                  dayjs().format('YYYY-MM-DD'),
+                  dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+                ],
+                label: 'Last 7 days',
+              },
+              {
+                value: [
+                  dayjs().format('YYYY-MM-DD'),
+                  dayjs().subtract(30, 'day').format('YYYY-MM-DD'),
+                ],
+                label: 'Last 30 days',
+              },
+              {
+                value: [
+                  dayjs().format('YYYY-MM-DD'),
+                  dayjs().subtract(90, 'day').format('YYYY-MM-DD'),
+                ],
+                label: 'Last 90 days',
+              },
+              {
+                value: [null, null],
+                label: 'All time',
+              },
+            ]}
             className="w-96"
           />
         </div>
@@ -64,7 +107,7 @@ function Players() {
         game={game}
         players={players}
         searchString={playerSearchString}
-        dateRange={dateRange}
+        lastLoginAtDateRange={lastLoginDateRange}
       />
     </div>
   );

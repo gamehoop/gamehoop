@@ -14,31 +14,31 @@ export interface PlayersTableProps {
   game: Game;
   players: Player[];
   searchString?: string;
-  dateRange?: DatesRangeValue<string>;
+  lastLoginAtDateRange?: DatesRangeValue<string>;
 }
 
 export function PlayersTable({
   game,
   players,
   searchString,
-  dateRange,
+  lastLoginAtDateRange,
 }: PlayersTableProps) {
   const { user } = useSessionContext();
   const router = useRouter();
   const openDeletePlayerModal = useDeletePlayerModal();
 
   const columnFilters = useMemo(() => {
-    if (!dateRange) {
+    if (!lastLoginAtDateRange) {
       return [];
     }
 
     return [
       {
-        id: 'createdAt',
-        value: dateRange,
+        id: 'lastLoginAt',
+        value: lastLoginAtDateRange,
       },
     ];
-  }, [dateRange]);
+  }, [lastLoginAtDateRange]);
 
   const onRowClick = async ({ original: player }: Row<Player>) => {
     await router.navigate({
